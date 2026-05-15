@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jong Express Property | Honest & Transparent Real Estate</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #d69e2e;
+            --light: #f7fafc;
+            --dark: #2d3748;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+        }
+        nav a:hover {
+            color: var(--secondary);
+        }
+        .hero {
+            background: linear-gradient(rgba(26, 54, 93, 0.8), rgba(26, 54, 93, 0.8)), url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
+            color: white;
+            text-align: center;
+            padding: 100px 20px;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+        .btn {
+            background-color: var(--secondary);
+            color: var(--primary);
+            padding: 12px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background-color: #ecc94b;
+        }
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 50px 5%;
+            gap: 30px;
+        }
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            flex: 1;
+            min-width: 250px;
+            max-width: 350px;
+            text-align: center;
+        }
+        .feature-card h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        .contact-section {
+            background-color: white;
+            padding: 50px 5%;
+            text-align: center;
+        }
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        .info-block {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 8px;
+            min-width: 200px;
+        }
+        footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .social-links a {
+            color: var(--secondary);
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Jong Express Property</div>
+        <nav>
+            <a href="#about">Our Promise</a>
+            <a href="#contact">Contact Jong</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>No Ghost Listings. Just Real Results.</h1>
+        <p>Tired of fake listings, hidden flaws, and agents who disappear after the sale? At Jong Express Property, we do things differently. 100% transparency, zero fluff.</p>
+        <a href="#contact" class="btn">Talk to an Expert Today</a>
+    </section>
+
+    <section id="about" class="features">
+        <div class="feature-card">
+            <h3>🚫 100% Real Listings</h3>
+            <p>We are the "Anti-Ghost Listing" squad. If you see it on our site, it's available. No bait-and-switch tactics. Your time is too valuable.</p>
+        </div>
+        <div class="feature-card">
+            <h3>🔍 Transparent Marketing</h3>
+            <p>Every property has flaws. We won't hide them with clever camera angles. We tell you the pros and the cons upfront so you can make an informed decision.</p>
+        </div>
+        <div class="feature-card">
+            <h3>🤝 End-to-End Care</h3>
+            <p>Our job doesn't end when the contract is signed. From utility transfers to move-in support, we ensure your transition is completely seamless.</p>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <h2>Ready to make a move? Let's connect.</h2>
+        <p style="margin-top: 10px; color: #4a5568;">Your trusted consultant, Jong Kiat Shan, is ready to assist you.</p>
+        
+        <div class="contact-info">
+            <div class="info-block">
+                <h3>📞 Call / WhatsApp</h3>
+                <p>016-924-2000</p>
+            </div>
+            <div class="info-block">
+                <h3>✉️ Email</h3>
+                <p><a href="mailto:jongkiatshan@kommonsrealty.com" style="color: var(--primary);">jongkiatshan@kommonsrealty.com</a></p>
+            </div>
+            <div class="info-block">
+                <h3>🕒 Operating Hours</h3>
+                <p>Available Anytime</p>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px;" class="social-links">
+            <p style="margin-bottom: 10px; font-weight: bold;">Follow our journey:</p>
+            <a href="https://www.facebook.com/jongexpresssproperty" target="_blank">Facebook</a> | 
+            <a href="https://www.instagram.com/jongks1234?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">Instagram</a> |
+            <a href="https://jongks1234.github.io/JongExpressProperty/" target="_blank">Old Github Site</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Jong Express Property. All rights reserved. | Represented by Jong Kiat Shan (Kommons Realty)</p>
+    </footer>
+
+</body>
+</html>
