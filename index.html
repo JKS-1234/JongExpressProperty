@@ -341,6 +341,26 @@
     <footer>
         <p>&copy; 2026 Jong Express Property. All rights reserved. | Represented by Jong Kiat Shan (Kommons Realty)</p>
     </footer>
+    <script>
+        function filterProperties() {
+            let statusChoice = document.getElementById('statusFilter').value;
+            let typeChoice = document.getElementById('typeFilter').value;
+            let allProperties = document.querySelectorAll('.property-card');
 
+            allProperties.forEach(card => {
+                let cardStatus = card.getAttribute('data-status');
+                let cardType = card.getAttribute('data-type');
+
+                let matchesStatus = (statusChoice === 'all' || statusChoice === cardStatus);
+                let matchesType = (typeChoice === 'all' || typeChoice === cardType);
+
+                if (matchesStatus && matchesType) {
+                    card.style.display = 'block'; // Show it
+                } else {
+                    card.style.display = 'none';  // Hide it
+                }
+            });
+        }
+    </script>
 </body>
 </html>
