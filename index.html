@@ -127,6 +127,84 @@
             margin: 0 10px;
             font-weight: bold;
         }
+        /* --- New Property Section Styles --- */
+        .featured-properties {
+            padding: 50px 5%;
+            background-color: white;
+            text-align: center;
+        }
+        .featured-properties h2 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .property-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .property-card {
+            background: var(--light);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 350px;
+            text-align: left;
+            transition: transform 0.3s ease;
+        }
+        .property-card:hover {
+            transform: translateY(-5px);
+        }
+        .property-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+        .property-details {
+            padding: 20px;
+        }
+        .property-details h3 {
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-size: 1.3rem;
+        }
+        .price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+        .pros-cons {
+            background: white;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: 0 5px 5px 0;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+        .pro {
+            color: #2f855a;
+            margin-bottom: 10px;
+        }
+        .con {
+            color: #c53030;
+        }
+        .whatsapp-btn {
+            display: block;
+            text-align: center;
+            background-color: #25D366; /* WhatsApp Green */
+            color: white;
+            padding: 12px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+        }
     </style>
 </head>
 <body>
@@ -160,7 +238,50 @@
         </div>
     </section>
 
-    <section id="contact" class="contact-section">
+    <section id="contact" 
+        <section id="properties" class="featured-properties">
+        <h2>Featured Honest Listings</h2>
+        <p>100% Verified. We show you the good, and we don't hide the bad.</p>
+        
+        <div class="property-grid">
+            
+            <div class="property-card">
+                <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Factory in Shah Alam">
+                <div class="property-details">
+                    <h3>Light Industrial Factory, Shah Alam</h3>
+                    <p class="price">RM 1,250,000</p>
+                    <div class="pros-cons">
+                        <p class="pro"><strong>✅ The Good:</strong> Newly upgraded 3-phase wiring, 30ft high ceiling, wide access road for 40ft trailers.</p>
+                        <p class="con"><strong>⚠️ The Catch:</strong> Located near a busy intersection, traffic can be heavy between 5 PM - 6 PM.</p>
+                    </div>
+                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20saw%20your%20website.%20I'm%20interested%20in%20the%20Shah%20Alam%20Factory." class="whatsapp-btn" target="_blank">Chat on WhatsApp</a>
+                </div>
+            </div>
+
+            <div class="property-card">
+                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Double Storey Terrace">
+                <div class="property-details">
+                    <h3>Double Storey Terrace, Subang Jaya</h3>
+                    <p class="price">RM 850,000</p>
+                    <div class="pros-cons">
+                        <p class="pro"><strong>✅ The Good:</strong> Walking distance to LRT station, fully extended kitchen, very quiet neighbors.</p>
+                        <p class="con"><strong>⚠️ The Catch:</strong> The master bathroom tiles are slightly outdated and could use a modern touch.</p>
+                    </div>
+                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20saw%20your%20website.%20I'm%20interested%20in%20the%20Subang%20Jaya%20Terrace." class="whatsapp-btn" target="_blank">Chat on WhatsApp</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    ```
+
+### 📝 Next Action For You:
+1. Save the file and upload it to GitHub to update your live website.
+2. Replace the dummy text (Shah Alam Factory, Subang Jaya Terrace) with **your real top 2 listings**.
+3. Think hard about the `⚠️ The Catch` for each property. Be honest! When a buyer reads a minor flaw, their trust in you will skyrocket.
+
+Let me know once you have updated it, and we can look at exactly how to structure your WhatsApp messages to start sending this new website link to the business owners you want to target!
+        class="contact-section">
         <h2>Ready to make a move? Let's connect.</h2>
         <p style="margin-top: 10px; color: #4a5568;">Your trusted consultant, Jong Kiat Shan, is ready to assist you.</p>
         
