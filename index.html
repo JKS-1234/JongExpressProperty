@@ -48,7 +48,7 @@
             color: var(--secondary);
         }
         .hero {
-            background: linear-gradient(rgba(26, 54, 93, 0.8), rgba(26, 54, 93, 0.8)), url('[https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80](https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80)') center/cover;
+            background: linear-gradient(rgba(26, 54, 93, 0.8), rgba(26, 54, 93, 0.8)), url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover;
             color: white;
             text-align: center;
             padding: 100px 20px;
@@ -127,7 +127,7 @@
             margin: 0 10px;
             font-weight: bold;
         }
-        /* --- New Property Section Styles --- */
+        /* --- Property Section Styles --- */
         .featured-properties {
             padding: 50px 5%;
             background-color: white;
@@ -272,23 +272,18 @@
                 <option value="rent">For Rent</option>
             </select>
             
-            <select id="typeFilter" onchange="filterProperties()">
-            <option value="all">All Types</option>
-        </select>
+            <select id="typeFilter" class="filter-select" onchange="filterProperties()">
+                <option value="all">All Types</option>
+            </select>
 
-            <select id="areaFilter" onchange="filterProperties()">
-            <option value="all">All Areas</option>
-            <option value="pujut">Pujut</option>
-            <option value="bayshore">Taman Bayshore</option>
-            <option value="senadin">Senadin</option>
-            <option value="luak">Luak / Riam</option>
-        </select>
+            <select id="areaFilter" class="filter-select" onchange="filterProperties()">
+                <option value="all">All Areas</option>
+            </select>
         </div>
 
         <div class="property-grid">
             <h3 style="text-align:center; width:100%; color:var(--primary);">Loading latest listings...</h3>
         </div>
-    </div>
     </section>
     
     <section id="contact" class="contact-section">
@@ -312,9 +307,9 @@
 
         <div style="margin-top: 40px;" class="social-links">
             <p style="margin-bottom: 10px; font-weight: bold;">Follow our journey:</p>
-            <a href="[https://www.facebook.com/jongexpresssproperty](https://www.facebook.com/jongexpresssproperty)" target="_blank">Facebook</a> | 
-            <a href="[https://www.instagram.com/jongks1234?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==](https://www.instagram.com/jongks1234?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==)" target="_blank">Instagram</a> |
-            <a href="[https://jongks1234.github.io/JongExpressProperty/)" target="_blank">Old Github Site</a>
+            <a href="https://www.facebook.com/jongexpresssproperty" target="_blank">Facebook</a> | 
+            <a href="https://www.instagram.com/jongks1234?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">Instagram</a> |
+            <a href="https://jongks1234.github.io/JongExpressProperty/" target="_blank">Old Github Site</a>
         </div>
     </section>
 
@@ -322,27 +317,6 @@
         <p>&copy; 2026 Jong Express Property. All rights reserved. | Represented by Jong Kiat Shan (Kommons Realty)</p>
     </footer>
 
-    <script>
-        function filterProperties() {
-            let statusChoice = document.getElementById('statusFilter').value;
-            let typeChoice = document.getElementById('typeFilter').value;
-            let allProperties = document.querySelectorAll('.property-card');
-
-            allProperties.forEach(card => {
-                let cardStatus = card.getAttribute('data-status');
-                let cardType = card.getAttribute('data-type');
-
-                let matchesStatus = (statusChoice === 'all' || statusChoice === cardStatus);
-                let matchesType = (typeChoice === 'all' || typeChoice === cardType);
-
-                if (matchesStatus && matchesType) {
-                    card.style.display = 'block'; // Show it
-                } else {
-                    card.style.display = 'none';  // Hide it
-                }
-            });
-        }
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
     <script>
@@ -408,7 +382,7 @@
                 if (areaFilter) {
                     areaFilter.innerHTML = '<option value="all">All Areas</option>';
                     Array.from(uniqueAreas).sort().forEach(areaName => {
-                        areaFilter.innerHTML += `<option value="${areaName.toLowerCase()}">${areaName}</option>';
+                        areaFilter.innerHTML += `<option value="${areaName.toLowerCase()}">${areaName}</option>`;
                     });
                 }
             }
