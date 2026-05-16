@@ -272,13 +272,9 @@
                 <option value="rent">For Rent</option>
             </select>
             
-            <select id="typeFilter" class="filter-select" onchange="filterProperties()">
-                <option value="all">All Property Types</option>
-                <option value="house">House</option>
-                <option value="apartment">Apartment</option>
-                <option value="shop">Shop / Commercial</option>
-                <option value="land">Land</option>
-            </select>
+            <select id="typeFilter" onchange="filterProperties()">
+            <option value="all">All Types</option>
+        </select>
 
             <select id="areaFilter" onchange="filterProperties()">
             <option value="all">All Areas</option>
@@ -360,28 +356,30 @@
                 const grid = document.querySelector('.property-grid');
                 grid.innerHTML = ''; // Clear loading text
 
-                // This set will remember all your unique areas automatically
+                // Tracks unique items automatically
                 const uniqueAreas = new Set();
+                const uniqueTypes = new Set();
 
                 data.forEach(row => {
                     if(!row['Property Name']) return; // Skip empty rows
 
                     let details = row['The Good (Pros)'] ? row['The Good (Pros)'].replace(/\n/g, '<br>') : '';
                     let status = row['Status'] ? row['Status'].toLowerCase().trim() : 'sale';
-                    let type = row['Type'] ? row['Type'].toLowerCase().trim() : 'house';
                     
-                    // Grab the area name from your Google Sheet
+                    // Grab Type and Area text safely
+                    let rawType = row['Type'] ? row['Type'].trim() : '';
+                    let typeValue = rawType.toLowerCase();
+                    
                     let rawArea = row['Area'] ? row['Area'].trim() : '';
                     let areaValue = rawArea.toLowerCase();
 
-                    // If you typed an area, remember it!
-                    if (rawArea) {
-                        uniqueAreas.add(rawArea);
-                    }
+                    // Collect unique values if they aren't blank
+                    if (rawType) uniqueTypes.add(rawType);
+                    if (rawArea) uniqueAreas.add(rawArea);
 
                     // Build the card automatically
                     let cardHTML = `
-                    <div class="property-card" data-status="${status}" data-type="${type}" data-area="${areaValue || 'all'}">
+                    <div class="property-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}">
                         <img src="${row['Image Name']}" alt="${row['Property Name']}">
                         <div class="property-details">
                             <h3>${row['Property Name']}</h3>
@@ -396,17 +394,21 @@
                     grid.innerHTML += cardHTML;
                 });
 
-                // DYNAMIC MAGIC: Build your 16-area dropdown filter automatically!
+                // DYNAMIC MAGIC 1: Build your Property Type Dropdown
+                const typeFilter = document.getElementById('typeFilter');
+                if (typeFilter) {
+                    typeFilter.innerHTML = '<option value="all">All Types</option>';
+                    Array.from(uniqueTypes).sort().forEach(typeName => {
+                        typeFilter.innerHTML += `<option value="${typeName.toLowerCase()}">${typeName}</option>`;
+                    });
+                }
+
+                // DYNAMIC MAGIC 2: Build your Area Dropdown
                 const areaFilter = document.getElementById('areaFilter');
                 if (areaFilter) {
-                    areaFilter.innerHTML = '<option value="all">All Areas</option>'; // Reset
-                    
-                    // Sort your areas alphabetically so it looks clean
-                    const sortedAreas = Array.from(uniqueAreas).sort();
-                    
-                    sortedAreas.forEach(areaName => {
-                        let optionHTML = `<option value="${areaName.toLowerCase()}">${areaName}</option>`;
-                        areaFilter.innerHTML += optionHTML;
+                    areaFilter.innerHTML = '<option value="all">All Areas</option>';
+                    Array.from(uniqueAreas).sort().forEach(areaName => {
+                        areaFilter.innerHTML += `<option value="${areaName.toLowerCase()}">${areaName}</option>';
                     });
                 }
             }
