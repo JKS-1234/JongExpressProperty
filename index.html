@@ -188,17 +188,34 @@
             color: #2f855a;
             margin-bottom: 10px;
         }
-        /* --- Dynamic Interactive Buttons --- */
+        /* --- Video Embed Container --- */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
         .video-btn {
             display: block;
             text-align: center;
-            background-color: #4a5568; /* Premium Dark Slate */
+            background-color: #4a5568;
             color: white;
             padding: 12px;
             text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             transition: background 0.3s;
         }
         .video-btn:hover {
@@ -207,7 +224,7 @@
         .whatsapp-btn {
             display: block;
             text-align: center;
-            background-color: #25D366; /* WhatsApp Green */
+            background-color: #25D366;
             color: white;
             padding: 12px;
             text-decoration: none;
@@ -335,6 +352,16 @@
     <script>
         const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs1vXMme9mBWAEtQUGkFbB7wcL_n-IGGkFzzwvq2yxQgWKuhyZKe-J4tYza3yzLtO/pub?output=csv";
 
+        // Helper function to extract YouTube ID and convert it into a clean embed URL safely
+        function getYouTubeEmbedUrl(url) {
+            let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            let match = url.match(regExp);
+            if (match && match[2].length === 11) {
+                return `https://www.youtube.com/embed/${match[2]}`;
+            }
+            return null;
+        }
+
         Papa.parse(csvUrl, {
             download: true,
             header: true,
@@ -343,35 +370,43 @@
                 const grid = document.querySelector('.property-grid');
                 grid.innerHTML = ''; // Clear loading text
 
-                // Tracks unique items automatically
                 const uniqueAreas = new Set();
                 const uniqueTypes = new Set();
 
                 data.forEach(row => {
-                    if(!row['Property Name']) return; // Skip empty rows
+                    if(!row['Property Name']) return; 
 
                     let details = row['The Good (Pros)'] ? row['The Good (Pros)'].replace(/\n/g, '<br>') : '';
                     let status = row['Status'] ? row['Status'].toLowerCase().trim() : 'sale';
                     
-                    // Grab Type and Area text safely
                     let rawType = row['Type'] ? row['Type'].trim() : '';
                     let typeValue = rawType.toLowerCase();
                     
                     let rawArea = row['Area'] ? row['Area'].trim() : '';
                     let areaValue = rawArea.toLowerCase();
 
-                    // Collect unique values if they aren't blank
                     if (rawType) uniqueTypes.add(rawType);
                     if (rawArea) uniqueAreas.add(rawArea);
 
-                    // Video Walkthrough Integration Block
+                    // HYBRID VIDEO ENGINE
                     let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
-                    let videoBtnHTML = '';
+                    let videoHTML = '';
+
                     if (videoLink) {
-                        videoBtnHTML = `<a href="${videoLink}" class="video-btn" target="_blank">🎬 Watch Video Tour</a>`;
+                        let ytEmbed = getYouTubeEmbedUrl(videoLink);
+                        if (ytEmbed) {
+                            // If YouTube link, build an interactive player inside the card
+                            videoHTML = `
+                            <div class="video-container">
+                                <iframe src="${ytEmbed}" allowfullscreen></iframe>
+                            </div>`;
+                        } else {
+                            // If TikTok, Facebook, etc., build the app button
+                            videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank">🎬 Watch Video Tour</a>`;
+                        }
                     }
 
-                    // Build the card automatically
+                    // Build Card
                     let cardHTML = `
                     <div class="property-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}">
                         <img src="${row['Image Name']}" alt="${row['Property Name']}">
@@ -381,7 +416,7 @@
                             <div class="pros-cons">
                                 <p class="pro" style="color: var(--primary);"><strong>✅ Details:</strong><br>${details}</p>
                             </div>
-                            ${videoBtnHTML}
+                            ${videoHTML}
                             <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(row['Property Name'])}" class="whatsapp-btn" target="_blank">Chat on WhatsApp</a>
                         </div>
                     </div>
@@ -389,7 +424,7 @@
                     grid.innerHTML += cardHTML;
                 });
 
-                // DYNAMIC MAGIC 1: Build your Property Type Dropdown
+                // Auto dropdown builder 1
                 const typeFilter = document.getElementById('typeFilter');
                 if (typeFilter) {
                     typeFilter.innerHTML = '<option value="all">All Types</option>';
@@ -398,7 +433,7 @@
                     });
                 }
 
-                // DYNAMIC MAGIC 2: Build your Area Dropdown
+                // Auto dropdown builder 2
                 const areaFilter = document.getElementById('areaFilter');
                 if (areaFilter) {
                     areaFilter.innerHTML = '<option value="all">All Areas</option>';
@@ -409,7 +444,6 @@
             }
         });
 
-        // Smart Multi-Filter Code
         function filterProperties() {
             const statusVal = document.getElementById('statusFilter') ? document.getElementById('statusFilter').value : 'all';
             const typeVal = document.getElementById('typeFilter') ? document.getElementById('typeFilter').value : 'all';
