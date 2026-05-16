@@ -188,8 +188,21 @@
             color: #2f855a;
             margin-bottom: 10px;
         }
-        .con {
-            color: #c53030;
+        /* --- Dynamic Interactive Buttons --- */
+        .video-btn {
+            display: block;
+            text-align: center;
+            background-color: #4a5568; /* Premium Dark Slate */
+            color: white;
+            padding: 12px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            transition: background 0.3s;
+        }
+        .video-btn:hover {
+            background-color: #2d3748;
         }
         .whatsapp-btn {
             display: block;
@@ -351,6 +364,13 @@
                     if (rawType) uniqueTypes.add(rawType);
                     if (rawArea) uniqueAreas.add(rawArea);
 
+                    // Video Walkthrough Integration Block
+                    let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
+                    let videoBtnHTML = '';
+                    if (videoLink) {
+                        videoBtnHTML = `<a href="${videoLink}" class="video-btn" target="_blank">🎬 Watch Video Tour</a>`;
+                    }
+
                     // Build the card automatically
                     let cardHTML = `
                     <div class="property-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}">
@@ -361,6 +381,7 @@
                             <div class="pros-cons">
                                 <p class="pro" style="color: var(--primary);"><strong>✅ Details:</strong><br>${details}</p>
                             </div>
+                            ${videoBtnHTML}
                             <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(row['Property Name'])}" class="whatsapp-btn" target="_blank">Chat on WhatsApp</a>
                         </div>
                     </div>
