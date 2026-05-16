@@ -279,6 +279,14 @@
                 <option value="shop">Shop / Commercial</option>
                 <option value="land">Land</option>
             </select>
+
+            <select id="areaFilter" onchange="filterProperties()">
+            <option value="all">All Areas</option>
+            <option value="pujut">Pujut</option>
+            <option value="bayshore">Taman Bayshore</option>
+            <option value="senadin">Senadin</option>
+            <option value="luak">Luak / Riam</option>
+        </select>
         </div>
 
         <div class="property-grid">
@@ -342,7 +350,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
     <script>
-        // Here is your live Google Sheet link, converted to CSV format!
         const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs1vXMme9mBWAEtQUGkFbB7wcL_n-IGGkFzzwvq2yxQgWKuhyZKe-J4tYza3yzLtO/pub?output=csv";
 
         Papa.parse(csvUrl, {
@@ -351,21 +358,30 @@
             complete: function(results) {
                 const data = results.data;
                 const grid = document.querySelector('.property-grid');
-                grid.innerHTML = ''; // Clear the loading text
+                grid.innerHTML = ''; // Clear loading text
+
+                // This set will remember all your unique areas automatically
+                const uniqueAreas = new Set();
 
                 data.forEach(row => {
                     if(!row['Property Name']) return; // Skip empty rows
 
-                    // Format the text to keep your line breaks from Google Sheets
                     let details = row['The Good (Pros)'] ? row['The Good (Pros)'].replace(/\n/g, '<br>') : '';
-                    
-                    // Fallback just in case Status/Type are blank in your sheet
                     let status = row['Status'] ? row['Status'].toLowerCase().trim() : 'sale';
                     let type = row['Type'] ? row['Type'].toLowerCase().trim() : 'house';
+                    
+                    // Grab the area name from your Google Sheet
+                    let rawArea = row['Area'] ? row['Area'].trim() : '';
+                    let areaValue = rawArea.toLowerCase();
+
+                    // If you typed an area, remember it!
+                    if (rawArea) {
+                        uniqueAreas.add(rawArea);
+                    }
 
                     // Build the card automatically
                     let cardHTML = `
-                    <div class="property-card" data-status="${status}" data-type="${type}">
+                    <div class="property-card" data-status="${status}" data-type="${type}" data-area="${areaValue || 'all'}">
                         <img src="${row['Image Name']}" alt="${row['Property Name']}">
                         <div class="property-details">
                             <h3>${row['Property Name']}</h3>
@@ -379,8 +395,43 @@
                     `;
                     grid.innerHTML += cardHTML;
                 });
+
+                // DYNAMIC MAGIC: Build your 16-area dropdown filter automatically!
+                const areaFilter = document.getElementById('areaFilter');
+                if (areaFilter) {
+                    areaFilter.innerHTML = '<option value="all">All Areas</option>'; // Reset
+                    
+                    // Sort your areas alphabetically so it looks clean
+                    const sortedAreas = Array.from(uniqueAreas).sort();
+                    
+                    sortedAreas.forEach(areaName => {
+                        let optionHTML = `<option value="${areaName.toLowerCase()}">${areaName}</option>`;
+                        areaFilter.innerHTML += optionHTML;
+                    });
+                }
             }
         });
+
+        // Smart Multi-Filter Code
+        function filterProperties() {
+            const statusVal = document.getElementById('statusFilter') ? document.getElementById('statusFilter').value : 'all';
+            const typeVal = document.getElementById('typeFilter') ? document.getElementById('typeFilter').value : 'all';
+            const areaVal = document.getElementById('areaFilter') ? document.getElementById('areaFilter').value : 'all';
+            
+            const cards = document.querySelectorAll('.property-card');
+            
+            cards.forEach(card => {
+                const matchStatus = (statusVal === 'all' || card.getAttribute('data-status') === statusVal);
+                const matchType = (typeVal === 'all' || card.getAttribute('data-type') === typeVal);
+                const matchArea = (areaVal === 'all' || card.getAttribute('data-area') === areaVal);
+                
+                if (matchStatus && matchType && matchArea) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
     </script>
 </body>
 </html>
