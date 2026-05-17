@@ -6,7 +6,7 @@
     <title>Jong Express Property | Honest & Transparent Real Estate Miri</title>
     <meta name="description" content="Buy, sell, or rent houses, apartments, shops, and land in Miri, Sarawak. Transparent property listings in Pujut, Senadin, Lutong, and Taman Bayshore with video tours.">
     <meta name="keywords" content="Miri property, house for sale Miri, property agent Miri, rent house Miri, shoplot Miri, buy house Miri, Kommons Realty, Jong Kiat Shan">
-    <link rel="icon" type="image/png" href="photos/icononly.png">
+    <link rel="icon" type="image/png" href="favicon.png">
     <style>
         :root {
             --primary: #1a365d;
@@ -191,24 +191,7 @@
             color: #2f855a;
             margin-bottom: 10px;
         }
-        /* --- Video Embed Container --- */
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            margin-bottom: 15px;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
+        /* --- Dynamic Interactive Buttons --- */
         .video-btn {
             display: block;
             text-align: center;
@@ -218,7 +201,7 @@
             text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             transition: background 0.3s;
         }
         .video-btn:hover {
@@ -238,15 +221,35 @@
         .whatsapp-btn:hover {
             background-color: #128C7E;
         }
-        /* --- Filter System Styles --- */
+        /* --- Filter & Search Control Panel Styles --- */
+        .search-filter-wrapper {
+            max-width: 700px;
+            margin: 0 auto 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 14px 20px;
+            border: 2px solid var(--primary);
+            border-radius: 5px;
+            font-size: 1.1rem;
+            outline: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .search-input:focus {
+            border-color: var(--secondary);
+        }
         .filter-container {
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin-bottom: 30px;
             flex-wrap: wrap;
         }
         .filter-select {
+            flex: 1;
+            min-width: 140px;
             padding: 12px;
             border: 2px solid var(--primary);
             border-radius: 5px;
@@ -259,6 +262,24 @@
         }
         .filter-select:hover {
             border-color: var(--secondary);
+        }
+        /* --- Video Embed Container --- */
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
         }
     </style>
     <meta name="google-site-verification" content="DmNkWGPhpuc2D9rzCBVezIjbnLr8M6qBpZ-TYUeL4lE" />
@@ -297,22 +318,26 @@
 
     <section id="properties" class="featured-properties">
         <h2>Featured Honest Listings</h2>
-        <p>100% Verified. We show you the good, and we don't hide the bad.</p>
+        <p style="margin-bottom: 30px;">100% Verified. We show you the good, and we don't hide the bad.</p>
         
-        <div class="filter-container">
-            <select id="statusFilter" class="filter-select" onchange="filterProperties()">
-                <option value="all">All Status</option>
-                <option value="sale">For Sale</option>
-                <option value="rent">For Rent</option>
-            </select>
+        <div class="search-filter-wrapper">
+            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Type keywords... (e.g. Corner, Furnished, Pujut, Curtin)" onkeyup="filterProperties()">
             
-            <select id="typeFilter" class="filter-select" onchange="filterProperties()">
-                <option value="all">All Types</option>
-            </select>
+            <div class="filter-container">
+                <select id="statusFilter" class="filter-select" onchange="filterProperties()">
+                    <option value="all">All Status</option>
+                    <option value="sale">For Sale</option>
+                    <option value="rent">For Rent</option>
+                </select>
+                
+                <select id="typeFilter" class="filter-select" onchange="filterProperties()">
+                    <option value="all">All Types</option>
+                </select>
 
-            <select id="areaFilter" class="filter-select" onchange="filterProperties()">
-                <option value="all">All Areas</option>
-            </select>
+                <select id="areaFilter" class="filter-select" onchange="filterProperties()">
+                    <option value="all">All Areas</option>
+                </select>
+            </div>
         </div>
 
         <div class="property-grid">
@@ -356,7 +381,6 @@
     <script>
         const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs1vXMme9mBWAEtQUGkFbB7wcL_n-IGGkFzzwvq2yxQgWKuhyZKe-J4tYza3yzLtO/pub?output=csv";
 
-        // Helper function to extract YouTube ID and convert it into a clean embed URL safely
         function getYouTubeEmbedUrl(url) {
             let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
             let match = url.match(regExp);
@@ -372,7 +396,7 @@
             complete: function(results) {
                 const data = results.data;
                 const grid = document.querySelector('.property-grid');
-                grid.innerHTML = ''; // Clear loading text
+                grid.innerHTML = ''; 
 
                 const uniqueAreas = new Set();
                 const uniqueTypes = new Set();
@@ -392,25 +416,21 @@
                     if (rawType) uniqueTypes.add(rawType);
                     if (rawArea) uniqueAreas.add(rawArea);
 
-                    // HYBRID VIDEO ENGINE
                     let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
                     let videoHTML = '';
 
                     if (videoLink) {
                         let ytEmbed = getYouTubeEmbedUrl(videoLink);
                         if (ytEmbed) {
-                            // If YouTube link, build an interactive player inside the card
                             videoHTML = `
                             <div class="video-container">
                                 <iframe src="${ytEmbed}" allowfullscreen></iframe>
                             </div>`;
                         } else {
-                            // If TikTok, Facebook, etc., build the app button
                             videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank">🎬 Watch Video Tour</a>`;
                         }
                     }
 
-                    // Build Card
                     let cardHTML = `
                     <div class="property-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}">
                         <img src="${row['Image Name']}" alt="${row['Property Name']}">
@@ -428,7 +448,6 @@
                     grid.innerHTML += cardHTML;
                 });
 
-                // Auto dropdown builder 1
                 const typeFilter = document.getElementById('typeFilter');
                 if (typeFilter) {
                     typeFilter.innerHTML = '<option value="all">All Types</option>';
@@ -437,7 +456,6 @@
                     });
                 }
 
-                // Auto dropdown builder 2
                 const areaFilter = document.getElementById('areaFilter');
                 if (areaFilter) {
                     areaFilter.innerHTML = '<option value="all">All Areas</option>';
@@ -448,10 +466,12 @@
             }
         });
 
+        // Upgraded Omni-Filter (Dropdowns + Keyword Search matching combined)
         function filterProperties() {
             const statusVal = document.getElementById('statusFilter') ? document.getElementById('statusFilter').value : 'all';
             const typeVal = document.getElementById('typeFilter') ? document.getElementById('typeFilter').value : 'all';
             const areaVal = document.getElementById('areaFilter') ? document.getElementById('areaFilter').value : 'all';
+            const searchVal = document.getElementById('searchBar') ? document.getElementById('searchBar').value.toLowerCase().trim() : '';
             
             const cards = document.querySelectorAll('.property-card');
             
@@ -460,7 +480,11 @@
                 const matchType = (typeVal === 'all' || card.getAttribute('data-type') === typeVal);
                 const matchArea = (areaVal === 'all' || card.getAttribute('data-area') === areaVal);
                 
-                if (matchStatus && matchType && matchArea) {
+                // Matches against text within the card title and details summary paragraph
+                const cardText = card.innerText.toLowerCase();
+                const matchSearch = (searchVal === '' || cardText.includes(searchVal));
+                
+                if (matchStatus && matchType && matchArea && matchSearch) {
                     card.style.display = 'block';
                 } else {
                     card.style.display = 'none';
