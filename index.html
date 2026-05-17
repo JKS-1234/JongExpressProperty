@@ -281,6 +281,25 @@
             height: 100%;
             border: 0;
         }
+        /* --- Premium Load More Button Style --- */
+        .load-more-btn {
+            display: none; /* Controlled dynamically by JavaScript */
+            margin: 40px auto 10px;
+            background-color: var(--primary);
+            color: white;
+            padding: 14px 40px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: 2px solid var(--primary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .load-more-btn:hover {
+            background-color: transparent;
+            color: var(--primary);
+        }
     </style>
     <meta name="google-site-verification" content="DmNkWGPhpuc2D9rzCBVezIjbnLr8M6qBpZ-TYUeL4lE" />
 </head>
@@ -321,20 +340,20 @@
         <p style="margin-bottom: 30px;">100% Verified. We show you the good, and we don't hide the bad.</p>
         
         <div class="search-filter-wrapper">
-            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Type keywords... (e.g. Corner, Furnished, Pujut, Curtin)" onkeyup="filterProperties()">
+            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Type keywords... (e.g. Corner, Furnished, Pujut, Curtin)" onkeyup="resetAndFilter()">
             
             <div class="filter-container">
-                <select id="statusFilter" class="filter-select" onchange="filterProperties()">
+                <select id="statusFilter" class="filter-select" onchange="resetAndFilter()">
                     <option value="all">All Status</option>
                     <option value="sale">For Sale</option>
                     <option value="rent">For Rent</option>
                 </select>
                 
-                <select id="typeFilter" class="filter-select" onchange="filterProperties()">
+                <select id="typeFilter" class="filter-select" onchange="resetAndFilter()">
                     <option value="all">All Types</option>
                 </select>
 
-                <select id="areaFilter" class="filter-select" onchange="filterProperties()">
+                <select id="areaFilter" class="filter-select" onchange="resetAndFilter()">
                     <option value="all">All Areas</option>
                 </select>
             </div>
@@ -343,6 +362,8 @@
         <div class="property-grid">
             <h3 style="text-align:center; width:100%; color:var(--primary);">Loading latest listings...</h3>
         </div>
+
+        <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
     </section>
     
     <section id="contact" class="contact-section">
@@ -380,6 +401,9 @@
 
     <script>
         const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs1vXMme9mBWAEtQUGkFbB7wcL_n-IGGkFzzwvq2yxQgWKuhyZKe-J4tYza3yzLtO/pub?output=csv";
+        
+        // Paging configurations
+        let currentLimit = 6;
 
         function getYouTubeEmbedUrl(url) {
             let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -463,10 +487,13 @@
                         areaFilter.innerHTML += `<option value="${areaName.toLowerCase()}">${areaName}</option>`;
                     });
                 }
+
+                // Run initial filter check to clamp items down to 6 right away
+                filterProperties();
             }
         });
 
-        // Upgraded Omni-Filter (Dropdowns + Keyword Search matching combined)
+        // Combined Filter and Limit Logic
         function filterProperties() {
             const statusVal = document.getElementById('statusFilter') ? document.getElementById('statusFilter').value : 'all';
             const typeVal = document.getElementById('typeFilter') ? document.getElementById('typeFilter').value : 'all';
@@ -474,22 +501,51 @@
             const searchVal = document.getElementById('searchBar') ? document.getElementById('searchBar').value.toLowerCase().trim() : '';
             
             const cards = document.querySelectorAll('.property-card');
+            let matchedCount = 0;
             
             cards.forEach(card => {
                 const matchStatus = (statusVal === 'all' || card.getAttribute('data-status') === statusVal);
                 const matchType = (typeVal === 'all' || card.getAttribute('data-type') === typeVal);
                 const matchArea = (areaVal === 'all' || card.getAttribute('data-area') === areaVal);
                 
-                // Matches against text within the card title and details summary paragraph
                 const cardText = card.innerText.toLowerCase();
                 const matchSearch = (searchVal === '' || cardText.includes(searchVal));
                 
+                // If it passes all search criteria parameters
                 if (matchStatus && matchType && matchArea && matchSearch) {
-                    card.style.display = 'block';
+                    matchedCount++;
+                    // Hide if it exceeds our current viewport limit ceiling 
+                    if (matchedCount <= currentLimit) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
                 } else {
                     card.style.display = 'none';
                 }
             });
+
+            // Display Load More button if total matching records exceeds current limit
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            if (loadMoreBtn) {
+                if (matchedCount > currentLimit) {
+                    loadMoreBtn.style.display = 'block';
+                } else {
+                    loadMoreBtn.style.display = 'none';
+                }
+            }
+        }
+
+        // Reset display limit back to 6 whenever user applies a clean filter change
+        function resetAndFilter() {
+            currentLimit = 6;
+            filterProperties();
+        }
+
+        // Expand the viewing limit by 6 additional items upon click event
+        function showMoreListings() {
+            currentLimit += 6;
+            filterProperties();
         }
     </script>
 </body>
