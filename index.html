@@ -283,7 +283,7 @@
         }
         /* --- Premium Load More Button Style --- */
         .load-more-btn {
-            display: none; /* Controlled dynamically by JavaScript */
+            display: none;
             margin: 40px auto 10px;
             background-color: var(--primary);
             color: white;
@@ -302,8 +302,7 @@
         }
     </style>
     <meta name="google-site-verification" content="DmNkWGPhpuc2D9rzCBVezIjbnLr8M6qBpZ-TYUeL4lE" />
-    <!-- Facebook Pixel Code --><script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js'); fbq('init', '2776876486027023'); fbq('track', 'PageView');</script><noscript> <img height="1" width="1" src="https://www.facebook.com/tr?id=2776876486027023&ev=PageView&noscript=1"/></noscript><!-- End Facebook Pixel Code -->
-</head>
+    <script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js'); fbq('init', '2776876486027023'); fbq('track', 'PageView');</script><noscript> <img height="1" width="1" src="https://www.facebook.com/tr?id=2776876486027023&ev=PageView&noscript=1"/></noscript></head>
 <body>
 
     <header>
@@ -403,10 +402,13 @@
     <script>
         const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs1vXMme9mBWAEtQUGkFbB7wcL_n-IGGkFzzwvq2yxQgWKuhyZKe-J4tYza3yzLtO/pub?output=csv";
         
-        // Paging configurations
         let currentLimit = 6;
 
+        // FIXED VIDEO FILTER: Explicitly prevents Facebook links from matching YouTube embeds
         function getYouTubeEmbedUrl(url) {
+            if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+                return null;
+            }
             let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
             let match = url.match(regExp);
             if (match && match[2].length === 11) {
@@ -489,12 +491,10 @@
                     });
                 }
 
-                // Run initial filter check to clamp items down to 6 right away
                 filterProperties();
             }
         });
 
-        // Combined Filter and Limit Logic
         function filterProperties() {
             const statusVal = document.getElementById('statusFilter') ? document.getElementById('statusFilter').value : 'all';
             const typeVal = document.getElementById('typeFilter') ? document.getElementById('typeFilter').value : 'all';
@@ -512,10 +512,8 @@
                 const cardText = card.innerText.toLowerCase();
                 const matchSearch = (searchVal === '' || cardText.includes(searchVal));
                 
-                // If it passes all search criteria parameters
                 if (matchStatus && matchType && matchArea && matchSearch) {
                     matchedCount++;
-                    // Hide if it exceeds our current viewport limit ceiling 
                     if (matchedCount <= currentLimit) {
                         card.style.display = 'block';
                     } else {
@@ -526,7 +524,6 @@
                 }
             });
 
-            // Display Load More button if total matching records exceeds current limit
             const loadMoreBtn = document.getElementById('loadMoreBtn');
             if (loadMoreBtn) {
                 if (matchedCount > currentLimit) {
@@ -537,13 +534,11 @@
             }
         }
 
-        // Reset display limit back to 6 whenever user applies a clean filter change
         function resetAndFilter() {
             currentLimit = 6;
             filterProperties();
         }
 
-        // Expand the viewing limit by 6 additional items upon click event
         function showMoreListings() {
             currentLimit += 6;
             filterProperties();
