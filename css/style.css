@@ -302,3 +302,25 @@ footer {
     background-color: transparent;
     color: var(--primary);
 }
+/* --- Market Category Tabs --- */
+.market-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+.tab-btn {
+    padding: 10px 20px;
+    border: 2px solid var(--primary);
+    background-color: transparent;
+    color: var(--primary);
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.tab-btn.active, .tab-btn:hover {
+    background-color: var(--primary);
+    color: white;
+}
