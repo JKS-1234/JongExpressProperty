@@ -1,6 +1,7 @@
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs1vXMme9mBWAEtQUGkFbB7wcL_n-IGGkFzzwvq2yxQgWKuhyZKe-J4tYza3yzLtO/pub?output=csv";
         
 let currentLimit = 6;
+let currentMarket = 'all'; // New variable to track the active tab
 
 function getYouTubeEmbedUrl(url) {
     if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
@@ -12,6 +13,18 @@ function getYouTubeEmbedUrl(url) {
         return `https://www.youtube.com/embed/${match[2]}`;
     }
     return null;
+}
+
+// Function to handle tab clicking
+function setMarket(marketType, btnElement) {
+    currentMarket = marketType;
+    
+    // Update the button colors
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    btnElement.classList.add('active');
+
+    resetAndFilter();
 }
 
 Papa.parse(csvUrl, {
@@ -40,8 +53,11 @@ Papa.parse(csvUrl, {
             if (rawType) uniqueTypes.add(rawType);
             if (rawArea) uniqueAreas.add(rawArea);
 
+            // Determine if this is a New Project or Sub-sale
+            let isProject = (typeValue.includes('new project') || typeValue.includes('new launch') || typeValue.includes('developer')) ? 'true' : 'false';
+            
             let badgeHTML = '';
-            if (typeValue.includes('new project') || typeValue.includes('new launch') || typeValue.includes('developer')) {
+            if (isProject === 'true') {
                 badgeHTML = `<div class="badge-new">🚀 NEW LAUNCH</div>`;
             }
 
@@ -60,8 +76,9 @@ Papa.parse(csvUrl, {
                 }
             }
 
+            // We add data-project tag to the HTML so the filter knows what it is
             let cardHTML = `
-            <div class="property-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}">
+            <div class="property-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}">
                 ${badgeHTML}
                 <img src="${row['Image Name']}" alt="${row['Property Name']}">
                 <div class="property-details">
@@ -112,10 +129,16 @@ function filterProperties() {
         const matchType = (typeVal === 'all' || card.getAttribute('data-type') === typeVal);
         const matchArea = (areaVal === 'all' || card.getAttribute('data-area') === areaVal);
         
+        // Check if the card matches the clicked Tab
+        const isProjectCard = card.getAttribute('data-project');
+        const matchMarket = (currentMarket === 'all') || 
+                            (currentMarket === 'project' && isProjectCard === 'true') || 
+                            (currentMarket === 'subsale' && isProjectCard === 'false');
+        
         const cardText = card.innerText.toLowerCase();
         const matchSearch = (searchVal === '' || cardText.includes(searchVal));
         
-        if (matchStatus && matchType && matchArea && matchSearch) {
+        if (matchStatus && matchType && matchArea && matchSearch && matchMarket) {
             matchedCount++;
             if (matchedCount <= currentLimit) {
                 card.style.display = 'block';
