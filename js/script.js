@@ -53,12 +53,12 @@ Papa.parse(csvUrl, {
             if (rawType) uniqueTypes.add(rawType);
             if (rawArea) uniqueAreas.add(rawArea);
 
-            // Determine if this is a New Project or Sub-sale
-            let isProject = (typeValue.includes('new project') || typeValue.includes('new launch') || typeValue.includes('developer')) ? 'true' : 'false';
+           // Determine if this is a Project or Sub-sale/Rent
+            let isProject = (typeValue.includes('project') || typeValue.includes('developer')) ? 'true' : 'false';
             
             let badgeHTML = '';
             if (isProject === 'true') {
-                badgeHTML = `<div class="badge-new">🚀 NEW LAUNCH</div>`;
+                badgeHTML = `<div class="badge-new">🏢 PROJECT</div>`;
             }
 
             let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
