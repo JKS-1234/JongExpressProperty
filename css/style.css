@@ -324,3 +324,82 @@ footer {
     background-color: var(--primary);
     color: white;
 }
+/* --- Mobile Responsiveness (Smartphones & Tablets) --- */
+@media (max-width: 768px) {
+    /* Stack the header logo and navigation links */
+    header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        padding: 1rem 15px;
+    }
+    
+    /* Make navigation links wrap neatly */
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+    
+    nav a {
+        margin-left: 0;
+        margin: 0 5px;
+        font-size: 0.95rem;
+    }
+    
+    /* Adjust the hero banner text for smaller screens */
+    .hero {
+        padding: 60px 15px;
+    }
+    
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+    
+    /* Stack the search and filter boxes vertically */
+    .filter-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .filter-select {
+        width: 100%;
+        min-width: 100%;
+    }
+    
+    .search-input {
+        font-size: 1rem;
+    }
+    
+    /* Adjust property cards to take up the full screen width */
+    .property-card {
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    /* Stack contact info blocks vertically */
+    .contact-info {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .info-block {
+        width: 100%;
+    }
+    
+    /* Adjust the market tabs for easy tapping */
+    .market-tabs {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .tab-btn {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
