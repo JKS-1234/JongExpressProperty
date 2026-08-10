@@ -403,3 +403,28 @@ footer {
         margin-bottom: 5px;
     }
 }
+/* --- Skeleton Loading Animation --- */
+.skeleton-card {
+    background: #e2e8f0;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 350px;
+    height: 420px; /* Matches roughly the height of your property cards */
+    animation: pulse 1.5s infinite ease-in-out;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+@keyframes pulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+/* --- No Results State --- */
+.no-results-msg {
+    width: 100%;
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--primary);
+    font-size: 1.2rem;
+}
