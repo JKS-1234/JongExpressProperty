@@ -1,3 +1,8 @@
+/* --- Added Smooth Scrolling for Single Page Layout --- */
+html {
+    scroll-behavior: smooth;
+}
+
 :root {
     --primary: #1a365d;
     --secondary: #d69e2e;
@@ -303,7 +308,7 @@ footer {
     background-color: transparent;
     color: var(--primary);
 }
-/* Market Category Tabs */
+/* --- Market Category Tabs --- */
 .market-tabs {
     display: flex;
     justify-content: center;
@@ -325,7 +330,7 @@ footer {
     background-color: var(--primary);
     color: white;
 }
-/* No Results State */
+/* --- No Results State --- */
 .no-results-msg {
     width: 100%;
     text-align: center;
@@ -334,7 +339,7 @@ footer {
     font-size: 1.2rem;
     font-weight: 500;
 }
-/* Mobile Responsiveness */
+/* --- Mobile Responsiveness (Smartphones & Tablets) --- */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
