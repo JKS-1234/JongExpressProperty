@@ -2,10 +2,10 @@ const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs
         
 let currentLimit = 6;
 let currentMarket = 'all'; 
-let allProperties = []; // New variable to store the fetched data
+let allProperties = []; // Global store for loaded dataset
 
 function getYouTubeEmbedUrl(url) {
-    if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+    if (!url || (!url.includes('youtube.com') && !url.includes('youtu.be'))) {
         return null;
     }
     let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -16,7 +16,7 @@ function getYouTubeEmbedUrl(url) {
     return null;
 }
 
-// Helper function to turn price strings (e.g., "RM 500,000") into numbers for sorting
+// Parses numerical value from price strings (e.g. "RM 450,000" -> 450000)
 function parsePrice(priceStr) {
     if (!priceStr) return 0;
     return parseInt(priceStr.replace(/[^0-9]/g, ''), 10) || 0;
@@ -36,7 +36,6 @@ Papa.parse(csvUrl, {
     download: true,
     header: true,
     complete: function(results) {
-        // Store the valid rows in our global array
         allProperties = results.data.filter(row => row['Property Name']);
 
         const uniqueAreas = new Set();
@@ -67,10 +66,11 @@ Papa.parse(csvUrl, {
 
         filterProperties();
     },
-    // Added Error Handling here
     error: function(error) {
         const grid = document.querySelector('.property-grid');
-        grid.innerHTML = '<h3 style="text-align:center; width: 100%; color:#e53e3e;">Failed to load properties. Please try again later.</h3>';
+        if (grid) {
+            grid.innerHTML = '<h3 style="text-align:center; width:100%; color:#e53e3e;">Failed to load properties. Please try again later.</h3>';
+        }
         console.error("Error fetching data:", error);
     }
 });
@@ -81,8 +81,8 @@ function filterProperties() {
     const areaVal = document.getElementById('areaFilter') ? document.getElementById('areaFilter').value : 'all';
     const searchVal = document.getElementById('searchBar') ? document.getElementById('searchBar').value.toLowerCase().trim() : '';
     const sortVal = document.getElementById('sortPriceFilter') ? document.getElementById('sortPriceFilter').value : 'default';
-    
-    // 1. Filter the data array
+
+    // 1. Apply Filtering Logic
     let filteredData = allProperties.filter(row => {
         let status = row['Status'] ? row['Status'].toLowerCase().trim() : 'sale';
         let typeValue = row['Type'] ? row['Type'].trim().toLowerCase() : '';
@@ -98,29 +98,26 @@ function filterProperties() {
                             (currentMarket === 'project' && isProject) || 
                             (currentMarket === 'subsale' && !isProject);
         
-        // Combine row values to allow search across multiple columns
         const rowText = Object.values(row).join(' ').toLowerCase();
         const matchSearch = (searchVal === '' || rowText.includes(searchVal));
         
         return matchStatus && matchType && matchArea && matchSearch && matchMarket;
     });
 
-    // 2. Sort the data array if needed
+    // 2. Apply Price Sorting
     if (sortVal === 'lowToHigh') {
         filteredData.sort((a, b) => parsePrice(a['Price']) - parsePrice(b['Price']));
     } else if (sortVal === 'highToLow') {
         filteredData.sort((a, b) => parsePrice(b['Price']) - parsePrice(a['Price']));
     }
 
-    // 3. Render the HTML (Optimized DOM Manipulation)
+    // 3. Optimized Single-pass DOM rendering
     const grid = document.querySelector('.property-grid');
     let allCardsHTML = '';
     
     if (filteredData.length === 0) {
-        // Added No Results State here
-        allCardsHTML = '<div class="no-results-msg" style="width:100%; text-align:center; padding:40px 20px; color:var(--primary); font-size:1.2rem;">No properties found matching your criteria. Try adjusting your filters!</div>';
+        allCardsHTML = '<div class="no-results-msg">No properties found matching your criteria. Try adjusting your filters!</div>';
     } else {
-        // Only loop up to the current limit
         const propertiesToShow = filteredData.slice(0, currentLimit);
         
         propertiesToShow.forEach(row => {
@@ -142,7 +139,6 @@ function filterProperties() {
                 }
             }
 
-            // Added loading="lazy" to the image tag
             allCardsHTML += `
             <div class="property-card">
                 ${badgeHTML}
@@ -160,9 +156,10 @@ function filterProperties() {
         });
     }
 
-    grid.innerHTML = allCardsHTML;
+    if (grid) {
+        grid.innerHTML = allCardsHTML;
+    }
 
-    // Show/Hide Load More Button
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     if (loadMoreBtn) {
         loadMoreBtn.style.display = (filteredData.length > currentLimit) ? 'block' : 'none';
