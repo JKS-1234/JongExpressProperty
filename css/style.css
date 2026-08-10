@@ -144,6 +144,7 @@ footer {
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     max-width: 350px;
+    width: 100%;
     text-align: left;
     transition: transform 0.3s ease;
     position: relative;
@@ -227,7 +228,7 @@ footer {
     background-color: #128C7E;
 }
 .search-filter-wrapper {
-    max-width: 700px;
+    max-width: 800px;
     margin: 0 auto 30px;
     display: flex;
     flex-direction: column;
@@ -302,7 +303,7 @@ footer {
     background-color: transparent;
     color: var(--primary);
 }
-/* --- Market Category Tabs --- */
+/* Market Category Tabs */
 .market-tabs {
     display: flex;
     justify-content: center;
@@ -324,107 +325,71 @@ footer {
     background-color: var(--primary);
     color: white;
 }
-/* --- Mobile Responsiveness (Smartphones & Tablets) --- */
-@media (max-width: 768px) {
-    /* Stack the header logo and navigation links */
-    header {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-        padding: 1rem 15px;
-    }
-    
-    /* Make navigation links wrap neatly */
-    nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
-    }
-    
-    nav a {
-        margin-left: 0;
-        margin: 0 5px;
-        font-size: 0.95rem;
-    }
-    
-    /* Adjust the hero banner text for smaller screens */
-    .hero {
-        padding: 60px 15px;
-    }
-    
-    .hero h1 {
-        font-size: 2rem;
-    }
-    
-    .hero p {
-        font-size: 1rem;
-    }
-    
-    /* Stack the search and filter boxes vertically */
-    .filter-container {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .filter-select {
-        width: 100%;
-        min-width: 100%;
-    }
-    
-    .search-input {
-        font-size: 1rem;
-    }
-    
-    /* Adjust property cards to take up the full screen width */
-    .property-card {
-        max-width: 100%;
-        width: 100%;
-    }
-    
-    /* Stack contact info blocks vertically */
-    .contact-info {
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    .info-block {
-        width: 100%;
-    }
-    
-    /* Adjust the market tabs for easy tapping */
-    .market-tabs {
-        flex-direction: column;
-        width: 100%;
-    }
-    
-    .tab-btn {
-        width: 100%;
-        margin-bottom: 5px;
-    }
-}
-/* --- Skeleton Loading Animation --- */
-.skeleton-card {
-    background: #e2e8f0;
-    border-radius: 8px;
-    width: 100%;
-    max-width: 350px;
-    height: 420px; /* Matches roughly the height of your property cards */
-    animation: pulse 1.5s infinite ease-in-out;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-}
-
-@keyframes pulse {
-    0% { opacity: 0.5; }
-    50% { opacity: 1; }
-    100% { opacity: 0.5; }
-}
-
-/* --- No Results State --- */
+/* No Results State */
 .no-results-msg {
     width: 100%;
     text-align: center;
     padding: 40px 20px;
     color: var(--primary);
     font-size: 1.2rem;
+    font-weight: 500;
+}
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+        padding: 1rem 15px;
+    }
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+    nav a {
+        margin-left: 0;
+        margin: 0 5px;
+        font-size: 0.95rem;
+    }
+    .hero {
+        padding: 60px 15px;
+    }
+    .hero h1 {
+        font-size: 2rem;
+    }
+    .hero p {
+        font-size: 1rem;
+    }
+    .filter-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .filter-select {
+        width: 100%;
+        min-width: 100%;
+    }
+    .search-input {
+        font-size: 1rem;
+    }
+    .property-card {
+        max-width: 100%;
+        width: 100%;
+    }
+    .contact-info {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .info-block {
+        width: 100%;
+    }
+    .market-tabs {
+        flex-direction: column;
+        width: 100%;
+    }
+    .tab-btn {
+        width: 100%;
+        margin-bottom: 5px;
+    }
 }
