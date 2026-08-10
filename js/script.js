@@ -139,6 +139,7 @@ function filterProperties() {
                 }
             }
 
+            // Notice the loading="lazy" tag added below
             allCardsHTML += `
             <div class="property-card">
                 ${badgeHTML}
