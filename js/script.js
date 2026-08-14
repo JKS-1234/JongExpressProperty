@@ -2,7 +2,7 @@ const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs
         
 let currentLimit = 6;
 let currentMarket = 'all'; 
-let allProperties = []; // Global store for loaded dataset
+let allProperties = []; 
 
 function getYouTubeEmbedUrl(url) {
     if (!url || (!url.includes('youtube.com') && !url.includes('youtu.be'))) {
@@ -16,7 +16,6 @@ function getYouTubeEmbedUrl(url) {
     return null;
 }
 
-// Parses numerical value from price strings (e.g. "RM 450,000" -> 450000)
 function parsePrice(priceStr) {
     if (!priceStr) return 0;
     return parseInt(priceStr.replace(/[^0-9]/g, ''), 10) || 0;
@@ -82,7 +81,6 @@ function filterProperties() {
     const searchVal = document.getElementById('searchBar') ? document.getElementById('searchBar').value.toLowerCase().trim() : '';
     const sortVal = document.getElementById('sortPriceFilter') ? document.getElementById('sortPriceFilter').value : 'default';
 
-    // 1. Apply Filtering Logic
     let filteredData = allProperties.filter(row => {
         let status = row['Status'] ? row['Status'].toLowerCase().trim() : 'sale';
         let typeValue = row['Type'] ? row['Type'].trim().toLowerCase() : '';
@@ -104,14 +102,12 @@ function filterProperties() {
         return matchStatus && matchType && matchArea && matchSearch && matchMarket;
     });
 
-    // 2. Apply Price Sorting
     if (sortVal === 'lowToHigh') {
         filteredData.sort((a, b) => parsePrice(a['Price']) - parsePrice(b['Price']));
     } else if (sortVal === 'highToLow') {
         filteredData.sort((a, b) => parsePrice(b['Price']) - parsePrice(a['Price']));
     }
 
-    // 3. Optimized Single-pass DOM rendering
     const grid = document.querySelector('.property-grid');
     let allCardsHTML = '';
     
@@ -127,6 +123,15 @@ function filterProperties() {
             
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             
+            // --- NEW: Dynamic Info Boxes ---
+            let beds = row['Bedrooms'] ? `<span class="info-badge">🛏️ ${row['Bedrooms']} Beds</span>` : '';
+            let baths = row['Bathrooms'] ? `<span class="info-badge">🛁 ${row['Bathrooms']} Baths</span>` : '';
+            let size = row['Size'] ? `<span class="info-badge">📐 ${row['Size']}</span>` : '';
+            let parking = row['Car Park'] ? `<span class="info-badge">🚗 ${row['Car Park']} Pkg</span>` : '';
+            
+            let quickInfoHTML = (beds || baths || size || parking) ? `<div class="quick-info">${beds}${baths}${size}${parking}</div>` : '';
+            // -------------------------------
+
             let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
             let videoHTML = '';
 
@@ -139,7 +144,7 @@ function filterProperties() {
                 }
             }
 
-            // Notice the loading="lazy" tag added below
+            // Notice how ${quickInfoHTML} is placed right beneath the price
             allCardsHTML += `
             <div class="property-card">
                 ${badgeHTML}
@@ -147,8 +152,11 @@ function filterProperties() {
                 <div class="property-details">
                     <h3>${row['Property Name']}</h3>
                     <p class="price">${row['Price']}</p>
+                    
+                    ${quickInfoHTML}
+
                     <div class="pros-cons">
-                        <p class="pro" style="color: #1a365d;"><strong>✅ Details:</strong><br>${details}</p>
+                        <p class="pro" style="color: #1a365d;"><strong>✅ Summary:</strong><br>${details}</p>
                     </div>
                     ${videoHTML}
                     <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(row['Property Name'])}" class="whatsapp-btn" target="_blank">Chat on WhatsApp</a>
