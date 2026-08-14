@@ -5,14 +5,10 @@ let currentMarket = 'all';
 let allProperties = []; 
 
 function getYouTubeEmbedUrl(url) {
-    if (!url || (!url.includes('youtube.com') && !url.includes('youtu.be'))) {
-        return null;
-    }
+    if (!url || (!url.includes('youtube.com') && !url.includes('youtu.be'))) { return null; }
     let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     let match = url.match(regExp);
-    if (match && match[2].length === 11) {
-        return `https://www.youtube.com/embed/${match[2]}`;
-    }
+    if (match && match[2].length === 11) { return `https://www.youtube.com/embed/${match[2]}`; }
     return null;
 }
 
@@ -34,7 +30,6 @@ Papa.parse(csvUrl, {
     header: true,
     complete: function(results) {
         allProperties = results.data.filter(row => row['Property Name']);
-
         const uniqueAreas = new Set();
         const uniqueTypes = new Set();
 
@@ -60,14 +55,11 @@ Papa.parse(csvUrl, {
                 areaFilter.innerHTML += `<option value="${areaName.toLowerCase()}">${areaName}</option>`;
             });
         }
-
         filterProperties();
     },
     error: function(error) {
         const grid = document.querySelector('.property-grid');
-        if (grid) {
-            grid.innerHTML = '<h3 style="text-align:center; width:100%; color:#e53e3e;">Failed to load properties. Please check your connection.</h3>';
-        }
+        if (grid) grid.innerHTML = '<h3 style="text-align:center; width:100%; color:#e53e3e;">Failed to load properties.</h3>';
         console.error("Error fetching data:", error);
     }
 });
@@ -88,96 +80,115 @@ function filterProperties() {
         const matchStatus = (statusVal === 'all' || status === statusVal);
         const matchType = (typeVal === 'all' || typeValue === typeVal);
         const matchArea = (areaVal === 'all' || areaValue === areaVal);
-        const matchMarket = (currentMarket === 'all') || 
-                            (currentMarket === 'project' && isProject) || 
-                            (currentMarket === 'subsale' && !isProject);
-        
+        const matchMarket = (currentMarket === 'all') || (currentMarket === 'project' && isProject) || (currentMarket === 'subsale' && !isProject);
         const rowText = Object.values(row).join(' ').toLowerCase();
         const matchSearch = (searchVal === '' || rowText.includes(searchVal));
         
         return matchStatus && matchType && matchArea && matchSearch && matchMarket;
     });
 
-    if (sortVal === 'lowToHigh') {
-        filteredData.sort((a, b) => parsePrice(a['Price']) - parsePrice(b['Price']));
-    } else if (sortVal === 'highToLow') {
-        filteredData.sort((a, b) => parsePrice(b['Price']) - parsePrice(a['Price']));
-    }
+    if (sortVal === 'lowToHigh') filteredData.sort((a, b) => parsePrice(a['Price']) - parsePrice(b['Price']));
+    else if (sortVal === 'highToLow') filteredData.sort((a, b) => parsePrice(b['Price']) - parsePrice(a['Price']));
 
     const grid = document.querySelector('.property-grid');
     let allCardsHTML = '';
     
     if (filteredData.length === 0) {
-        allCardsHTML = '<div class="no-results-msg">No properties found matching your criteria. Try adjusting your filters!</div>';
+        allCardsHTML = '<div class="no-results-msg">No properties found matching your criteria.</div>';
     } else {
         const propertiesToShow = filteredData.slice(0, currentLimit);
         
-        // These are the core structural columns we DO NOT want to turn into small badges
-        const excludeColumns = ['Property Name', 'Price', 'Image Name', 'Video Link', 'The Good (Pros)', 'Status', 'Type', 'Area', 'Timestamp'];
-
         propertiesToShow.forEach(row => {
+            let title = row['Property Name'] || '';
+            let address = row['Area'] || '';
+            let price = row['Price'] || '';
             let details = row['The Good (Pros)'] ? row['The Good (Pros)'].replace(/\n/g, '<br>') : '';
-            let typeValue = row['Type'] ? row['Type'].trim().toLowerCase() : '';
-            let isProject = (typeValue.includes('project') || typeValue.includes('developer'));
+            let typeValue = row['Type'] ? row['Type'].trim() : '';
+            let isProject = (typeValue.toLowerCase().includes('project') || typeValue.toLowerCase().includes('developer'));
+            
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             
-            // --- DYNAMIC "AUTO-READ" ALL BADGES LOGIC ---
-            let quickInfoBadges = '';
-            Object.keys(row).forEach(columnName => {
-                let value = row[columnName] ? row[columnName].trim() : '';
-                
-                if (!excludeColumns.includes(columnName) && value !== '') {
-                    // Smart Emoji Assignment based on column header name
-                    let icon = '📌'; 
-                    let lowerCol = columnName.toLowerCase();
-                    if (lowerCol.includes('bed')) icon = '🛏️';
-                    else if (lowerCol.includes('bath')) icon = '🛁';
-                    else if (lowerCol.includes('size') || lowerCol.includes('area') || lowerCol.includes('sqft')) icon = '📐';
-                    else if (lowerCol.includes('park') || lowerCol.includes('car')) icon = '🚗';
-                    else if (lowerCol.includes('furnish')) icon = '🛋️';
-                    else if (lowerCol.includes('title') || lowerCol.includes('grant')) icon = '📜';
+            // --- 1. Minimalist Icons Logic ---
+            let beds = row['Bedrooms'] ? row['Bedrooms'].trim() : '';
+            let baths = row['Bathrooms'] ? row['Bathrooms'].trim() : '';
+            let parking = row['Car Park'] ? row['Car Park'].trim() : '';
+            
+            let iconsHTML = '';
+            if (beds || baths || parking) {
+                iconsHTML = `<div class="icon-row">`;
+                if (beds) iconsHTML += `<span>🛏️ ${beds}</span>`;
+                if (baths) iconsHTML += `<span>🛁 ${baths}</span>`;
+                if (parking) iconsHTML += `<span>🚗 ${parking}</span>`;
+                iconsHTML += `</div>`;
+            }
 
-                    quickInfoBadges += `<span class="info-badge">${icon} ${columnName}: ${value}</span>`;
+            // --- 2. Pipe Separated Details Logic (e.g. Size | Type | Furnished) ---
+            const excludeColumns = ['Property Name', 'Price', 'Image Name', 'Video Link', 'The Good (Pros)', 'Area', 'Timestamp', 'Bedrooms', 'Bathrooms', 'Car Park'];
+            let pipeDetailsArr = [];
+            
+            Object.keys(row).forEach(col => {
+                let val = row[col] ? row[col].trim() : '';
+                // Push the value directly if it's not an excluded column and not empty
+                if (!excludeColumns.includes(col) && val !== '') {
+                    pipeDetailsArr.push(val);
                 }
             });
-            
-            let quickInfoHTML = quickInfoBadges ? `<div class="quick-info">${quickInfoBadges}</div>` : '';
-            // --------------------------------------------
 
+            let pipeHTML = '';
+            if (pipeDetailsArr.length > 0) {
+                // Join them with HTML spans so CSS can add the pipe separator
+                let spans = pipeDetailsArr.map(item => `<span>${item}</span>`).join('');
+                pipeHTML = `<div class="pipe-details">${spans}</div>`;
+            }
+
+            // --- 3. Video Link Logic ---
             let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
             let videoHTML = '';
             if (videoLink) {
                 let ytEmbed = getYouTubeEmbedUrl(videoLink);
                 if (ytEmbed) {
-                    videoHTML = `<div class="video-container"><iframe src="${ytEmbed}" allowfullscreen></iframe></div>`;
+                    videoHTML = `<div style="margin-bottom: 15px;"><iframe width="100%" height="200" src="${ytEmbed}" frameborder="0" allowfullscreen></iframe></div>`;
                 } else {
                     videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank">🎬 Watch Video Tour</a>`;
                 }
             }
 
+            // --- Assemble Card ---
             allCardsHTML += `
             <div class="property-card">
                 ${badgeHTML}
-                <img src="${row['Image Name']}" alt="${row['Property Name']}" loading="lazy">
+                <img src="${row['Image Name']}" alt="${title}" loading="lazy">
+                
                 <div class="property-details">
-                    <h3>${row['Property Name']}</h3>
-                    <p class="price">${row['Price']}</p>
+                    <div class="card-header-flex">
+                        <div class="card-title-group">
+                            <h3>${title}</h3>
+                            ${address ? `<p class="card-address">${address}</p>` : ''}
+                        </div>
+                        <div class="card-price-group">
+                            <p class="price">${price}</p>
+                        </div>
+                    </div>
                     
-                    ${quickInfoHTML}
+                    ${iconsHTML}
+                    
+                    <div class="card-divider"></div>
+                    
+                    ${pipeHTML}
 
                     <div class="pros-cons">
-                        <p class="pro" style="color: #1a365d;"><strong>✅ Summary:</strong><br>${details}</p>
+                        <strong>📌 Summary:</strong><br>${details}
                     </div>
+                    
                     ${videoHTML}
-                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(row['Property Name'])}" class="whatsapp-btn" target="_blank">Chat on WhatsApp</a>
+                    
+                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" class="whatsapp-btn" target="_blank">Chat on WhatsApp</a>
                 </div>
             </div>`;
         });
     }
 
-    if (grid) {
-        grid.innerHTML = allCardsHTML;
-    }
+    if (grid) grid.innerHTML = allCardsHTML;
 
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     if (loadMoreBtn) {
@@ -189,7 +200,6 @@ function resetAndFilter() {
     currentLimit = 6;
     filterProperties();
 }
-
 function showMoreListings() {
     currentLimit += 6;
     filterProperties();
