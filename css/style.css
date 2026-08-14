@@ -1,8 +1,6 @@
-/* --- Added Smooth Scrolling for Single Page Layout --- */
 html {
     scroll-behavior: smooth;
 }
-
 :root {
     --primary: #1a365d;
     --secondary: #d69e2e;
@@ -153,6 +151,8 @@ footer {
     text-align: left;
     transition: transform 0.3s ease;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 .property-card:hover {
     transform: translateY(-5px);
@@ -179,6 +179,9 @@ footer {
 }
 .property-details {
     padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 .property-details h3 {
     color: var(--primary);
@@ -191,6 +194,25 @@ footer {
     color: var(--secondary);
     margin-bottom: 15px;
 }
+/* --- Auto-Generated Info Badges --- */
+.quick-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+.info-badge {
+    background-color: #e2e8f0;
+    color: var(--primary);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    border: 1px solid #cbd5e0;
+}
+/* ---------------------------------- */
 .pros-cons {
     background: white;
     border-left: 4px solid var(--primary);
@@ -198,6 +220,7 @@ footer {
     border-radius: 0 5px 5px 0;
     margin-bottom: 20px;
     font-size: 0.95rem;
+    flex-grow: 1;
 }
 .pro {
     color: #2f855a;
@@ -308,7 +331,6 @@ footer {
     background-color: transparent;
     color: var(--primary);
 }
-/* --- Market Category Tabs --- */
 .market-tabs {
     display: flex;
     justify-content: center;
@@ -330,7 +352,6 @@ footer {
     background-color: var(--primary);
     color: white;
 }
-/* --- No Results State --- */
 .no-results-msg {
     width: 100%;
     text-align: center;
@@ -339,7 +360,6 @@ footer {
     font-size: 1.2rem;
     font-weight: 500;
 }
-/* --- Mobile Responsiveness (Smartphones & Tablets) --- */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
@@ -397,23 +417,4 @@ footer {
         width: 100%;
         margin-bottom: 5px;
     }
-}
-/* --- Quick Info Badges --- */
-.quick-info {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 15px;
-}
-
-.info-badge {
-    background-color: #e2e8f0;
-    color: var(--primary);
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    border: 1px solid #cbd5e0;
 }
