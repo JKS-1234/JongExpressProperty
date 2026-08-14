@@ -398,3 +398,22 @@ footer {
         margin-bottom: 5px;
     }
 }
+/* --- Quick Info Badges --- */
+.quick-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.info-badge {
+    background-color: #e2e8f0;
+    color: var(--primary);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    border: 1px solid #cbd5e0;
+}
