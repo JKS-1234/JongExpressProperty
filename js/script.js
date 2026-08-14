@@ -23,11 +23,9 @@ function parsePrice(priceStr) {
 
 function setMarket(marketType, btnElement) {
     currentMarket = marketType;
-    
     const tabs = document.querySelectorAll('.tab-btn');
     tabs.forEach(tab => tab.classList.remove('active'));
     btnElement.classList.add('active');
-
     resetAndFilter();
 }
 
@@ -68,7 +66,7 @@ Papa.parse(csvUrl, {
     error: function(error) {
         const grid = document.querySelector('.property-grid');
         if (grid) {
-            grid.innerHTML = '<h3 style="text-align:center; width:100%; color:#e53e3e;">Failed to load properties. Please try again later.</h3>';
+            grid.innerHTML = '<h3 style="text-align:center; width:100%; color:#e53e3e;">Failed to load properties. Please check your connection.</h3>';
         }
         console.error("Error fetching data:", error);
     }
@@ -85,13 +83,11 @@ function filterProperties() {
         let status = row['Status'] ? row['Status'].toLowerCase().trim() : 'sale';
         let typeValue = row['Type'] ? row['Type'].trim().toLowerCase() : '';
         let areaValue = row['Area'] ? row['Area'].trim().toLowerCase() : '';
-        
         let isProject = (typeValue.includes('project') || typeValue.includes('developer'));
         
         const matchStatus = (statusVal === 'all' || status === statusVal);
         const matchType = (typeVal === 'all' || typeValue === typeVal);
         const matchArea = (areaVal === 'all' || areaValue === areaVal);
-        
         const matchMarket = (currentMarket === 'all') || 
                             (currentMarket === 'project' && isProject) || 
                             (currentMarket === 'subsale' && !isProject);
@@ -116,25 +112,40 @@ function filterProperties() {
     } else {
         const propertiesToShow = filteredData.slice(0, currentLimit);
         
+        // These are the core structural columns we DO NOT want to turn into small badges
+        const excludeColumns = ['Property Name', 'Price', 'Image Name', 'Video Link', 'The Good (Pros)', 'Status', 'Type', 'Area', 'Timestamp'];
+
         propertiesToShow.forEach(row => {
             let details = row['The Good (Pros)'] ? row['The Good (Pros)'].replace(/\n/g, '<br>') : '';
             let typeValue = row['Type'] ? row['Type'].trim().toLowerCase() : '';
             let isProject = (typeValue.includes('project') || typeValue.includes('developer'));
-            
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             
-            // --- NEW: Dynamic Info Boxes ---
-            let beds = row['Bedrooms'] ? `<span class="info-badge">🛏️ ${row['Bedrooms']} Beds</span>` : '';
-            let baths = row['Bathrooms'] ? `<span class="info-badge">🛁 ${row['Bathrooms']} Baths</span>` : '';
-            let size = row['Size'] ? `<span class="info-badge">📐 ${row['Size']}</span>` : '';
-            let parking = row['Car Park'] ? `<span class="info-badge">🚗 ${row['Car Park']} Pkg</span>` : '';
+            // --- DYNAMIC "AUTO-READ" ALL BADGES LOGIC ---
+            let quickInfoBadges = '';
+            Object.keys(row).forEach(columnName => {
+                let value = row[columnName] ? row[columnName].trim() : '';
+                
+                if (!excludeColumns.includes(columnName) && value !== '') {
+                    // Smart Emoji Assignment based on column header name
+                    let icon = '📌'; 
+                    let lowerCol = columnName.toLowerCase();
+                    if (lowerCol.includes('bed')) icon = '🛏️';
+                    else if (lowerCol.includes('bath')) icon = '🛁';
+                    else if (lowerCol.includes('size') || lowerCol.includes('area') || lowerCol.includes('sqft')) icon = '📐';
+                    else if (lowerCol.includes('park') || lowerCol.includes('car')) icon = '🚗';
+                    else if (lowerCol.includes('furnish')) icon = '🛋️';
+                    else if (lowerCol.includes('title') || lowerCol.includes('grant')) icon = '📜';
+
+                    quickInfoBadges += `<span class="info-badge">${icon} ${columnName}: ${value}</span>`;
+                }
+            });
             
-            let quickInfoHTML = (beds || baths || size || parking) ? `<div class="quick-info">${beds}${baths}${size}${parking}</div>` : '';
-            // -------------------------------
+            let quickInfoHTML = quickInfoBadges ? `<div class="quick-info">${quickInfoBadges}</div>` : '';
+            // --------------------------------------------
 
             let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
             let videoHTML = '';
-
             if (videoLink) {
                 let ytEmbed = getYouTubeEmbedUrl(videoLink);
                 if (ytEmbed) {
@@ -144,7 +155,6 @@ function filterProperties() {
                 }
             }
 
-            // Notice how ${quickInfoHTML} is placed right beneath the price
             allCardsHTML += `
             <div class="property-card">
                 ${badgeHTML}
