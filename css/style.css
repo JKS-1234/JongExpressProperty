@@ -32,22 +32,47 @@ footer { background-color: var(--primary); color: white; text-align: center; pad
 .property-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); max-width: 380px; width: 100%; text-align: left; transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative; display: flex; flex-direction: column; }
 .property-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
 
-/* --- NEW Interactive Image Slider Styles --- */
-.image-slider-container { position: relative; width: 100%; height: 240px; overflow: hidden; background-color: #f7fafc;}
-.image-slider { display: flex; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; }
+/* --- FIXED: Interactive Image Slider Styles --- */
+.image-slider-container { 
+    position: relative; 
+    width: 100%; 
+    height: 260px; /* Made slightly taller to show houses better */
+    overflow: hidden; 
+    background-color: #e2e8f0;
+}
+.image-slider { 
+    display: flex; 
+    height: 100%; 
+    width: 100%;
+    overflow-x: auto; 
+    scroll-snap-type: x mandatory; 
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
+    scroll-behavior: smooth; 
+}
 .image-slider::-webkit-scrollbar { display: none; }
-.slider-img { flex: 0 0 100%; scroll-snap-align: start; width: 100%; height: 100%; object-fit: cover; }
+.slider-img { 
+    flex: 0 0 100%; /* FORCES the image to be exactly 100% of the card width */
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; /* Crops the image perfectly without squishing it */
+    scroll-snap-align: start; 
+}
 
-/* Slider Navigation Buttons */
-.slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.85); color: var(--primary); border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 10; transition: background 0.3s; }
-.slider-btn:hover { background: white; }
-.slider-btn-prev { left: 10px; }
-.slider-btn-next { right: 10px; }
-
-/* Slider Dots Indicator */
-.slider-dots { position: absolute; bottom: 10px; left: 0; width: 100%; display: flex; justify-content: center; gap: 6px; z-index: 10; pointer-events: none; }
-.dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, 0.5); box-shadow: 0 1px 3px rgba(0,0,0,0.5); transition: background 0.3s; }
-.dot.active { background: white; transform: scale(1.2); }
+.swipe-hint {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(26, 54, 93, 0.85); 
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    pointer-events: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    z-index: 5;
+}
 
 .badge-new { position: absolute; top: 15px; left: 15px; background-color: #e53e3e; color: white; padding: 6px 12px; font-size: 0.85rem; font-weight: bold; border-radius: 4px; z-index: 20; box-shadow: 0 4px 6px rgba(0,0,0,0.3); letter-spacing: 0.5px; }
 .property-details { padding: 24px; flex-grow: 1; display: flex; flex-direction: column; }
