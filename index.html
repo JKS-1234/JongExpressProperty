@@ -148,10 +148,14 @@
         <p>&copy; 2026 Jong Express Property. All rights reserved. | Represented by JONG KIAT SHAN (Kommons Realty)</p>
     </footer>
 
-    <!-- LIGHTBOX MODAL (Fullscreen Image Preview) -->
-    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-        <span class="lightbox-close">&times;</span>
+    <!-- UPDATED: LIGHTBOX MODAL WITH GALLERY NAVIGATION -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <span class="lightbox-prev" onclick="changeLightboxImage(-1)">&#10094;</span>
+        <span class="lightbox-next" onclick="changeLightboxImage(1)">&#10095;</span>
+        
         <img id="lightbox-img" class="lightbox-content" src="">
+        <div id="lightbox-caption" class="lightbox-caption"></div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
