@@ -98,7 +98,7 @@ function filterProperties() {
     } else {
         const propertiesToShow = filteredData.slice(0, currentLimit);
         
-        propertiesToShow.forEach(row => {
+        propertiesToShow.forEach((row, index) => {
             let title = row['Property Name'] || '';
             let address = row['Area'] || '';
             let price = row['Price'] || '';
@@ -108,30 +108,43 @@ function filterProperties() {
             
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             
-            // --- Swipeable Image Logic ---
+            // --- UPDATED: User-Friendly Image Slider with Arrows & Dots ---
             let rawImages = row['Image Name'] ? row['Image Name'].trim() : '';
             let imagesArr = rawImages.split(',').map(url => url.trim()).filter(url => url !== '');
+            let uniqueSliderId = `slider-${index}`;
             
-            let sliderHTML = `<div class="image-slider-container"><div class="image-slider">`;
+            let sliderHTML = `<div class="image-slider-container">`;
+            sliderHTML += `<div class="image-slider" id="${uniqueSliderId}" onscroll="updateDots('${uniqueSliderId}', ${imagesArr.length})">`;
+            
             if (imagesArr.length > 0) {
                 imagesArr.forEach(imgUrl => {
                     sliderHTML += `<img src="${imgUrl}" alt="${title}" loading="lazy" class="slider-img">`;
                 });
             } else {
-                sliderHTML += `<div style="height: 240px; width: 100%; background: #e2e8f0; display:flex; align-items:center; justify-content:center;">No Image</div>`;
+                sliderHTML += `<div class="slider-img" style="display:flex; align-items:center; justify-content:center;">No Image</div>`;
             }
             sliderHTML += `</div>`;
             
+            // Only add arrows and dots if there are multiple images
             if (imagesArr.length > 1) {
-                sliderHTML += `<div class="swipe-hint">📸 1 / ${imagesArr.length} (Swipe)</div>`;
+                // Arrows
+                sliderHTML += `<button class="slider-btn slider-btn-prev" onclick="slideImage('${uniqueSliderId}', -1)">&#10094;</button>`;
+                sliderHTML += `<button class="slider-btn slider-btn-next" onclick="slideImage('${uniqueSliderId}', 1)">&#10095;</button>`;
+                
+                // Dots
+                sliderHTML += `<div class="slider-dots" id="dots-${uniqueSliderId}">`;
+                imagesArr.forEach((_, i) => {
+                    let activeClass = i === 0 ? 'active' : '';
+                    sliderHTML += `<div class="dot ${activeClass}"></div>`;
+                });
+                sliderHTML += `</div>`;
             }
             sliderHTML += `</div>`;
+            // -------------------------------------------------------------
 
-            // --- Minimalist Icons Logic ---
             let beds = row['Bedrooms'] ? row['Bedrooms'].trim() : '';
             let baths = row['Bathrooms'] ? row['Bathrooms'].trim() : '';
             let parking = row['Car Park'] ? row['Car Park'].trim() : '';
-            
             let iconsHTML = '';
             if (beds || baths || parking) {
                 iconsHTML = `<div class="icon-row">`;
@@ -141,15 +154,11 @@ function filterProperties() {
                 iconsHTML += `</div>`;
             }
 
-            // --- Pipe Separated Details Logic ---
             const excludeColumns = ['Property Name', 'Price', 'Image Name', 'Video Link', 'The Good (Pros)', 'Area', 'Timestamp', 'Bedrooms', 'Bathrooms', 'Car Park'];
             let pipeDetailsArr = [];
-            
             Object.keys(row).forEach(col => {
                 let val = row[col] ? row[col].trim() : '';
-                if (!excludeColumns.includes(col) && val !== '') {
-                    pipeDetailsArr.push(val);
-                }
+                if (!excludeColumns.includes(col) && val !== '') pipeDetailsArr.push(val);
             });
 
             let pipeHTML = '';
@@ -158,7 +167,6 @@ function filterProperties() {
                 pipeHTML = `<div class="pipe-details">${spans}</div>`;
             }
 
-            // --- Video Link Logic ---
             let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
             let videoHTML = '';
             if (videoLink) {
@@ -173,9 +181,7 @@ function filterProperties() {
             allCardsHTML += `
             <div class="property-card">
                 ${badgeHTML}
-                
                 ${sliderHTML}
-                
                 <div class="property-details">
                     <div class="card-header-flex">
                         <div class="card-title-group">
@@ -186,19 +192,13 @@ function filterProperties() {
                             <p class="price">${price}</p>
                         </div>
                     </div>
-                    
                     ${iconsHTML}
-                    
                     <div class="card-divider"></div>
-                    
                     ${pipeHTML}
-
                     <div class="pros-cons">
                         <strong>📌 Summary:</strong><br>${details}
                     </div>
-                    
                     ${videoHTML}
-                    
                     <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" class="whatsapp-btn" target="_blank">Chat on WhatsApp</a>
                 </div>
             </div>`;
@@ -210,6 +210,35 @@ function filterProperties() {
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     if (loadMoreBtn) {
         loadMoreBtn.style.display = (filteredData.length > currentLimit) ? 'block' : 'none';
+    }
+}
+
+// Slider Control Functions
+function slideImage(sliderId, direction) {
+    const slider = document.getElementById(sliderId);
+    if (!slider) return;
+    const scrollAmount = slider.clientWidth;
+    slider.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
+}
+
+function updateDots(sliderId, totalImages) {
+    const slider = document.getElementById(sliderId);
+    const dotsContainer = document.getElementById(`dots-${sliderId}`);
+    if (!slider || !dotsContainer) return;
+    
+    // Calculate which image is currently in view
+    const scrollPosition = slider.scrollLeft;
+    const imageWidth = slider.clientWidth;
+    const currentIndex = Math.round(scrollPosition / imageWidth);
+    
+    // Update active dot
+    const dots = dotsContainer.children;
+    for (let i = 0; i < dots.length; i++) {
+        if (i === currentIndex) {
+            dots[i].classList.add('active');
+        } else {
+            dots[i].classList.remove('active');
+        }
     }
 }
 
