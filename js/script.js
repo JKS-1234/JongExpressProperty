@@ -108,36 +108,28 @@ function filterProperties() {
             
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             
-            // --- UPDATED: User-Friendly Image Slider with Arrows & Dots ---
+            // --- FIXED: Swipeable Image Logic with Changing Numbers ---
             let rawImages = row['Image Name'] ? row['Image Name'].trim() : '';
             let imagesArr = rawImages.split(',').map(url => url.trim()).filter(url => url !== '');
             let uniqueSliderId = `slider-${index}`;
             
             let sliderHTML = `<div class="image-slider-container">`;
-            sliderHTML += `<div class="image-slider" id="${uniqueSliderId}" onscroll="updateDots('${uniqueSliderId}', ${imagesArr.length})">`;
+            
+            // Added onscroll listener here to trigger the number update
+            sliderHTML += `<div class="image-slider" id="${uniqueSliderId}" onscroll="updateCounter('${uniqueSliderId}', ${imagesArr.length})">`;
             
             if (imagesArr.length > 0) {
                 imagesArr.forEach(imgUrl => {
                     sliderHTML += `<img src="${imgUrl}" alt="${title}" loading="lazy" class="slider-img">`;
                 });
             } else {
-                sliderHTML += `<div class="slider-img" style="display:flex; align-items:center; justify-content:center;">No Image</div>`;
+                sliderHTML += `<div class="slider-img" style="display:flex; align-items:center; justify-content:center; background: #e2e8f0;">No Image</div>`;
             }
             sliderHTML += `</div>`;
             
-            // Only add arrows and dots if there are multiple images
             if (imagesArr.length > 1) {
-                // Arrows
-                sliderHTML += `<button class="slider-btn slider-btn-prev" onclick="slideImage('${uniqueSliderId}', -1)">&#10094;</button>`;
-                sliderHTML += `<button class="slider-btn slider-btn-next" onclick="slideImage('${uniqueSliderId}', 1)">&#10095;</button>`;
-                
-                // Dots
-                sliderHTML += `<div class="slider-dots" id="dots-${uniqueSliderId}">`;
-                imagesArr.forEach((_, i) => {
-                    let activeClass = i === 0 ? 'active' : '';
-                    sliderHTML += `<div class="dot ${activeClass}"></div>`;
-                });
-                sliderHTML += `</div>`;
+                // The ID is attached here so JS can change the text
+                sliderHTML += `<div class="swipe-hint" id="counter-${uniqueSliderId}">📸 1 / ${imagesArr.length} (Swipe)</div>`;
             }
             sliderHTML += `</div>`;
             // -------------------------------------------------------------
@@ -213,33 +205,23 @@ function filterProperties() {
     }
 }
 
-// Slider Control Functions
-function slideImage(sliderId, direction) {
+// --- FIXED: Function to Update the Swipe Number ---
+function updateCounter(sliderId, totalImages) {
     const slider = document.getElementById(sliderId);
-    if (!slider) return;
-    const scrollAmount = slider.clientWidth;
-    slider.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
-}
-
-function updateDots(sliderId, totalImages) {
-    const slider = document.getElementById(sliderId);
-    const dotsContainer = document.getElementById(`dots-${sliderId}`);
-    if (!slider || !dotsContainer) return;
+    const counter = document.getElementById(`counter-${sliderId}`);
     
-    // Calculate which image is currently in view
+    if (!slider || !counter) return;
+    
     const scrollPosition = slider.scrollLeft;
     const imageWidth = slider.clientWidth;
+    
+    if (imageWidth === 0) return; // Prevents errors
+    
+    // Calculates which image is currently showing (0-based)
     const currentIndex = Math.round(scrollPosition / imageWidth);
     
-    // Update active dot
-    const dots = dotsContainer.children;
-    for (let i = 0; i < dots.length; i++) {
-        if (i === currentIndex) {
-            dots[i].classList.add('active');
-        } else {
-            dots[i].classList.remove('active');
-        }
-    }
+    // Updates the text inside the box!
+    counter.innerText = `📸 ${currentIndex + 1} / ${totalImages} (Swipe)`;
 }
 
 function resetAndFilter() {
