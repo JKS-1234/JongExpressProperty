@@ -108,7 +108,7 @@ function filterProperties() {
             
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             
-            // --- 1. Swipeable Image Logic ---
+            // --- Swipeable Image Logic ---
             let rawImages = row['Image Name'] ? row['Image Name'].trim() : '';
             let imagesArr = rawImages.split(',').map(url => url.trim()).filter(url => url !== '');
             
@@ -127,7 +127,7 @@ function filterProperties() {
             }
             sliderHTML += `</div>`;
 
-            // --- 2. Minimalist Icons Logic ---
+            // --- Minimalist Icons Logic ---
             let beds = row['Bedrooms'] ? row['Bedrooms'].trim() : '';
             let baths = row['Bathrooms'] ? row['Bathrooms'].trim() : '';
             let parking = row['Car Park'] ? row['Car Park'].trim() : '';
@@ -141,7 +141,7 @@ function filterProperties() {
                 iconsHTML += `</div>`;
             }
 
-            // --- 3. Pipe Separated Details Logic ---
+            // --- Pipe Separated Details Logic ---
             const excludeColumns = ['Property Name', 'Price', 'Image Name', 'Video Link', 'The Good (Pros)', 'Area', 'Timestamp', 'Bedrooms', 'Bathrooms', 'Car Park'];
             let pipeDetailsArr = [];
             
@@ -158,7 +158,7 @@ function filterProperties() {
                 pipeHTML = `<div class="pipe-details">${spans}</div>`;
             }
 
-            // --- 4. Video Link Logic ---
+            // --- Video Link Logic ---
             let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
             let videoHTML = '';
             if (videoLink) {
@@ -170,7 +170,6 @@ function filterProperties() {
                 }
             }
 
-            // --- Assemble Card ---
             allCardsHTML += `
             <div class="property-card">
                 ${badgeHTML}
