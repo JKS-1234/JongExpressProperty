@@ -108,19 +108,18 @@ function filterProperties() {
             
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             
-            // --- FIXED: Swipeable Image Logic with Changing Numbers ---
+            // --- Image Slider & Lightbox Logic ---
             let rawImages = row['Image Name'] ? row['Image Name'].trim() : '';
             let imagesArr = rawImages.split(',').map(url => url.trim()).filter(url => url !== '');
             let uniqueSliderId = `slider-${index}`;
             
             let sliderHTML = `<div class="image-slider-container">`;
-            
-            // Added onscroll listener here to trigger the number update
-            sliderHTML += `<div class="image-slider" id="${uniqueSliderId}" onscroll="updateCounter('${uniqueSliderId}', ${imagesArr.length})">`;
+            sliderHTML += `<div class="image-slider" id="${uniqueSliderId}" onscroll="updateDots('${uniqueSliderId}', ${imagesArr.length})">`;
             
             if (imagesArr.length > 0) {
                 imagesArr.forEach(imgUrl => {
-                    sliderHTML += `<img src="${imgUrl}" alt="${title}" loading="lazy" class="slider-img">`;
+                    // Added onclick="openLightbox(this.src)"
+                    sliderHTML += `<img src="${imgUrl}" alt="${title}" loading="lazy" class="slider-img" onclick="openLightbox(this.src)">`;
                 });
             } else {
                 sliderHTML += `<div class="slider-img" style="display:flex; align-items:center; justify-content:center; background: #e2e8f0;">No Image</div>`;
@@ -128,11 +127,18 @@ function filterProperties() {
             sliderHTML += `</div>`;
             
             if (imagesArr.length > 1) {
-                // The ID is attached here so JS can change the text
-                sliderHTML += `<div class="swipe-hint" id="counter-${uniqueSliderId}">📸 1 / ${imagesArr.length} (Swipe)</div>`;
+                sliderHTML += `<button class="slider-btn slider-btn-prev" onclick="slideImage('${uniqueSliderId}', -1)">&#10094;</button>`;
+                sliderHTML += `<button class="slider-btn slider-btn-next" onclick="slideImage('${uniqueSliderId}', 1)">&#10095;</button>`;
+                
+                sliderHTML += `<div class="slider-dots" id="dots-${uniqueSliderId}">`;
+                imagesArr.forEach((_, i) => {
+                    let activeClass = i === 0 ? 'active' : '';
+                    sliderHTML += `<div class="dot ${activeClass}"></div>`;
+                });
+                sliderHTML += `</div>`;
             }
             sliderHTML += `</div>`;
-            // -------------------------------------------------------------
+            // ------------------------------------
 
             let beds = row['Bedrooms'] ? row['Bedrooms'].trim() : '';
             let baths = row['Bathrooms'] ? row['Bathrooms'].trim() : '';
@@ -205,23 +211,48 @@ function filterProperties() {
     }
 }
 
-// --- FIXED: Function to Update the Swipe Number ---
-function updateCounter(sliderId, totalImages) {
+// --- Lightbox Functions ---
+function openLightbox(imageSrc) {
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    if (lightbox && lightboxImg) {
+        lightboxImg.src = imageSrc;
+        lightbox.style.display = 'block';
+    }
+}
+
+function closeLightbox() {
+    const lightbox = document.getElementById('lightbox');
+    if (lightbox) {
+        lightbox.style.display = 'none';
+    }
+}
+// --------------------------
+
+function slideImage(sliderId, direction) {
     const slider = document.getElementById(sliderId);
-    const counter = document.getElementById(`counter-${sliderId}`);
-    
-    if (!slider || !counter) return;
+    if (!slider) return;
+    const scrollAmount = slider.clientWidth;
+    slider.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
+}
+
+function updateDots(sliderId, totalImages) {
+    const slider = document.getElementById(sliderId);
+    const dotsContainer = document.getElementById(`dots-${sliderId}`);
+    if (!slider || !dotsContainer) return;
     
     const scrollPosition = slider.scrollLeft;
     const imageWidth = slider.clientWidth;
-    
-    if (imageWidth === 0) return; // Prevents errors
-    
-    // Calculates which image is currently showing (0-based)
     const currentIndex = Math.round(scrollPosition / imageWidth);
     
-    // Updates the text inside the box!
-    counter.innerText = `📸 ${currentIndex + 1} / ${totalImages} (Swipe)`;
+    const dots = dotsContainer.children;
+    for (let i = 0; i < dots.length; i++) {
+        if (i === currentIndex) {
+            dots[i].classList.add('active');
+        } else {
+            dots[i].classList.remove('active');
+        }
+    }
 }
 
 function resetAndFilter() {
