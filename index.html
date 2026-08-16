@@ -4,19 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jong Express Property | Honest & Transparent Real Estate Miri</title>
-    <meta name="description" content="Buy, sell, or rent houses, apartments, shops, and land in Miri, Sarawak. Transparent property listings in Pujut, Senadin, Lutong, and Taman Bayshore with video tours.[cite: 13]">
-    <meta name="keywords" content="Miri property, house for sale Miri, property agent Miri, rent house Miri, shoplot Miri, buy house Miri, Kommons Realty, Jong Kiat Shan[cite: 13]">
-    <link rel="canonical" href="https://jongexpressproperty.online/" />
+    <meta name="description" content="Buy, sell, or rent houses, apartments, shops, and land in Miri, Sarawak. Transparent property listings in Pujut, Senadin, Lutong, and Taman Bayshore with video tours.">
+    <meta name="keywords" content="Miri property, house for sale Miri, property agent Miri, rent house Miri, shoplot Miri, buy house Miri, Kommons Realty, Jong Kiat Shan">
     <link rel="icon" type="image/png" href="photos/icononly.png">
     
+    <!-- SEO Open Graph Tags -->
     <meta property="og:title" content="Jong Express Property | Honest Real Estate Miri">
     <meta property="og:description" content="100% verified properties in Miri, Sarawak. No ghost listings, just transparent details.">
     <meta property="og:image" content="https://jongexpressproperty.online/photos/icononly.png">
     <meta property="og:url" content="https://jongexpressproperty.online/">
     <meta property="og:type" content="website">
 
-    <link rel="stylesheet" href="css/style.css">
+    <!-- SEO Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "RealEstateAgent",
+      "name": "Jong Express Property - Kommons Realty",
+      "image": "https://jongexpressproperty.online/photos/icononly.png",
+      "url": "https://jongexpressproperty.online/",
+      "telephone": "+6016-924-2000",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Miri",
+        "addressRegion": "Sarawak",
+        "addressCountry": "MY"
+      },
+      "areaServed": ["Miri", "Pujut", "Senadin", "Lutong", "Taman Bayshore"]
+    }
+    </script>
     
+    <link rel="stylesheet" href="css/style.css">
     <meta name="google-site-verification" content="DmNkWGPhpuc2D9rzCBVezIjbnLr8M6qBpZ-TYUeL4lE" />
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YNY4XZBS1T"></script>
@@ -30,7 +48,7 @@
 <body>
 
     <header>
-        <a href="/" class="logo" style="text-decoration: none;">Jong Express Property</a>
+        <a href="/" class="logo">Jong Express Property</a>
         <nav>
             <a href="#about">Our Promise</a>
             <a href="#properties">Listings</a>
@@ -57,17 +75,6 @@
             <h3>🤝 End-to-End Care</h3>
             <p>Our job doesn't end when the contract is signed. From utility transfers to move-in support, we ensure your transition is completely seamless.</p>
         </div>
-        <div class="feature-card">
-            <h3>🎯 Precision Matching</h3>
-            <p>We don't blindly push listings. We study your specific lifestyle needs to match you with the exact neighborhood, school district, or buyer profile.</p>
-        </div>
-    </section>
-
-    <section style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
-        <h2>Our Latest Properties on Facebook</h2>
-        <p style="margin-bottom: 30px;">Check out our newest listings and market updates below!</p>
-        <script src="https://elfsightcdn.com/platform.js" async></script>
-        <div class="elfsight-app-8cfc3004-89f9-4754-9047-e12cd7216640" data-elfsight-app-lazy></div>
     </section>
 
     <section id="properties" class="featured-properties">
@@ -104,11 +111,16 @@
 
         <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
     </section>
+
+    <!-- Facebook feed section -->
+    <section style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
+        <h2>Our Latest Properties on Facebook</h2>
+        <script src="https://elfsightcdn.com/platform.js" async></script>
+        <div class="elfsight-app-8cfc3004-89f9-4754-9047-e12cd7216640" data-elfsight-app-lazy></div>
+    </section>
     
     <section id="contact" class="contact-section">
         <h2>Ready to make a move? Let's connect.</h2>
-        <p style="margin-top: 10px; color: #4a5568;">Your trusted consultant, Jong Kiat Shan, is ready to assist you.</p>
-        
         <div class="contact-info">
             <div class="info-block">
                 <h3>📞 Call / WhatsApp</h3>
@@ -118,14 +130,9 @@
                 <h3>✉️ Email</h3>
                 <p><a href="mailto:jongkiatshan@kommonsrealty.com" style="color: var(--primary);">jongkiatshan@kommonsrealty.com</a></p>
             </div>
-            <div class="info-block">
-                <h3>🕒 Operating Hours</h3>
-                <p>Available Anytime</p>
-            </div>
         </div>
 
         <div style="margin-top: 40px;" class="social-links">
-            <p style="margin-bottom: 10px; font-weight: bold;">Follow our journey:</p>
             <a href="https://www.facebook.com/jongexpresssproperty" target="_blank" rel="noopener noreferrer">Facebook</a> | 
             <a href="https://www.instagram.com/jongks1234" target="_blank" rel="noopener noreferrer">Instagram</a>
         </div>
@@ -135,15 +142,21 @@
         <p>&copy; 2026 Jong Express Property. All rights reserved. | Represented by JONG KIAT SHAN (Kommons Realty)</p>
     </footer>
 
+    <!-- LIGHTBOX PREVIEW MODAL -->
+    <div id="lightbox" class="lightbox" onclick="closePreview()">
+        <span class="lightbox-close" onclick="closePreview()">&times;</span>
+        <img id="lightbox-img" class="lightbox-content" src="">
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script src="js/script.js"></script>
-    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" rel="noopener noreferrer" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 12px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
+    
+    <!-- WhatsApp button shifted to left side to prevent covering Chatbase -->
+    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" rel="noopener noreferrer" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
       💬 WhatsApp Us
     </a>
     
-    <script>
-      window.chatbaseConfig = { chatbotId: "g5wuvpEGYSCkeUYFoRiTp" };
-    </script>
+    <script>window.chatbaseConfig = { chatbotId: "g5wuvpEGYSCkeUYFoRiTp" };</script>
     <script src="https://www.chatbase.co/embed.min.js" chatbotId="g5wuvpEGYSCkeUYFoRiTp" defer></script>
 </body>
 </html>
