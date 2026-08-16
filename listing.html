@@ -6,14 +6,12 @@
     <title>Property Listings & Updates | Jong Express Property</title>
     <meta name="description" content="Browse transparent, 100% verified property listings in Miri, Sarawak by Jong Express Property.">
     
-    <!-- NEW SEO UPGRADES -->
     <link rel="canonical" href="https://jongexpressproperty.online/listing.html" />
     <meta property="og:title" content="Verified Property Listings in Miri | Jong Express Property">
     <meta property="og:description" content="Browse transparent, 100% verified property listings in Miri, Sarawak. Sub-sales, rentals, and developer projects.">
     <meta property="og:image" content="https://jongexpressproperty.online/photos/icononly.png">
     <meta property="og:url" content="https://jongexpressproperty.online/listing.html">
     <meta property="og:type" content="website">
-    <!-- END NEW SEO UPGRADES -->
 
     <link rel="icon" type="image/png" href="https://jongexpressproperty.online/photos/icononly.png">
     <link rel="stylesheet" href="css/style.css">
@@ -21,15 +19,15 @@
 <body>
 
     <header>
-        <a href="/" class="logo">Jong Express Property</a>
+        <a href="index.html" class="logo">Jong Express Property</a>
         <nav>
-            <a href="/">Our Promise</a>
+            <!-- FIX: Points safely back to the home page -->
+            <a href="index.html">Our Promise</a>
             <a href="listing.html" style="color: var(--secondary);">Listings & FB Updates</a>
-            <a href="/#contact">Contact Jong</a>
+            <a href="index.html#contact">Contact Jong</a>
         </nav>
     </header>
 
-    <!-- 1. PROPERTIES FIRST -->
     <section id="properties" class="featured-properties">
         <h2>Featured Honest Listings</h2>
         <p style="margin-bottom: 30px;">100% Verified. We show you the good, and we don't hide the bad.</p>
@@ -70,11 +68,9 @@
         <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
     </section>
 
-    <!-- 2. FACEBOOK FEED SECOND -->
     <section style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
         <h2>Our Latest Properties on Facebook</h2>
         <p style="margin-bottom: 30px;">Check out our newest market updates below!</p>
-        <!-- Correct New Facebook Widget ID -->
         <script src="https://elfsightcdn.com/platform.js" async></script>
         <div class="elfsight-app-f8015444-62da-45e2-85d3-62c0c647068e" data-elfsight-app-lazy></div>
     </section>
