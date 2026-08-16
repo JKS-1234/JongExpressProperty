@@ -29,7 +29,7 @@ function setMarket(marketType, btnElement) {
     resetAndFilter();
 }
 
-// Check if we are on the listing page before running the property script
+// Safety check: Only load CSV if we are on the listing page
 if (document.querySelector('.property-grid')) {
     Papa.parse(csvUrl, {
         download: true,
