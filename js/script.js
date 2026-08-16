@@ -8,7 +8,6 @@ let lightboxGalleries = {};
 let currentGalleryId = null;
 let currentImageIndex = 0;
 
-// --- NEW SEO HELPER FUNCTION ---
 function slugify(text) {
     return text.toString().toLowerCase()
       .replace(/\s+/g, '-')           
@@ -39,7 +38,6 @@ function setMarket(marketType, btnElement) {
     resetAndFilter();
 }
 
-// Safety check: Only load CSV if we are on the listing page
 if (document.querySelector('.property-grid')) {
     Papa.parse(csvUrl, {
         download: true,
@@ -72,15 +70,12 @@ if (document.querySelector('.property-grid')) {
                 });
             }
 
-            // --- NEW SEO ROUTING LOGIC ---
             const urlParams = new URLSearchParams(window.location.search);
             const propertySlug = urlParams.get('property');
 
             if (propertySlug) {
-                // If a unique property URL is accessed, show only that property
                 renderSingleProperty(propertySlug);
             } else {
-                // Otherwise, show the normal grid
                 filterProperties();
             }
         },
@@ -92,34 +87,28 @@ if (document.querySelector('.property-grid')) {
     });
 }
 
-// --- NEW SINGLE PROPERTY RENDERER ---
 function renderSingleProperty(slug) {
-    // Find the specific property
     const property = allProperties.find(row => slugify(row['Property Name']) === slug);
     const grid = document.querySelector('.property-grid');
     
     if (!property) {
-        grid.innerHTML = '<h3 style="text-align:center; width: 100%;">Property not found. <a href="listing.html" style="color: var(--primary);">Return to listings</a></h3>';
+        grid.innerHTML = '<h3 style="text-align:center; width: 100%; grid-column: 1/-1;">Property not found. <a href="listing.html" style="color: var(--primary);">Return to listings</a></h3>';
         return;
     }
 
-    // --- DYNAMIC SEO UPGRADE ---
-    // Update the browser tab title and meta description
     document.title = `${property['Property Name']} | Jong Express Property`;
     let metaDesc = document.querySelector('meta[name="description"]');
     if(metaDesc) {
         metaDesc.setAttribute("content", `For Sale/Rent: ${property['Property Name']} located in ${property['Area']}. Price: ${property['Price']}. 100% verified listing.`);
     }
 
-    // Hide the search filters and load more button for the single view
     const searchWrapper = document.querySelector('.search-filter-wrapper');
     if(searchWrapper) searchWrapper.style.display = 'none';
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     if(loadMoreBtn) loadMoreBtn.style.display = 'none';
 
-    // Temporarily replace allProperties with just this one to reuse the card generator
     allProperties = [property]; 
-    currentLimit = 1; // Only need to render one
+    currentLimit = 1; 
     filterProperties(); 
 }
 
@@ -156,7 +145,7 @@ function filterProperties() {
     lightboxGalleries = {};
 
     if (filteredData.length === 0) {
-        allCardsHTML = '<div class="no-results-msg">No properties found matching your criteria.</div>';
+        allCardsHTML = '<div class="no-results-msg" style="grid-column: 1/-1; text-align: center; color: #718096; padding: 40px 0; font-size: 1.1rem;">No properties found matching your criteria.</div>';
     } else {
         const propertiesToShow = filteredData.slice(0, currentLimit);
         
@@ -181,10 +170,10 @@ function filterProperties() {
             
             if (imagesArr.length > 0) {
                 imagesArr.forEach((imgUrl, i) => {
-                    sliderHTML += `<img src="${imgUrl}" alt="${title}" loading="lazy" class="slider-img" onclick="openLightbox('${uniqueSliderId}', ${i})">`;
+                    sliderHTML += `<img src="${imgUrl}" alt="${title}" loading="lazy" class="slider-img" onclick="openLightbox('${uniqueSliderId}', ${i})" onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80'">`;
                 });
             } else {
-                sliderHTML += `<div class="slider-img" style="display:flex; align-items:center; justify-content:center; background: #e2e8f0;">No Image</div>`;
+                sliderHTML += `<img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80" alt="Fallback Image" class="slider-img">`;
             }
             sliderHTML += `</div>`;
             
@@ -233,11 +222,10 @@ function filterProperties() {
                 if (ytEmbed) {
                     videoHTML = `<div style="margin-bottom: 15px;"><iframe width="100%" height="200" src="${ytEmbed}" frameborder="0" allowfullscreen></iframe></div>`;
                 } else {
-                    videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank">🎬 Watch Video Tour</a>`;
+                    videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank" rel="noopener noreferrer">🎬 Watch Video Tour</a>`;
                 }
             }
 
-            // --- NEW SEO LINK IMPLEMENTATION ---
             let titleSlug = slugify(title);
             let propertyUrl = `listing.html?property=${titleSlug}`;
 
@@ -262,7 +250,7 @@ function filterProperties() {
                         <strong>📌 Summary:</strong><br>${details}
                     </div>
                     ${videoHTML}
-                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" class="whatsapp-btn" target="_blank">Chat on WhatsApp</a>
+                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" class="whatsapp-btn" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
                 </div>
             </div>`;
         });
@@ -272,7 +260,6 @@ function filterProperties() {
 
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     if (loadMoreBtn) {
-        // Hide load more button if we are looking at a single property page
         const urlParams = new URLSearchParams(window.location.search);
         const isSingleProperty = urlParams.get('property');
         
@@ -360,3 +347,21 @@ function showMoreListings() {
     currentLimit += 6;
     filterProperties();
 }
+
+// --- MOBILE NAVIGATION BAR HIDE ON SCROLL ---
+let lastScrollTop = 0;
+const header = document.getElementById('main-header');
+
+window.addEventListener('scroll', function() {
+    if (header && window.innerWidth <= 768) {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        if (currentScroll > lastScrollTop && currentScroll > 100) {
+            header.style.top = "-150px"; 
+        } else {
+            header.style.top = "0";
+        }
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; 
+    } else if (header) {
+        header.style.top = "0";
+    }
+});
