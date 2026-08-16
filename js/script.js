@@ -25,7 +25,7 @@ function setMarket(marketType, btnElement) {
     currentMarket = marketType;
     const tabs = document.querySelectorAll('.tab-btn');
     tabs.forEach(tab => tab.classList.remove('active'));
-    btnElement.classList.add('active');
+    if(btnElement) btnElement.classList.add('active');
     resetAndFilter();
 }
 
@@ -34,10 +34,10 @@ if (document.querySelector('.property-grid')) {
         download: true,
         header: true,
         complete: function(results) {
-            // FIX: Assign a safe Number ID to each property to prevent Emoji crashes
             let validRows = results.data.filter(row => row['Property Name']);
+            // FIX 1: Safely store the ID as a string to prevent the script from crashing
             validRows.forEach((row, index) => {
-                row.originalId = index;
+                row.originalId = index.toString(); 
             });
             allProperties = validRows;
 
@@ -45,8 +45,8 @@ if (document.querySelector('.property-grid')) {
             const uniqueTypes = new Set();
 
             allProperties.forEach(row => {
-                let rawType = row['Type'] ? row['Type'].trim() : '';
-                let rawArea = row['Area'] ? row['Area'].trim() : '';
+                let rawType = row['Type'] ? String(row['Type']).trim() : '';
+                let rawArea = row['Area'] ? String(row['Area']).trim() : '';
                 if (rawType) uniqueTypes.add(rawType);
                 if (rawArea) uniqueAreas.add(rawArea);
             });
@@ -67,12 +67,11 @@ if (document.querySelector('.property-grid')) {
                 });
             }
 
-            // FIX: Routing based on the safe Number ID
             const urlParams = new URLSearchParams(window.location.search);
             const propertyId = urlParams.get('id');
 
             if (propertyId !== null) {
-                renderSingleProperty(parseInt(propertyId));
+                renderSingleProperty(propertyId);
             } else {
                 filterProperties();
             }
@@ -118,9 +117,9 @@ function filterProperties() {
     const sortVal = document.getElementById('sortPriceFilter') ? document.getElementById('sortPriceFilter').value : 'default';
 
     let filteredData = allProperties.filter(row => {
-        let status = row['Status'] ? row['Status'].toLowerCase().trim() : 'sale';
-        let typeValue = row['Type'] ? row['Type'].trim().toLowerCase() : '';
-        let areaValue = row['Area'] ? row['Area'].trim().toLowerCase() : '';
+        let status = row['Status'] ? String(row['Status']).toLowerCase().trim() : 'sale';
+        let typeValue = row['Type'] ? String(row['Type']).trim().toLowerCase() : '';
+        let areaValue = row['Area'] ? String(row['Area']).trim().toLowerCase() : '';
         let isProject = (typeValue.includes('project') || typeValue.includes('developer'));
         
         const matchStatus = (statusVal === 'all' || status === statusVal);
@@ -151,13 +150,13 @@ function filterProperties() {
             let title = row['Property Name'] || '';
             let address = row['Area'] || '';
             let price = row['Price'] || '';
-            let details = row['The Good (Pros)'] ? row['The Good (Pros)'].replace(/\n/g, '<br>') : '';
-            let typeValue = row['Type'] ? row['Type'].trim() : '';
+            let details = row['The Good (Pros)'] ? String(row['The Good (Pros)']).replace(/\n/g, '<br>') : '';
+            let typeValue = row['Type'] ? String(row['Type']).trim() : '';
             let isProject = (typeValue.toLowerCase().includes('project') || typeValue.toLowerCase().includes('developer'));
             
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             
-            let rawImages = row['Image Name'] ? row['Image Name'].trim() : '';
+            let rawImages = row['Image Name'] ? String(row['Image Name']).trim() : '';
             let imagesArr = rawImages.split(',').map(url => url.trim()).filter(url => url !== '');
             let uniqueSliderId = `slider-${index}`;
             
@@ -188,9 +187,9 @@ function filterProperties() {
             }
             sliderHTML += `</div>`;
 
-            let beds = row['Bedrooms'] ? row['Bedrooms'].trim() : '';
-            let baths = row['Bathrooms'] ? row['Bathrooms'].trim() : '';
-            let parking = row['Car Park'] ? row['Car Park'].trim() : '';
+            let beds = row['Bedrooms'] ? String(row['Bedrooms']).trim() : '';
+            let baths = row['Bathrooms'] ? String(row['Bathrooms']).trim() : '';
+            let parking = row['Car Park'] ? String(row['Car Park']).trim() : '';
             let iconsHTML = '';
             if (beds || baths || parking) {
                 iconsHTML = `<div class="icon-row">`;
@@ -200,10 +199,11 @@ function filterProperties() {
                 iconsHTML += `</div>`;
             }
 
-            const excludeColumns = ['Property Name', 'Price', 'Image Name', 'Video Link', 'The Good (Pros)', 'Area', 'Timestamp', 'Bedrooms', 'Bathrooms', 'Car Park'];
+            // FIX 2: Added 'originalId' to the exclude list so it doesn't crash when drawing the text
+            const excludeColumns = ['Property Name', 'Price', 'Image Name', 'Video Link', 'The Good (Pros)', 'Area', 'Timestamp', 'Bedrooms', 'Bathrooms', 'Car Park', 'originalId'];
             let pipeDetailsArr = [];
             Object.keys(row).forEach(col => {
-                let val = row[col] ? row[col].trim() : '';
+                let val = row[col] ? String(row[col]).trim() : ''; 
                 if (!excludeColumns.includes(col) && val !== '') pipeDetailsArr.push(val);
             });
 
@@ -213,7 +213,7 @@ function filterProperties() {
                 pipeHTML = `<div class="pipe-details">${spans}</div>`;
             }
 
-            let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
+            let videoLink = row['Video Link'] ? String(row['Video Link']).trim() : '';
             let videoHTML = '';
             if (videoLink) {
                 let ytEmbed = getYouTubeEmbedUrl(videoLink);
@@ -224,7 +224,6 @@ function filterProperties() {
                 }
             }
 
-            // FIX: Clean ID link and dual-button layout for maximum user friendliness
             let propertyUrl = `listing.html?id=${row.originalId}`;
 
             allCardsHTML += `
@@ -234,7 +233,7 @@ function filterProperties() {
                 <div class="property-details" style="display:flex; flex-direction:column; height:100%;">
                     <div class="card-header-flex">
                         <div class="card-title-group">
-                            <h3><a href="${propertyUrl}" style="color: inherit; text-decoration: underline;">${title}</a></h3>
+                            <h3><a href="${propertyUrl}" style="color: inherit; text-decoration: none;">${title}</a></h3>
                             ${address ? `<p class="card-address">${address}</p>` : ''}
                         </div>
                         <div class="card-price-group">
