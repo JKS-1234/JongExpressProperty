@@ -72,6 +72,8 @@ nav a:hover {
 .btn:hover {
     background-color: #ecc94b;
 }
+
+/* --- Features & Grids --- */
 .features {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -122,6 +124,7 @@ footer {
     margin: 0 10px;
     font-weight: bold;
 }
+
 /* --- Property Section Styles --- */
 .featured-properties {
     padding: 50px 5%;
@@ -157,54 +160,183 @@ footer {
 .property-card:hover {
     transform: translateY(-5px);
 }
-.property-card img {
+
+/* --- THE MISSING IMAGE SLIDER STYLES --- */
+.image-slider-container {
+    position: relative;
     width: 100%;
     height: 220px;
-    object-fit: cover;
-    background-color: #e2e8f0; 
+    overflow: hidden;
+    background-color: #e2e8f0;
 }
+.image-slider {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
+}
+.image-slider::-webkit-scrollbar { display: none; }
+.slider-img {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    scroll-snap-align: start;
+    cursor: zoom-in;
+}
+.slider-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--primary);
+    border: none;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 10;
+    transition: background 0.3s;
+}
+.slider-btn:hover { background: white; }
+.slider-btn-prev { left: 10px; }
+.slider-btn-next { right: 10px; }
+.slider-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    z-index: 10;
+    pointer-events: none;
+}
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    transition: background 0.3s;
+}
+.dot.active {
+    background: white;
+    transform: scale(1.2);
+}
+
+/* --- THE MISSING FULLSCREEN PREVIEW (LIGHTBOX) STYLES --- */
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    padding-top: 60px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(5px);
+}
+.lightbox-content {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 80vh;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    object-fit: contain;
+}
+.lightbox-close {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+    z-index: 2010;
+}
+.lightbox-close:hover { color: var(--secondary); }
+.lightbox-prev, .lightbox-next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: white;
+    font-weight: bold;
+    font-size: 30px;
+    transition: 0.3s;
+    border-radius: 50%;
+    background-color: rgba(255,255,255,0.1);
+    user-select: none;
+    z-index: 2010;
+}
+.lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
+.lightbox-prev:hover, .lightbox-next:hover { background-color: rgba(255,255,255,0.3); }
+.lightbox-caption {
+    margin: 15px auto 0;
+    display: block;
+    width: 80%;
+    max-width: 700px;
+    text-align: center;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+/* --- Card Details --- */
 .badge-new {
     position: absolute;
     top: 15px;
-    right: 15px;
+    left: 15px;
     background-color: #e53e3e;
     color: white;
     padding: 6px 12px;
     font-size: 0.85rem;
     font-weight: bold;
     border-radius: 4px;
-    z-index: 10;
+    z-index: 20;
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     letter-spacing: 0.5px;
 }
 .property-details {
-    padding: 20px;
+    padding: 24px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
 }
-.property-details h3 {
-    color: var(--primary);
-    margin-bottom: 5px;
-    font-size: 1.3rem;
-}
-.price {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: var(--secondary);
-    margin-bottom: 15px;
-}
+.card-header-flex { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 15px; }
+.card-title-group h3 { color: #1a202c; font-size: 1.25rem; margin-bottom: 4px; line-height: 1.3; }
+.card-address { color: #718096; font-size: 0.95rem; }
+.card-price-group { text-align: right; min-width: 110px; }
+.card-price-group .price { font-size: 1.3rem; font-weight: bold; color: #2d3748; margin-bottom: 0;}
+.icon-row { display: flex; gap: 15px; font-size: 1.1rem; color: #4a5568; margin-bottom: 15px; }
+.icon-row span { display: flex; align-items: center; gap: 5px; }
+.card-divider { border-top: 1px solid #e2e8f0; margin: 15px 0; }
+.pipe-details { color: #718096; font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5; }
+.pipe-details span:not(:last-child)::after { content: " | "; color: #cbd5e0; margin: 0 6px; font-weight: 300; }
 .pros-cons {
-    background: white;
+    background: #f7fafc;
     border-left: 4px solid var(--primary);
-    padding: 15px;
-    border-radius: 0 5px 5px 0;
+    padding: 12px;
+    border-radius: 0 4px 4px 0;
     margin-bottom: 20px;
-    font-size: 0.95rem;
-}
-.pro {
-    color: #2f855a;
-    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: #4a5568;
 }
 .video-btn {
     display: block;
@@ -218,9 +350,7 @@ footer {
     margin-bottom: 10px;
     transition: background 0.3s;
 }
-.video-btn:hover {
-    background-color: #2d3748;
-}
+.video-btn:hover { background-color: #2d3748; }
 .whatsapp-btn {
     display: block;
     text-align: center;
@@ -233,11 +363,11 @@ footer {
     transition: background 0.3s;
     margin-top: auto;
 }
-.whatsapp-btn:hover {
-    background-color: #128C7E;
-}
+.whatsapp-btn:hover { background-color: #128C7E; }
+
+/* Filter & Search Layout */
 .search-filter-wrapper {
-    max-width: 700px;
+    max-width: 800px;
     margin: 0 auto 30px;
     display: flex;
     flex-direction: column;
@@ -246,26 +376,19 @@ footer {
 .search-input {
     width: 100%;
     padding: 14px 20px;
-    border: 2px solid var(--primary);
+    border: 2px solid #e2e8f0;
     border-radius: 5px;
     font-size: 1.1rem;
     outline: none;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
-.search-input:focus {
-    border-color: var(--secondary);
-}
-.filter-container {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
+.search-input:focus { border-color: var(--primary); }
+.filter-container { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
 .filter-select {
     flex: 1;
     min-width: 140px;
     padding: 12px;
-    border: 2px solid var(--primary);
+    border: 2px solid #e2e8f0;
     border-radius: 5px;
     font-size: 1rem;
     color: var(--primary);
@@ -274,9 +397,7 @@ footer {
     cursor: pointer;
     outline: none;
 }
-.filter-select:hover {
-    border-color: var(--secondary);
-}
+.filter-select:hover { border-color: var(--primary); }
 .video-container {
     position: relative;
     width: 100%;
@@ -286,14 +407,7 @@ footer {
     border-radius: 4px;
     overflow: hidden;
 }
-.video-container iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-}
+.video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 .load-more-btn {
     display: none;
     margin: 40px auto 10px;
@@ -306,20 +420,9 @@ footer {
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
-.load-more-btn:hover {
-    background-color: transparent;
-    color: var(--primary);
-}
-/* --- Market Category Tabs --- */
-.market-tabs {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-}
+.load-more-btn:hover { background-color: transparent; color: var(--primary); }
+.market-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
 .tab-btn {
     padding: 10px 20px;
     border: 2px solid var(--primary);
@@ -330,66 +433,21 @@ footer {
     cursor: pointer;
     transition: all 0.3s ease;
 }
-.tab-btn.active, .tab-btn:hover {
-    background-color: var(--primary);
-    color: white;
-}
-/* --- Mobile Responsiveness (Smartphones & Tablets) --- */
+.tab-btn.active, .tab-btn:hover { background-color: var(--primary); color: white; }
+
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
-    header {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-        padding: 1rem 15px;
-    }
-    nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
-    }
-    nav a {
-        margin-left: 0;
-        margin: 0 5px;
-        font-size: 0.95rem;
-    }
-    .hero {
-        padding: 60px 15px;
-    }
-    .hero h1 {
-        font-size: 2rem;
-    }
-    .hero p {
-        font-size: 1rem;
-    }
-    .filter-container {
-        flex-direction: column;
-        gap: 10px;
-    }
-    .filter-select {
-        width: 100%;
-        min-width: 100%;
-    }
-    .search-input {
-        font-size: 1rem;
-    }
-    .property-card {
-        max-width: 100%;
-        width: 100%;
-    }
-    .contact-info {
-        flex-direction: column;
-        gap: 20px;
-    }
-    .info-block {
-        width: 100%;
-    }
-    .market-tabs {
-        flex-direction: column;
-        width: 100%;
-    }
-    .tab-btn {
-        width: 100%;
-        margin-bottom: 5px;
-    }
+    header { flex-direction: column; gap: 15px; text-align: center; padding: 1rem 15px; }
+    nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+    nav a { margin: 0 5px; font-size: 0.95rem; }
+    .hero { padding: 60px 15px; }
+    .hero h1 { font-size: 2rem; }
+    .filter-container { flex-direction: column; gap: 10px; }
+    .filter-select { width: 100%; min-width: 100%; }
+    .property-card { max-width: 100%; width: 100%; }
+    .card-header-flex { flex-direction: column; }
+    .card-price-group { text-align: left; margin-top: 5px; }
+    .contact-info { flex-direction: column; gap: 20px; }
+    .market-tabs { flex-direction: column; width: 100%; }
+    .tab-btn { width: 100%; margin-bottom: 5px; }
 }
