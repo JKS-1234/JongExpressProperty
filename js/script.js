@@ -3,6 +3,7 @@ const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs
 let currentLimit = 6;
 let currentMarket = 'all'; 
 let allProperties = []; 
+
 let lightboxGalleries = {}; 
 let currentGalleryId = null;
 let currentImageIndex = 0;
@@ -225,6 +226,7 @@ function filterProperties() {
                 }
             }
 
+            // FIX: THIS MAKES THE TITLE CLICKABLE
             let titleSlug = slugify(title);
             let propertyUrl = `listing.html?property=${titleSlug}`;
 
@@ -235,6 +237,7 @@ function filterProperties() {
                 <div class="property-details">
                     <div class="card-header-flex">
                         <div class="card-title-group">
+                            <!-- FIX: WRAPPED TITLE IN A HREF TAG -->
                             <h3><a href="${propertyUrl}" style="color: inherit; text-decoration: none;">${title}</a></h3>
                             ${address ? `<p class="card-address">${address}</p>` : ''}
                         </div>
@@ -270,7 +273,6 @@ function filterProperties() {
     }
 }
 
-// --- LIGHTBOX PREVIEW LOGIC ---
 function openLightbox(galleryId, imgIndex) {
     currentGalleryId = galleryId;
     currentImageIndex = imgIndex;
