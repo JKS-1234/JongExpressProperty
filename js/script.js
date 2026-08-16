@@ -4,6 +4,7 @@ let currentLimit = 6;
 let currentMarket = 'all'; 
 let allProperties = []; 
 
+// --- Stores image arrays for the lightbox gallery ---
 let lightboxGalleries = {}; 
 let currentGalleryId = null;
 let currentImageIndex = 0;
@@ -97,6 +98,7 @@ function filterProperties() {
     const grid = document.querySelector('.property-grid');
     let allCardsHTML = '';
     
+    // Clear the old galleries before rendering new ones
     lightboxGalleries = {};
 
     if (filteredData.length === 0) {
@@ -114,10 +116,12 @@ function filterProperties() {
             
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             
+            // --- Image Slider & Lightbox Registration ---
             let rawImages = row['Image Name'] ? row['Image Name'].trim() : '';
             let imagesArr = rawImages.split(',').map(url => url.trim()).filter(url => url !== '');
             let uniqueSliderId = `slider-${index}`;
             
+            // Save the images into the global gallery object for the Lightbox arrows to use
             lightboxGalleries[uniqueSliderId] = imagesArr;
 
             let sliderHTML = `<div class="image-slider-container">`;
@@ -125,6 +129,7 @@ function filterProperties() {
             
             if (imagesArr.length > 0) {
                 imagesArr.forEach((imgUrl, i) => {
+                    // Click passes the unique gallery ID and the image index
                     sliderHTML += `<img src="${imgUrl}" alt="${title}" loading="lazy" class="slider-img" onclick="openLightbox('${uniqueSliderId}', ${i})">`;
                 });
             } else {
@@ -144,6 +149,7 @@ function filterProperties() {
                 sliderHTML += `</div>`;
             }
             sliderHTML += `</div>`;
+            // -------------------------------------------
 
             let beds = row['Bedrooms'] ? row['Bedrooms'].trim() : '';
             let baths = row['Bathrooms'] ? row['Bathrooms'].trim() : '';
@@ -216,6 +222,7 @@ function filterProperties() {
     }
 }
 
+// --- Lightbox Gallery Navigation Functions ---
 function openLightbox(galleryId, imgIndex) {
     currentGalleryId = galleryId;
     currentImageIndex = imgIndex;
@@ -236,6 +243,7 @@ function changeLightboxImage(direction) {
 
     currentImageIndex += direction;
     
+    // Loop back to the beginning or end of the images
     if (currentImageIndex >= gallery.length) {
         currentImageIndex = 0;
     } else if (currentImageIndex < 0) {
@@ -257,6 +265,7 @@ function updateLightboxView() {
         captionEl.innerText = `📸 Image ${currentImageIndex + 1} of ${gallery.length}`;
     }
 }
+// -------------------------------------------------------
 
 function slideImage(sliderId, direction) {
     const slider = document.getElementById(sliderId);
