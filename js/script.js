@@ -3,7 +3,6 @@ const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs
 let currentLimit = 6;
 let currentMarket = 'all'; 
 let allProperties = []; 
-
 let lightboxGalleries = {}; 
 let currentGalleryId = null;
 let currentImageIndex = 0;
@@ -81,7 +80,7 @@ if (document.querySelector('.property-grid')) {
         },
         error: function(error) {
             const grid = document.querySelector('.property-grid');
-            if (grid) grid.innerHTML = '<h3 style="text-align:center; width:100%; color:#e53e3e;">Failed to load properties.</h3>';
+            if (grid) grid.innerHTML = '<h3 style="text-align:center; width:100%; color:#e53e3e; grid-column: 1/-1;">Failed to load properties.</h3>';
             console.error("Error fetching data:", error);
         }
     });
@@ -271,6 +270,7 @@ function filterProperties() {
     }
 }
 
+// --- LIGHTBOX PREVIEW LOGIC ---
 function openLightbox(galleryId, imgIndex) {
     currentGalleryId = galleryId;
     currentImageIndex = imgIndex;
