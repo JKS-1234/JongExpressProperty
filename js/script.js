@@ -4,7 +4,7 @@ let currentLimit = 6;
 let currentMarket = 'all'; 
 let allProperties = []; 
 
-// --- NEW: Stores image arrays for the lightbox gallery ---
+// --- Stores image arrays for the lightbox gallery ---
 let lightboxGalleries = {}; 
 let currentGalleryId = null;
 let currentImageIndex = 0;
@@ -222,7 +222,7 @@ function filterProperties() {
     }
 }
 
-// --- UPDATED: Lightbox Gallery Navigation Functions ---
+// --- Lightbox Gallery Navigation Functions ---
 function openLightbox(galleryId, imgIndex) {
     currentGalleryId = galleryId;
     currentImageIndex = imgIndex;
