@@ -3,55 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Properties | Jong Express Property</title>
-    <link rel="icon" type="image/png" href="photos/icononly.png">
+    <title>Property Listings & Updates | Jong Express Property</title>
+    <meta name="description" content="Browse transparent, 100% verified property listings in Miri, Sarawak by Jong Express Property.">
+    
+    <!-- NEW SEO UPGRADES -->
+    <link rel="canonical" href="https://jongexpressproperty.online/listing.html" />
+    <meta property="og:title" content="Verified Property Listings in Miri | Jong Express Property">
+    <meta property="og:description" content="Browse transparent, 100% verified property listings in Miri, Sarawak. Sub-sales, rentals, and developer projects.">
+    <meta property="og:image" content="https://jongexpressproperty.online/photos/icononly.png">
+    <meta property="og:url" content="https://jongexpressproperty.online/listing.html">
+    <meta property="og:type" content="website">
+    <!-- END NEW SEO UPGRADES -->
+
+    <link rel="icon" type="image/png" href="https://jongexpressproperty.online/photos/icononly.png">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
     <header>
-        <div class="logo">Jong Express Property</div>
+        <a href="/" class="logo">Jong Express Property</a>
         <nav>
-            <a href="index.html">Home</a>
+            <a href="/">Our Promise</a>
             <a href="listing.html" style="color: var(--secondary);">Listings & FB Updates</a>
+            <a href="/#contact">Contact Jong</a>
         </nav>
     </header>
 
+    <!-- 1. PROPERTIES FIRST -->
     <section id="properties" class="featured-properties">
         <h2>Featured Honest Listings</h2>
+        <p style="margin-bottom: 30px;">100% Verified. We show you the good, and we don't hide the bad.</p>
+        
         <div class="search-filter-wrapper">
             <div class="market-tabs">
                 <button class="tab-btn active" onclick="setMarket('all', this)">All Listings</button>
                 <button class="tab-btn" onclick="setMarket('subsale', this)">Sub-Sale & Rent</button>
                 <button class="tab-btn" onclick="setMarket('project', this)">Developer Projects</button>
             </div>
-            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Type keywords..." onkeyup="resetAndFilter()">
+            
+            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Type keywords... (e.g. Corner, Furnished, Pujut, Curtin)" onkeyup="resetAndFilter()">
+            
             <div class="filter-container">
-                <select id="statusFilter" class="filter-select" onchange="resetAndFilter()"><option value="all">All Status</option><option value="sale">For Sale</option><option value="rent">For Rent</option></select>
-                <select id="typeFilter" class="filter-select" onchange="resetAndFilter()"><option value="all">All Types</option></select>
-                <select id="areaFilter" class="filter-select" onchange="resetAndFilter()"><option value="all">All Areas</option></select>
+                <select id="statusFilter" class="filter-select" onchange="resetAndFilter()">
+                    <option value="all">All Status</option>
+                    <option value="sale">For Sale</option>
+                    <option value="rent">For Rent</option>
+                </select>
+                <select id="typeFilter" class="filter-select" onchange="resetAndFilter()">
+                    <option value="all">All Types</option>
+                </select>
+                <select id="areaFilter" class="filter-select" onchange="resetAndFilter()">
+                    <option value="all">All Areas</option>
+                </select>
+                <select id="sortPriceFilter" class="filter-select" onchange="resetAndFilter()">
+                    <option value="default">Sort: Default</option>
+                    <option value="lowToHigh">Price: Low to High</option>
+                    <option value="highToLow">Price: High to Low</option>
+                </select>
             </div>
         </div>
 
         <div class="property-grid">
             <h3 style="text-align:center; width:100%; color:var(--primary);">Loading latest listings...</h3>
         </div>
+
         <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
     </section>
 
+    <!-- 2. FACEBOOK FEED SECOND -->
     <section style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
         <h2>Our Latest Properties on Facebook</h2>
+        <p style="margin-bottom: 30px;">Check out our newest market updates below!</p>
+        <!-- Correct New Facebook Widget ID -->
         <script src="https://elfsightcdn.com/platform.js" async></script>
-        <div class="elfsight-app-8cfc3004-89f9-4754-9047-e12cd7216640" data-elfsight-app-lazy></div>
+        <div class="elfsight-app-f8015444-62da-45e2-85d3-62c0c647068e" data-elfsight-app-lazy></div>
     </section>
 
-    <!-- HIDDEN LIGHTBOX FOR IMAGE PREVIEW -->
-    <div id="lightbox" class="lightbox" onclick="closePreview()">
-        <span class="lightbox-close" onclick="closePreview()">&times;</span>
+    <footer>
+        <p>&copy; 2026 Jong Express Property. All rights reserved. | Represented by JONG KIAT SHAN (Kommons Realty)</p>
+    </footer>
+
+    <!-- LIGHTBOX MODAL WITH GALLERY NAVIGATION -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <span class="lightbox-prev" onclick="changeLightboxImage(-1)">&#10094;</span>
+        <span class="lightbox-next" onclick="changeLightboxImage(1)">&#10095;</span>
+        
         <img id="lightbox-img" class="lightbox-content" src="">
+        <div id="lightbox-caption" class="lightbox-caption"></div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script src="js/script.js"></script>
+    
+    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
+        💬 WhatsApp Us
+    </a>
+    
+    <script>window.chatbaseConfig = { chatbotId: "g5wuvpEGYSCkeUYFoRiTp" };</script>
+    <script src="https://www.chatbase.co/embed.min.js" chatbotId="g5wuvpEGYSCkeUYFoRiTp" defer></script>
 </body>
 </html>
