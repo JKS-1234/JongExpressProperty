@@ -160,7 +160,7 @@ footer {
 .property-card img {
     width: 100%;
     height: 220px;
-    object-fit: cover;
+    object-fit: cover; /* FIXES THE MISSING IMAGE / LAYOUT ISSUE */
     background-color: #e2e8f0; 
 }
 .badge-new {
@@ -312,7 +312,6 @@ footer {
     background-color: transparent;
     color: var(--primary);
 }
-/* --- Market Category Tabs --- */
 .market-tabs {
     display: flex;
     justify-content: center;
@@ -334,7 +333,6 @@ footer {
     background-color: var(--primary);
     color: white;
 }
-/* --- Mobile Responsiveness (Smartphones & Tablets) --- */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
