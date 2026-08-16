@@ -57,7 +57,7 @@ footer { background-color: var(--primary); color: white; text-align: center; pad
 .property-card { background: var(--light); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: left; transition: transform 0.3s ease; position: relative; display: flex; flex-direction: column; height: 100%; }
 .property-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
 
-/* --- SLIDER & IMAGE FIX (NO CUT-OFF ROOFS) --- */
+/* --- SLIDER & IMAGE CONTAINER --- */
 .image-slider-container { position: relative; width: 100%; height: 260px; overflow: hidden; background-color: #ffffff; }
 .image-slider { display: flex; height: 100%; width: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; }
 .image-slider::-webkit-scrollbar { display: none; }
