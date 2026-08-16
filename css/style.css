@@ -8,7 +8,6 @@ html { scroll-behavior: smooth; }
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
 body { background-color: var(--light); color: var(--dark); line-height: 1.6; }
 header { background-color: var(--primary); color: white; padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
-/* Modified to support the logo as an anchor tag */
 .logo { font-size: 1.5rem; font-weight: bold; color: var(--secondary); text-decoration: none; transition: color 0.3s ease; }
 .logo:hover { color: white; }
 nav a { color: white; text-decoration: none; margin-left: 20px; font-weight: 500; }
