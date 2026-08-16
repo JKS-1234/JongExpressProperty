@@ -212,6 +212,7 @@ function filterProperties() {
         });
     }
 
+    // GUARANTEED FIX: Replaces the HTML entirely instead of appending multiple times
     grid.innerHTML = allCardsHTML;
 
     const loadMoreBtn = document.getElementById('loadMoreBtn');
