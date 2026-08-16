@@ -4,7 +4,6 @@ let currentLimit = 6;
 let currentMarket = 'all'; 
 let allProperties = []; 
 
-// --- Stores image arrays for the lightbox gallery ---
 let lightboxGalleries = {}; 
 let currentGalleryId = null;
 let currentImageIndex = 0;
@@ -30,44 +29,47 @@ function setMarket(marketType, btnElement) {
     resetAndFilter();
 }
 
-Papa.parse(csvUrl, {
-    download: true,
-    header: true,
-    complete: function(results) {
-        allProperties = results.data.filter(row => row['Property Name']);
-        const uniqueAreas = new Set();
-        const uniqueTypes = new Set();
+// Check if we are on the listing page before running the property script
+if (document.querySelector('.property-grid')) {
+    Papa.parse(csvUrl, {
+        download: true,
+        header: true,
+        complete: function(results) {
+            allProperties = results.data.filter(row => row['Property Name']);
+            const uniqueAreas = new Set();
+            const uniqueTypes = new Set();
 
-        allProperties.forEach(row => {
-            let rawType = row['Type'] ? row['Type'].trim() : '';
-            let rawArea = row['Area'] ? row['Area'].trim() : '';
-            if (rawType) uniqueTypes.add(rawType);
-            if (rawArea) uniqueAreas.add(rawArea);
-        });
-
-        const typeFilter = document.getElementById('typeFilter');
-        if (typeFilter) {
-            typeFilter.innerHTML = '<option value="all">All Types</option>';
-            Array.from(uniqueTypes).sort().forEach(typeName => {
-                typeFilter.innerHTML += `<option value="${typeName.toLowerCase()}">${typeName}</option>`;
+            allProperties.forEach(row => {
+                let rawType = row['Type'] ? row['Type'].trim() : '';
+                let rawArea = row['Area'] ? row['Area'].trim() : '';
+                if (rawType) uniqueTypes.add(rawType);
+                if (rawArea) uniqueAreas.add(rawArea);
             });
-        }
 
-        const areaFilter = document.getElementById('areaFilter');
-        if (areaFilter) {
-            areaFilter.innerHTML = '<option value="all">All Areas</option>';
-            Array.from(uniqueAreas).sort().forEach(areaName => {
-                areaFilter.innerHTML += `<option value="${areaName.toLowerCase()}">${areaName}</option>`;
-            });
+            const typeFilter = document.getElementById('typeFilter');
+            if (typeFilter) {
+                typeFilter.innerHTML = '<option value="all">All Types</option>';
+                Array.from(uniqueTypes).sort().forEach(typeName => {
+                    typeFilter.innerHTML += `<option value="${typeName.toLowerCase()}">${typeName}</option>`;
+                });
+            }
+
+            const areaFilter = document.getElementById('areaFilter');
+            if (areaFilter) {
+                areaFilter.innerHTML = '<option value="all">All Areas</option>';
+                Array.from(uniqueAreas).sort().forEach(areaName => {
+                    areaFilter.innerHTML += `<option value="${areaName.toLowerCase()}">${areaName}</option>`;
+                });
+            }
+            filterProperties();
+        },
+        error: function(error) {
+            const grid = document.querySelector('.property-grid');
+            if (grid) grid.innerHTML = '<h3 style="text-align:center; width:100%; color:#e53e3e;">Failed to load properties.</h3>';
+            console.error("Error fetching data:", error);
         }
-        filterProperties();
-    },
-    error: function(error) {
-        const grid = document.querySelector('.property-grid');
-        if (grid) grid.innerHTML = '<h3 style="text-align:center; width:100%; color:#e53e3e;">Failed to load properties.</h3>';
-        console.error("Error fetching data:", error);
-    }
-});
+    });
+}
 
 function filterProperties() {
     const statusVal = document.getElementById('statusFilter') ? document.getElementById('statusFilter').value : 'all';
@@ -96,9 +98,9 @@ function filterProperties() {
     else if (sortVal === 'highToLow') filteredData.sort((a, b) => parsePrice(b['Price']) - parsePrice(a['Price']));
 
     const grid = document.querySelector('.property-grid');
-    let allCardsHTML = '';
+    if (!grid) return;
     
-    // Clear the old galleries before rendering new ones
+    let allCardsHTML = '';
     lightboxGalleries = {};
 
     if (filteredData.length === 0) {
@@ -116,12 +118,10 @@ function filterProperties() {
             
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             
-            // --- Image Slider & Lightbox Registration ---
             let rawImages = row['Image Name'] ? row['Image Name'].trim() : '';
             let imagesArr = rawImages.split(',').map(url => url.trim()).filter(url => url !== '');
             let uniqueSliderId = `slider-${index}`;
             
-            // Save the images into the global gallery object for the Lightbox arrows to use
             lightboxGalleries[uniqueSliderId] = imagesArr;
 
             let sliderHTML = `<div class="image-slider-container">`;
@@ -129,7 +129,6 @@ function filterProperties() {
             
             if (imagesArr.length > 0) {
                 imagesArr.forEach((imgUrl, i) => {
-                    // Click passes the unique gallery ID and the image index
                     sliderHTML += `<img src="${imgUrl}" alt="${title}" loading="lazy" class="slider-img" onclick="openLightbox('${uniqueSliderId}', ${i})">`;
                 });
             } else {
@@ -149,7 +148,6 @@ function filterProperties() {
                 sliderHTML += `</div>`;
             }
             sliderHTML += `</div>`;
-            // -------------------------------------------
 
             let beds = row['Bedrooms'] ? row['Bedrooms'].trim() : '';
             let baths = row['Bathrooms'] ? row['Bathrooms'].trim() : '';
@@ -214,7 +212,7 @@ function filterProperties() {
         });
     }
 
-    if (grid) grid.innerHTML = allCardsHTML;
+    grid.innerHTML = allCardsHTML;
 
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     if (loadMoreBtn) {
@@ -222,7 +220,6 @@ function filterProperties() {
     }
 }
 
-// --- Lightbox Gallery Navigation Functions ---
 function openLightbox(galleryId, imgIndex) {
     currentGalleryId = galleryId;
     currentImageIndex = imgIndex;
@@ -243,7 +240,6 @@ function changeLightboxImage(direction) {
 
     currentImageIndex += direction;
     
-    // Loop back to the beginning or end of the images
     if (currentImageIndex >= gallery.length) {
         currentImageIndex = 0;
     } else if (currentImageIndex < 0) {
@@ -265,7 +261,6 @@ function updateLightboxView() {
         captionEl.innerText = `📸 Image ${currentImageIndex + 1} of ${gallery.length}`;
     }
 }
-// -------------------------------------------------------
 
 function slideImage(sliderId, direction) {
     const slider = document.getElementById(sliderId);
