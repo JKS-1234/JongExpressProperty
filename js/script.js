@@ -8,15 +8,6 @@ let lightboxGalleries = {};
 let currentGalleryId = null;
 let currentImageIndex = 0;
 
-function slugify(text) {
-    return text.toString().toLowerCase()
-      .replace(/\s+/g, '-')           
-      .replace(/[^\w\-]+/g, '')       
-      .replace(/\-\-+/g, '-')         
-      .replace(/^-+/, '')             
-      .replace(/-+$/, '');            
-}
-
 function getYouTubeEmbedUrl(url) {
     if (!url || (!url.includes('youtube.com') && !url.includes('youtu.be'))) { return null; }
     let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -43,7 +34,13 @@ if (document.querySelector('.property-grid')) {
         download: true,
         header: true,
         complete: function(results) {
-            allProperties = results.data.filter(row => row['Property Name']);
+            // FIX: Assign a safe Number ID to each property to prevent Emoji crashes
+            let validRows = results.data.filter(row => row['Property Name']);
+            validRows.forEach((row, index) => {
+                row.originalId = index;
+            });
+            allProperties = validRows;
+
             const uniqueAreas = new Set();
             const uniqueTypes = new Set();
 
@@ -70,11 +67,12 @@ if (document.querySelector('.property-grid')) {
                 });
             }
 
+            // FIX: Routing based on the safe Number ID
             const urlParams = new URLSearchParams(window.location.search);
-            const propertySlug = urlParams.get('property');
+            const propertyId = urlParams.get('id');
 
-            if (propertySlug) {
-                renderSingleProperty(propertySlug);
+            if (propertyId !== null) {
+                renderSingleProperty(parseInt(propertyId));
             } else {
                 filterProperties();
             }
@@ -87,8 +85,8 @@ if (document.querySelector('.property-grid')) {
     });
 }
 
-function renderSingleProperty(slug) {
-    const property = allProperties.find(row => slugify(row['Property Name']) === slug);
+function renderSingleProperty(id) {
+    const property = allProperties.find(row => row.originalId === id);
     const grid = document.querySelector('.property-grid');
     
     if (!property) {
@@ -226,19 +224,17 @@ function filterProperties() {
                 }
             }
 
-            // FIX: THIS MAKES THE TITLE CLICKABLE
-            let titleSlug = slugify(title);
-            let propertyUrl = `listing.html?property=${titleSlug}`;
+            // FIX: Clean ID link and dual-button layout for maximum user friendliness
+            let propertyUrl = `listing.html?id=${row.originalId}`;
 
             allCardsHTML += `
             <div class="property-card">
                 ${badgeHTML}
                 ${sliderHTML}
-                <div class="property-details">
+                <div class="property-details" style="display:flex; flex-direction:column; height:100%;">
                     <div class="card-header-flex">
                         <div class="card-title-group">
-                            <!-- FIX: WRAPPED TITLE IN A HREF TAG -->
-                            <h3><a href="${propertyUrl}" style="color: inherit; text-decoration: none;">${title}</a></h3>
+                            <h3><a href="${propertyUrl}" style="color: inherit; text-decoration: underline;">${title}</a></h3>
                             ${address ? `<p class="card-address">${address}</p>` : ''}
                         </div>
                         <div class="card-price-group">
@@ -252,7 +248,11 @@ function filterProperties() {
                         <strong>📌 Summary:</strong><br>${details}
                     </div>
                     ${videoHTML}
-                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" class="whatsapp-btn" target="_blank" rel="noopener noreferrer">Chat on WhatsApp</a>
+                    
+                    <div class="action-buttons" style="display: flex; gap: 10px; margin-top: auto;">
+                        <a href="${propertyUrl}" style="flex: 1; text-align: center; background-color: var(--primary); color: white; padding: 12px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.95rem;">📄 Details</a>
+                        <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" target="_blank" rel="noopener noreferrer" style="flex: 1; text-align: center; background-color: #25D366; color: white; padding: 12px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.95rem;">💬 WhatsApp</a>
+                    </div>
                 </div>
             </div>`;
         });
@@ -263,7 +263,7 @@ function filterProperties() {
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     if (loadMoreBtn) {
         const urlParams = new URLSearchParams(window.location.search);
-        const isSingleProperty = urlParams.get('property');
+        const isSingleProperty = urlParams.get('id');
         
         if (isSingleProperty) {
             loadMoreBtn.style.display = 'none';
@@ -350,7 +350,6 @@ function showMoreListings() {
     filterProperties();
 }
 
-// --- MOBILE NAVIGATION BAR HIDE ON SCROLL ---
 let lastScrollTop = 0;
 const header = document.getElementById('main-header');
 
