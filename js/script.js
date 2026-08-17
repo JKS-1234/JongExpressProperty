@@ -27,6 +27,7 @@ function setMarket(marketType, btnElement) {
     resetAndFilter();
 }
 
+// Fetches the lightning-fast JSON file built by your GitHub Action
 if (document.querySelector('.property-grid')) {
     fetch('data/properties.json')
         .then(response => {
@@ -185,6 +186,7 @@ function filterProperties() {
                 }
             }
 
+            // Links to the auto-generated SEO pages!
             let propertyUrl = `properties/${row.slug}/`;
 
             allCardsHTML += `
