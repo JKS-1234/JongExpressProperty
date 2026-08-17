@@ -16,7 +16,6 @@ body {
     line-height: 1.6;
 }
 
-/* --- HEADER & AUTO-HIDE NAV --- */
 header {
     background-color: var(--primary);
     color: white;
@@ -40,7 +39,6 @@ nav a:hover { color: var(--secondary); }
 .btn { background-color: var(--secondary); color: var(--primary); padding: 12px 30px; text-decoration: none; font-weight: bold; border-radius: 5px; display: inline-block; transition: background 0.3s; }
 .btn:hover { background-color: #ecc94b; }
 
-/* --- FEATURES & FOOTER --- */
 .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); padding: 50px 5%; gap: 30px; max-width: 1200px; margin: 0 auto; }
 .feature-card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
 .feature-card h3 { color: var(--primary); margin-bottom: 15px; }
@@ -50,14 +48,12 @@ nav a:hover { color: var(--secondary); }
 footer { background-color: var(--primary); color: white; text-align: center; padding: 20px; margin-top: 20px; }
 .social-links a { color: var(--secondary); text-decoration: none; margin: 0 10px; font-weight: bold; }
 
-/* --- PROPERTY GRID --- */
 .featured-properties { padding: 50px 5%; background-color: white; text-align: center; }
 .featured-properties h2 { color: var(--primary); font-size: 2rem; margin-bottom: 10px; }
 .property-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-top: 40px; max-width: 1200px; margin-left: auto; margin-right: auto; }
 .property-card { background: var(--light); border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: left; transition: transform 0.3s ease; position: relative; display: flex; flex-direction: column; height: 100%; }
 .property-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
 
-/* --- SLIDER & IMAGE CONTAINER --- */
 .image-slider-container { position: relative; width: 100%; height: 260px; overflow: hidden; background-color: #ffffff; }
 .image-slider { display: flex; height: 100%; width: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; }
 .image-slider::-webkit-scrollbar { display: none; }
@@ -71,7 +67,6 @@ footer { background-color: var(--primary); color: white; text-align: center; pad
 .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, 0.5); box-shadow: 0 1px 3px rgba(0,0,0,0.5); transition: background 0.3s; }
 .dot.active { background: white; transform: scale(1.2); }
 
-/* --- LIGHTBOX PREVIEW --- */
 .lightbox { display: none; position: fixed; z-index: 2000; padding-top: 60px; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); backdrop-filter: blur(5px); }
 .lightbox-content { margin: auto; display: block; max-width: 90%; max-height: 80vh; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); object-fit: contain; }
 .lightbox-close { position: absolute; top: 15px; right: 35px; color: #f1f1f1; font-size: 40px; font-weight: bold; transition: 0.3s; cursor: pointer; z-index: 2010; }
@@ -82,7 +77,6 @@ footer { background-color: var(--primary); color: white; text-align: center; pad
 .lightbox-prev:hover, .lightbox-next:hover { background-color: rgba(255,255,255,0.3); }
 .lightbox-caption { margin: 15px auto 0; display: block; width: 80%; max-width: 700px; text-align: center; color: white; font-size: 1.1rem; font-weight: bold; }
 
-/* --- CARD DETAILS --- */
 .badge-new { position: absolute; top: 15px; left: 15px; background-color: #e53e3e; color: white; padding: 6px 12px; font-size: 0.85rem; font-weight: bold; border-radius: 4px; z-index: 20; box-shadow: 0 4px 6px rgba(0,0,0,0.3); letter-spacing: 0.5px; }
 .property-details { padding: 24px; display: flex; flex-direction: column; flex-grow: 1; }
 .card-header-flex { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 15px; }
@@ -101,7 +95,6 @@ footer { background-color: var(--primary); color: white; text-align: center; pad
 .whatsapp-btn { display: block; text-align: center; background-color: #25D366; color: white; padding: 12px; text-decoration: none; border-radius: 5px; font-weight: bold; transition: background 0.3s; margin-top: auto; }
 .whatsapp-btn:hover { background-color: #128C7E; }
 
-/* --- FILTERS --- */
 .search-filter-wrapper { max-width: 800px; margin: 0 auto 30px; display: flex; flex-direction: column; gap: 15px; }
 .search-input { width: 100%; padding: 14px 20px; border: 2px solid #e2e8f0; border-radius: 5px; font-size: 1.1rem; outline: none; transition: border 0.3s; }
 .search-input:focus { border-color: var(--primary); }
@@ -116,7 +109,6 @@ footer { background-color: var(--primary); color: white; text-align: center; pad
 .tab-btn { padding: 10px 20px; border: 2px solid var(--primary); background-color: transparent; color: var(--primary); font-weight: bold; border-radius: 5px; cursor: pointer; transition: all 0.3s ease; }
 .tab-btn.active, .tab-btn:hover { background-color: var(--primary); color: white; }
 
-/* --- MOBILE RESPONSIVENESS --- */
 @media (max-width: 768px) {
     header { flex-direction: column; gap: 15px; text-align: center; padding: 1rem 15px; }
     nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
