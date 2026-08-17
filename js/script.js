@@ -185,7 +185,6 @@ function filterProperties() {
                 }
             }
 
-            // Links to the auto-generated static SEO page!
             let propertyUrl = `properties/${row.slug}/`;
 
             allCardsHTML += `
