@@ -186,7 +186,7 @@ function filterProperties() {
                 }
             }
 
-            // Links to the auto-generated SEO page from your GitHub Action build!
+            // Links to the auto-generated static SEO page!
             let propertyUrl = `properties/${row.slug}/`;
 
             allCardsHTML += `
