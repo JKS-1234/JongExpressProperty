@@ -63,45 +63,13 @@ if (document.querySelector('.property-grid')) {
                 });
             }
 
-            const urlParams = new URLSearchParams(window.location.search);
-            const propertyId = urlParams.get('id');
-
-            if (propertyId !== null) {
-                renderSingleProperty(propertyId);
-            } else {
-                filterProperties();
-            }
+            filterProperties();
         })
         .catch(error => {
             const grid = document.querySelector('.property-grid');
             if (grid) grid.innerHTML = '<h3 style="text-align:center; width:100%; color:#e53e3e; grid-column: 1/-1;">Building latest listings... Please wait a few minutes and refresh the page.</h3>';
             console.error("Error fetching properties.json:", error);
         });
-}
-
-function renderSingleProperty(id) {
-    const property = allProperties.find(row => row.originalId === id);
-    const grid = document.querySelector('.property-grid');
-    
-    if (!property) {
-        grid.innerHTML = '<h3 style="text-align:center; width: 100%; grid-column: 1/-1;">Property not found. <a href="listing.html" style="color: var(--primary);">Return to listings</a></h3>';
-        return;
-    }
-
-    document.title = `${property['Property Name']} | Jong Express Property`;
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if(metaDesc) {
-        metaDesc.setAttribute("content", `For Sale/Rent: ${property['Property Name']} located in ${property['Area']}. Price: ${property['Price']}. 100% verified listing.`);
-    }
-
-    const searchWrapper = document.querySelector('.search-filter-wrapper');
-    if(searchWrapper) searchWrapper.style.display = 'none';
-    const loadMoreBtn = document.getElementById('loadMoreBtn');
-    if(loadMoreBtn) loadMoreBtn.style.display = 'none';
-
-    allProperties = [property]; 
-    currentLimit = 1; 
-    filterProperties(); 
 }
 
 function filterProperties() {
@@ -218,7 +186,7 @@ function filterProperties() {
                 }
             }
 
-            // Links directly to the auto-generated static SEO page!
+            // Links to the auto-generated SEO page from your GitHub Action build!
             let propertyUrl = `properties/${row.slug}/`;
 
             allCardsHTML += `
