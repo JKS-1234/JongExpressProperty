@@ -27,7 +27,6 @@ function setMarket(marketType, btnElement) {
     resetAndFilter();
 }
 
-// THE UPGRADE: Fetch the auto-generated JSON file built by GitHub Actions
 if (document.querySelector('.property-grid')) {
     fetch('data/properties.json')
         .then(response => {
