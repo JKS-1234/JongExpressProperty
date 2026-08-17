@@ -7,9 +7,6 @@
  *   - /properties/<slug>/index.html  one static, SEO-indexable page PER property
  *   - /sitemap.xml
  *   - /robots.txt
- *
- * Run locally:  node scripts/build.js
- * Requires Node 18+ (built-in fetch) and the "papaparse" package (see package.json).
  */
 
 const fs = require('fs');
@@ -64,9 +61,18 @@ function buildPropertyPageHTML(p) {
   const parking = p['Car Park'] || '';
   const typeValue = p['Type'] ? String(p['Type']).trim() : '';
   const isProject = /project|developer/i.test(typeValue);
+  
+  // *** THE FIX: Forces relative paths like "photos/img.jpg" to use your full absolute URL ***
   const images = (p['Image Name'] ? String(p['Image Name']).split(',') : [])
-    .map((s) => s.trim())
+    .map((s) => {
+        let url = s.trim();
+        if (url && !url.startsWith('http') && !url.startsWith('/')) {
+            url = `${SITE_URL}/${url}`;
+        }
+        return url;
+    })
     .filter(Boolean);
+
   const videoLink = p['Video Link'] ? String(p['Video Link']).trim() : '';
   const ytEmbed = getYouTubeEmbedUrl(videoLink);
   const pageUrl = `${SITE_URL}/properties/${p.slug}/`;
@@ -253,7 +259,7 @@ async function main() {
     row.slug = slug;
   });
 
-  // 1. data/properties.json — used by js/script.js on the listing page
+  // 1. data/properties.json
   fs.mkdirSync(DATA_DIR, { recursive: true });
   fs.writeFileSync(path.join(DATA_DIR, 'properties.json'), JSON.stringify(rows, null, 2));
   console.log(`Wrote data/properties.json (${rows.length} properties)`);
