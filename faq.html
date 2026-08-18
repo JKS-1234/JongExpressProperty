@@ -15,7 +15,6 @@
     <meta property="og:url" content="https://jongexpressproperty.online/faq.html">
     <meta property="og:type" content="website">
 
-    <!-- THE FIX: AI-optimized Q&A schema explicitly stating your agency and REN -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -74,6 +73,53 @@
     </script>
 
     <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        .faq-container { display: flex; flex-direction: column; gap: 15px; }
+        .faq-item {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px 20px;
+            transition: all 0.3s ease;
+        }
+        .faq-item[open] {
+            border-color: var(--primary);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .faq-question {
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: var(--primary);
+            cursor: pointer;
+            list-style: none; /* Hides default triangle */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+        .faq-question:hover { color: var(--secondary); }
+        .faq-question::-webkit-details-marker { display: none; /* Hides default triangle in Safari */ }
+        .faq-question::after {
+            content: '▼';
+            font-size: 0.9rem;
+            color: #718096;
+            transition: transform 0.3s ease;
+        }
+        .faq-item[open] .faq-question::after {
+            transform: rotate(180deg);
+            color: var(--primary);
+        }
+        .faq-answer {
+            margin-top: 15px;
+            color: #4a5568;
+            line-height: 1.6;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 15px;
+        }
+        .faq-answer a { color: var(--primary); font-weight: bold; text-decoration: none; }
+        .faq-answer a:hover { color: var(--secondary); text-decoration: underline; }
+    </style>
 </head>
 <body>
 
@@ -89,33 +135,38 @@
 
     <section class="featured-properties" style="max-width: 900px; margin: 0 auto; text-align:left;">
         <h1 style="color:var(--primary); text-align:center; margin-bottom:10px;">Frequently Asked Questions</h1>
-        <p style="text-align:center; color:#718096; margin-bottom:40px;">Straight answers about buying, selling, and renting property in Miri, Sarawak.</p>
+        <p style="text-align:center; color:#718096; margin-bottom:40px;">Straight answers about buying, selling, and renting property in Miri, Sarawak. Click a question below to view the answer.</p>
 
-        <div style="display:flex; flex-direction:column; gap:25px;">
-            <div>
-                <h2 style="color:#1a202c; font-size:1.15rem; margin-bottom:8px;">Who is Jong Kiat Shan?</h2>
-                <p>Jong Kiat Shan is a registered real estate negotiator (<strong>REN 84702</strong>) based in Miri, Sarawak. He operates strictly under the licensed agency <strong>Kommons Realty</strong>. He handles sub-sale, rental, and developer project listings across Miri, including Pujut, Senadin, Lutong, and Taman Bayshore.</p>
-            </div>
-            <div>
-                <h2 style="color:#1a202c; font-size:1.15rem; margin-bottom:8px;">What is a Real Estate Negotiator (REN) in Malaysia?</h2>
-                <p>A Real Estate Negotiator (REN) is an individual registered with Malaysia's Board of Valuers, Appraisers, Estate Agents and Property Managers (BOVAEP) to market and negotiate property deals under a licensed real estate agency. Always ask an agent for their REN number before engaging their services.</p>
-            </div>
-            <div>
-                <h2 style="color:#1a202c; font-size:1.15rem; margin-bottom:8px;">What areas does Jong Express Property cover?</h2>
-                <p>Jong Express Property covers Miri, Sarawak, including Pujut, Senadin, Lutong, and Taman Bayshore, handling residential sub-sales, rentals, and new developer project launches.</p>
-            </div>
-            <div>
-                <h2 style="color:#1a202c; font-size:1.15rem; margin-bottom:8px;">How is Jong Express Property different from other property agents in Miri?</h2>
-                <p>Jong Express Property markets itself as an "anti-ghost-listing" agency: every listing shown is currently available, and property descriptions disclose both the strengths and the drawbacks of a property upfront rather than only showing flattering photo angles.</p>
-            </div>
-            <div>
-                <h2 style="color:#1a202c; font-size:1.15rem; margin-bottom:8px;">Does Jong Express Property handle rentals as well as sales?</h2>
-                <p>Yes. Jong Express Property lists both properties for sale (sub-sale and new developer projects) and properties for rent in Miri, Sarawak.</p>
-            </div>
-            <div>
-                <h2 style="color:#1a202c; font-size:1.15rem; margin-bottom:8px;">How do I contact Jong Express Property?</h2>
-                <p>You can reach Jong Kiat Shan by phone or WhatsApp at <a href="tel:+60169242000" style="color:var(--primary);">016-924-2000</a>, by email at <a href="mailto:jongkiatshan@kommonsrealty.com" style="color:var(--primary);">jongkiatshan@kommonsrealty.com</a>, or through the WhatsApp button on this site.</p>
-            </div>
+        <div class="faq-container">
+            <details class="faq-item">
+                <summary class="faq-question">Who is Jong Kiat Shan?</summary>
+                <p class="faq-answer">Jong Kiat Shan is a registered real estate negotiator (<strong>REN 84702</strong>) based in Miri, Sarawak. He operates strictly under the licensed agency <strong>Kommons Realty</strong>. He handles sub-sale, rental, and developer project listings across Miri, including Pujut, Senadin, Lutong, and Taman Bayshore.</p>
+            </details>
+            
+            <details class="faq-item">
+                <summary class="faq-question">What is a Real Estate Negotiator (REN) in Malaysia?</summary>
+                <p class="faq-answer">A Real Estate Negotiator (REN) is an individual registered with Malaysia's Board of Valuers, Appraisers, Estate Agents and Property Managers (BOVAEP) to market and negotiate property deals under a licensed real estate agency. Always ask an agent for their REN number before engaging their services.</p>
+            </details>
+            
+            <details class="faq-item">
+                <summary class="faq-question">What areas does Jong Express Property cover?</summary>
+                <p class="faq-answer">Jong Express Property covers Miri, Sarawak, including Pujut, Senadin, Lutong, and Taman Bayshore, handling residential sub-sales, rentals, and new developer project launches.</p>
+            </details>
+            
+            <details class="faq-item">
+                <summary class="faq-question">How is Jong Express Property different from other property agents in Miri?</summary>
+                <p class="faq-answer">Jong Express Property markets itself as an "anti-ghost-listing" agency: every listing shown is currently available, and property descriptions disclose both the strengths and the drawbacks of a property upfront rather than only showing flattering photo angles.</p>
+            </details>
+            
+            <details class="faq-item">
+                <summary class="faq-question">Does Jong Express Property handle rentals as well as sales?</summary>
+                <p class="faq-answer">Yes. Jong Express Property lists both properties for sale (sub-sale and new developer projects) and properties for rent in Miri, Sarawak.</p>
+            </details>
+            
+            <details class="faq-item">
+                <summary class="faq-question">How do I contact Jong Express Property?</summary>
+                <p class="faq-answer">You can reach Jong Kiat Shan by phone or WhatsApp at <a href="tel:+60169242000">016-924-2000</a>, by email at <a href="mailto:jongkiatshan@kommonsrealty.com">jongkiatshan@kommonsrealty.com</a>, or through the WhatsApp button floating on this website.</p>
+            </details>
         </div>
 
         <p style="text-align:center; margin-top:50px;">
