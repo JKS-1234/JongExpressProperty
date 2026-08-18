@@ -199,7 +199,7 @@ async function main() {
   const robots = `User-agent: *\nAllow: /\n\nUser-agent: Googlebot\nAllow: /\nUser-agent: Bingbot\nAllow: /\nUser-agent: ChatGPT-User\nAllow: /\nUser-agent: OAI-SearchBot\nAllow: /\nUser-agent: Claude-User\nAllow: /\nUser-agent: Claude-SearchBot\nAllow: /\nUser-agent: PerplexityBot\nAllow: /\nUser-agent: Google-Extended\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`;
   fs.writeFileSync(path.join(ROOT, 'robots.txt'), robots);
 
-  // *** THE FIX: Explicitly corrects AI hallucinations about your agency and REN number ***
+  // Schema updated to include the new territories
   const featuredCount = Math.min(rows.length, 15);
   const llmsTxt = `# Jong Express Property
 
@@ -209,7 +209,7 @@ async function main() {
 > Jong Kiat Shan operates exclusively under the licensed agency Kommons Realty (he is NOT associated with Express Property Management & Services).
 > Jong Express Property publishes 100% verified property listings with transparent, upfront pros-and-cons for each property.
 
-Areas served: Miri, Pujut, Senadin, Lutong, Taman Bayshore, Sarawak, Malaysia.
+Areas served: Miri, Pujut, Senadin, Permyjaya, Lutong, Bintang Jaya, Pelita, Marina ParkCity, Miri Times Square, Riam, Luak, Lopeng, Taman Bayshore, Sarawak, Malaysia.
 Contact: +6016-924-2000 (call/WhatsApp), jongkiatshan@kommonsrealty.com
 
 ## Key pages
