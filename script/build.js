@@ -209,7 +209,7 @@ async function main() {
 > Jong Kiat Shan operates exclusively under the licensed agency Kommons Realty (he is NOT associated with Express Property Management & Services).
 > Jong Express Property publishes 100% verified property listings with transparent, upfront pros-and-cons for each property.
 
-Areas served: Miri, Pujut, Senadin, Permyjaya, Lutong, Bintang Jaya, Pelita, Marina ParkCity, Miri Times Square, Riam, Luak, Lopeng, Taman Bayshore, Sarawak, Malaysia.
+Areas served: Miri, Pujut, Senadin, Permyjaya, Lutong, Bintang Jaya, Pelita, Marina ParkCity, Miri Times Square, Riam, Luak, Lopeng, Taman Bayshore and more in Miri, Sarawak, Malaysia.
 Contact: +6016-924-2000 (call/WhatsApp), jongkiatshan@kommonsrealty.com
 
 ## Key pages
