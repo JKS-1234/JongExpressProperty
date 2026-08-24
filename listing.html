@@ -3,107 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Property Listings Miri | Jong Express Property</title>
-    <meta name="description" content="Browse our 100% verified real estate listings in Miri, Sarawak. Find houses, apartments, shoplots, and land for sale or rent with zero hidden flaws.">
-    <link rel="canonical" href="https://jongexpressproperty.online/listing.html" />
-    
-    <link rel="icon" type="image/png" href="https://jongexpressproperty.online/photos/icononly.png">
-    <link rel="apple-touch-icon" href="https://jongexpressproperty.online/photos/icononly.png">
-    
-    <meta property="og:title" content="Verified Property Listings in Miri | Jong Express Property">
-    <meta property="og:description" content="Transparent, honest property listings in Miri, Sarawak. View pros, cons, and actual prices upfront.">
-    <meta property="og:image" content="https://jongexpressproperty.online/photos/icononly.png">
-    <meta property="og:url" content="https://jongexpressproperty.online/listing.html">
-    <meta property="og:type" content="website">
+    <title>Jong Express Property | Honest & Transparent Real Estate Miri</title>
+    <meta name="description" content="Buy, sell, or rent houses, apartments, shops, and land in Miri, Sarawak. Transparent property listings with upfront pros and cons.">
+    <link rel="icon" type="image/png" href="photos/icononly.png">
     
     <link rel="stylesheet" href="css/style.css">
     
-    <!-- Tracking Scripts -->
-    <meta name="google-site-verification" content="DmNkWGPhpuc2D9rzCBVezIjbnLr8M6qBpZ-TYUeL4lE" />
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YNY4XZBS1T"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-YNY4XZBS1T');
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "RealEstateAgent",
+      "name": "Jong Express Property - Kommons Realty",
+      "url": "https://jongexpressproperty.online/",
+      "telephone": "+6016-924-2000",
+      "areaServed": ["Miri", "Pujut", "Senadin", "Permyjaya", "Lutong", "Bintang Jaya", "Pelita", "Marina ParkCity", "Luak", "Lopeng", "Taman Bayshore"],
+      "employee": { "@type": "Person", "name": "Jong Kiat Shan", "identifier": { "@type": "PropertyValue", "name": "REN", "value": "REN 84702" } }
+    }
     </script>
 </head>
 <body>
 
-    <header id="main-header">
-        <a href="/" class="logo">Jong Express Property</a>
+    <header>
+        <a href="index.html" class="logo" style="text-decoration:none;">Jong Express Property</a>
         <nav>
-            <a href="/#about">Our Promise</a>
-            <a href="/listing.html" style="color: var(--secondary);">Listings</a>
-            <a href="/faq.html">FAQ</a>
-            <a href="/#contact">Contact</a>
+            <a href="index.html#about">Our Promise</a>
+            <a href="listing.html" style="color: var(--secondary);">Listings</a>
+            <a href="index.html#contact">Contact Jong</a>
         </nav>
     </header>
 
-    <!-- Property Section -->
-    <section class="featured-properties" style="padding-top: 40px;">
-        <h2>Our Honest Listings</h2>
-        <p style="margin-bottom: 30px; color: #4a5568;">100% Verified. We show you the good, and we don't hide the bad.</p>
-        
-        <div class="search-filter-wrapper">
-            
-            <div class="market-tabs">
-                <button class="tab-btn active" onclick="setMarket('all', this)">All Listings</button>
-                <button class="tab-btn" onclick="setMarket('subsale', this)">Sub-Sale & Rent</button>
-                <button class="tab-btn" onclick="setMarket('project', this)">Developer Projects</button>
-            </div>
-            
-            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Search keywords... (e.g., Corner, Furnished, Pujut, Curtin)" onkeyup="resetAndFilter()">
-            
-            <div class="filter-container">
-                <select id="statusFilter" class="filter-select" onchange="resetAndFilter()">
-                    <option value="all">All Status</option>
-                    <option value="sale">For Sale</option>
-                    <option value="rent">For Rent</option>
-                </select>
-                <select id="typeFilter" class="filter-select" onchange="resetAndFilter()">
-                    <option value="all">All Types</option>
-                </select>
-                <select id="areaFilter" class="filter-select" onchange="resetAndFilter()">
-                    <option value="all">All Areas</option>
-                </select>
-                <select id="sortPriceFilter" class="filter-select" onchange="resetAndFilter()">
-                    <option value="default">Sort by: Default</option>
-                    <option value="lowToHigh">Price: Low to High</option>
-                    <option value="highToLow">Price: High to Low</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- The fast JSON script will automatically inject the property cards here -->
-        <div class="property-grid">
-            <h3 style="text-align:center; width:100%; color:var(--primary);">Loading latest listings...</h3>
-        </div>
-
-        <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
+    <section class="hero">
+        <h1>No Ghost Listings. Just Real Results.</h1>
+        <p>Tired of fake listings, hidden flaws, and agents who disappear after the sale? At Jong Express Property, we do things differently. 100% transparency, zero fluff.</p>
+        <a href="listing.html" class="btn">View Our Honest Listings</a>
     </section>
-    
-    <!-- Lightbox Pop-up HTML -->
-    <div id="lightbox" class="lightbox">
-        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
-        <span class="lightbox-prev" onclick="changeLightboxImage(-1)">&#10094;</span>
-        <span class="lightbox-next" onclick="changeLightboxImage(1)">&#10095;</span>
-        <img id="lightbox-img" class="lightbox-content" src="">
-        <div id="lightbox-caption" class="lightbox-caption"></div>
-    </div>
 
-    <footer style="margin-top: 60px;">
+    <section id="about" class="features">
+        <div class="feature-card">
+            <h3>🚫 100% Real Listings</h3>
+            <p>We are the "Anti-Ghost Listing" squad. If you see it on our site, it's available. No bait-and-switch tactics.</p>
+        </div>
+        <div class="feature-card">
+            <h3>🔍 Transparent Marketing</h3>
+            <p>Every property has flaws. We tell you the pros and the cons upfront so you can make an informed decision.</p>
+        </div>
+        <div class="feature-card">
+            <h3>🤝 End-to-End Care</h3>
+            <p>Our job doesn't end when the contract is signed. From utility transfers to move-in support, we ensure your transition is seamless.</p>
+        </div>
+    </section>
+
+    <!-- SEO DECOY FOR GOOGLE & CHATGPT -->
+    <noscript>
+        <div style="display: none;">
+            <h2>Current Miri Properties for Sale and Rent</h2>
+            <ul>
+                <li>Brand New Double Storey Terrace at Coastal Villa, Luak, Miri - Sale RM 578,000. 4 Beds, 4 Baths.</li>
+                <li>The Wharf Condominium, Miri - Sale RM 898,000. Fully Furnished, 3 Beds, 2 Baths.</li>
+                <li>Aurum Pine Residence, Miri - Sale RM 1,048,000. 5 Beds, 5 Baths, Unfurnished.</li>
+                <li>Double Storey Semi Detached at Grace Avenue, Miri - Sale RM 958,000. 5 Beds, 4 Baths.</li>
+            </ul>
+            <p>View all properties at jongexpressproperty.online/listing.html</p>
+        </div>
+    </noscript>
+
+    <section style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
+        <h2>Our Latest Updates on Facebook</h2>
+        <script src="https://elfsightcdn.com/platform.js" async></script>
+        <div class="elfsight-app-8cfc3004-89f9-4754-9047-e12cd7216640" data-elfsight-app-lazy></div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <h2>Ready to make a move? Let's connect.</h2>
+        <p style="margin-top: 10px; color: #4a5568;">Your trusted consultant, Jong Kiat Shan (REN 84702), is ready to assist you.</p>
+        
+        <div class="contact-info">
+            <div class="info-block">
+                <h3>📞 Call / WhatsApp</h3>
+                <p>016-924-2000</p>
+            </div>
+            <div class="info-block">
+                <h3>✉️ Email</h3>
+                <p><a href="mailto:jongkiatshan@kommonsrealty.com" style="color: var(--primary);">jongkiatshan@kommonsrealty.com</a></p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
         <p>&copy; 2026 Jong Express Property. All rights reserved. | Represented by JONG KIAT SHAN (REN 84702) | Kommons Realty</p>
     </footer>
 
-    <!-- The fast Smart-Capture Engine -->
-    <script src="js/script.js"></script>
-    
-    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" rel="noopener noreferrer" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 12px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
+    <a href="https://wa.me/60169242000" target="_blank" style="position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
         💬 WhatsApp Us
     </a>
-    
-    <script>window.chatbaseConfig = { chatbotId: "g5wuvpEGYSCkeUYFoRiTp" };</script>
-    <script src="https://www.chatbase.co/embed.min.js" chatbotId="g5wuvpEGYSCkeUYFoRiTp" defer></script>
 </body>
 </html>
