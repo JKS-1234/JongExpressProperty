@@ -6,11 +6,6 @@ let lightboxGalleries = {};
 let currentGalleryId = null;
 let currentImageIndex = 0;
 
-function parsePrice(priceStr) {
-    if (!priceStr) return 0;
-    return parseInt(String(priceStr).replace(/[^0-9]/g, ''), 10) || 0;
-}
-
 function setMarket(marketType, btnElement) {
     currentMarket = marketType;
     const tabs = document.querySelectorAll('.tab-btn');
@@ -19,46 +14,40 @@ function setMarket(marketType, btnElement) {
     resetAndFilter();
 }
 
-// Keep PapaParse, but use our upgraded logic!
-Papa.parse(csvUrl, {
-    download: true,
-    header: true,
-    complete: function(results) {
-        allProperties = results.data.filter(row => row['Property Name']); // filter empty rows
+// Only run PapaParse if we are actually on the listing page
+if (document.querySelector('.property-grid')) {
+    Papa.parse(csvUrl, {
+        download: true,
+        header: true,
+        complete: function(results) {
+            allProperties = results.data.filter(row => row['Property Name']);
 
-        const uniqueAreas = new Set();
-        const uniqueTypes = new Set();
+            const uniqueAreas = new Set();
+            const uniqueTypes = new Set();
 
-        allProperties.forEach(row => {
-            let rawType = row['Type'] ? String(row['Type']).trim() : '';
-            let rawArea = row['Area'] ? String(row['Area']).trim() : '';
-            if (rawType) uniqueTypes.add(rawType);
-            if (rawArea) uniqueAreas.add(rawArea);
-        });
-
-        const typeFilter = document.getElementById('typeFilter');
-        if (typeFilter) {
-            typeFilter.innerHTML = '<option value="all">All Types</option>';
-            Array.from(uniqueTypes).sort().forEach(typeName => {
-                typeFilter.innerHTML += `<option value="${typeName.toLowerCase()}">${typeName}</option>`;
+            allProperties.forEach(row => {
+                let rawType = row['Type'] ? String(row['Type']).trim() : '';
+                let rawArea = row['Area'] ? String(row['Area']).trim() : '';
+                if (rawType) uniqueTypes.add(rawType);
+                if (rawArea) uniqueAreas.add(rawArea);
             });
-        }
 
-        const areaFilter = document.getElementById('areaFilter');
-        if (areaFilter) {
-            areaFilter.innerHTML = '<option value="all">All Areas</option>';
-            Array.from(uniqueAreas).sort().forEach(areaName => {
-                areaFilter.innerHTML += `<option value="${areaName.toLowerCase()}">${areaName}</option>`;
-            });
-        }
+            const typeFilter = document.getElementById('typeFilter');
+            if (typeFilter) {
+                typeFilter.innerHTML = '<option value="all">All Types</option>';
+                Array.from(uniqueTypes).sort().forEach(typeName => typeFilter.innerHTML += `<option value="${typeName.toLowerCase()}">${typeName}</option>`);
+            }
 
-        filterProperties();
-    },
-    error: function(error) {
-        const grid = document.querySelector('.property-grid');
-        if (grid) grid.innerHTML = '<h3 style="text-align:center; width:100%; color:#e53e3e;">Error loading listings.</h3>';
-    }
-});
+            const areaFilter = document.getElementById('areaFilter');
+            if (areaFilter) {
+                areaFilter.innerHTML = '<option value="all">All Areas</option>';
+                Array.from(uniqueAreas).sort().forEach(areaName => areaFilter.innerHTML += `<option value="${areaName.toLowerCase()}">${areaName}</option>`);
+            }
+
+            filterProperties();
+        }
+    });
+}
 
 function filterProperties() {
     const statusVal = document.getElementById('statusFilter') ? document.getElementById('statusFilter').value : 'all';
@@ -96,8 +85,7 @@ function filterProperties() {
         propertiesToShow.forEach((row, index) => {
             let title = row['Property Name'] || '';
             let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
-            let areaRaw = row['Area'] ? String(row['Area']).trim() : '';
-            let address = areaRaw ? `${areaRaw}, Sarawak` : 'Miri, Sarawak';
+            let address = row['Area'] ? `${row['Area']}, Sarawak` : 'Miri, Sarawak';
             
             // SMART PRICE LOGIC
             let priceStr = row['Price'] ? String(row['Price']).trim() : '';
@@ -111,8 +99,7 @@ function filterProperties() {
                 }
             }
             
-            let typeValue = row['Type'] ? String(row['Type']).trim() : '';
-            let isProject = (typeValue.toLowerCase().includes('project') || typeValue.toLowerCase().includes('developer'));
+            let isProject = (String(row['Type']).toLowerCase().includes('project'));
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             
             // AUTO CAPTURE LOGIC
@@ -127,34 +114,22 @@ function filterProperties() {
             let uniqueSliderId = `slider-${index}`;
             lightboxGalleries[uniqueSliderId] = imagesArr;
 
-            let sliderHTML = `<div class="image-slider-container"><div class="image-slider" id="${uniqueSliderId}">`;
+            let imageHTML = `<div class="image-slider-container">`;
             if (imagesArr.length > 0) {
-                imagesArr.forEach((imgUrl, i) => {
-                    sliderHTML += `<img src="${imgUrl}" alt="${title}" loading="lazy" class="slider-img" onclick="openLightbox('${uniqueSliderId}', ${i})">`;
-                });
+                imageHTML += `<img src="${imagesArr[0]}" alt="${title}" loading="lazy" class="slider-img" onclick="openLightbox('${uniqueSliderId}', 0)" style="cursor:pointer;">`;
             }
-            sliderHTML += `</div>`;
-            if (imagesArr.length > 1) {
-                sliderHTML += `<button class="slider-btn slider-btn-prev" onclick="slideImage('${uniqueSliderId}', -1)">&#10094;</button><button class="slider-btn slider-btn-next" onclick="slideImage('${uniqueSliderId}', 1)">&#10095;</button>`;
-            }
-            sliderHTML += `</div>`;
+            imageHTML += `</div>`;
 
-            let beds = row['Bedrooms'] ? String(row['Bedrooms']).trim() : '';
-            let baths = row['Bathrooms'] ? String(row['Bathrooms']).trim() : '';
-            let parking = row['Car Park'] ? String(row['Car Park']).trim() : '';
-            let iconsHTML = '';
-            if (beds || baths || parking) {
-                iconsHTML = `<div class="icon-row" style="display: flex; gap: 20px; color: #4a5568; font-size: 1rem; margin-bottom: 20px;">`;
-                if (beds) iconsHTML += `<span>🛏️ ${beds}</span>`;
-                if (baths) iconsHTML += `<span>🛁 ${baths}</span>`;
-                if (parking) iconsHTML += `<span>🚗 ${parking}</span>`;
-                iconsHTML += `</div>`;
-            }
+            let iconsHTML = `<div class="icon-row" style="display: flex; gap: 20px; color: #4a5568; font-size: 1rem; margin-bottom: 20px;">`;
+            if (row['Bedrooms']) iconsHTML += `<span>🛏️ ${row['Bedrooms']}</span>`;
+            if (row['Bathrooms']) iconsHTML += `<span>🛁 ${row['Bathrooms']}</span>`;
+            if (row['Car Park']) iconsHTML += `<span>🚗 ${row['Car Park']}</span>`;
+            iconsHTML += `</div>`;
 
             allCardsHTML += `
             <div class="property-card" style="display:flex; flex-direction:column; height:100%;">
                 ${badgeHTML}
-                ${sliderHTML}
+                ${imageHTML}
                 <div class="property-details" style="padding: 20px; display:flex; flex-direction:column; flex-grow: 1;">
                     <h3 class="price" style="font-size: 1.5rem; color: #2d3748; margin-bottom: 15px;">${formattedPrice}</h3>
                     <p style="font-size: 1.1rem; color: #4a5568; margin-bottom: 5px; font-weight: 500;">${title}</p>
@@ -179,14 +154,13 @@ function openLightbox(galleryId, imgIndex) {
     currentGalleryId = galleryId;
     currentImageIndex = imgIndex;
     let gallery = lightboxGalleries[currentGalleryId];
-    const imgEl = document.getElementById('lightbox-img');
-    if (imgEl && gallery) imgEl.src = gallery[currentImageIndex];
-    document.getElementById('lightbox').style.display = 'block';
+    if (gallery && gallery.length > 0) {
+        document.getElementById('lightbox-img').src = gallery[currentImageIndex];
+        document.getElementById('lightbox').style.display = 'block';
+    }
 }
 
-function closeLightbox() {
-    document.getElementById('lightbox').style.display = 'none';
-}
+function closeLightbox() { document.getElementById('lightbox').style.display = 'none'; }
 
 function changeLightboxImage(direction) {
     let gallery = lightboxGalleries[currentGalleryId];
@@ -197,17 +171,5 @@ function changeLightboxImage(direction) {
     document.getElementById('lightbox-img').src = gallery[currentImageIndex];
 }
 
-function slideImage(sliderId, direction) {
-    const slider = document.getElementById(sliderId);
-    if (!slider) return;
-    slider.scrollBy({ left: slider.clientWidth * direction, behavior: 'smooth' });
-}
-
-function resetAndFilter() {
-    currentLimit = 6;
-    filterProperties();
-}
-function showMoreListings() {
-    currentLimit += 6;
-    filterProperties();
-}
+function resetAndFilter() { currentLimit = 6; filterProperties(); }
+function showMoreListings() { currentLimit += 6; filterProperties(); }
