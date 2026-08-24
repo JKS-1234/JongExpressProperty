@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Property Listings & Updates | Jong Express Property</title>
-    <meta name="description" content="Browse transparent, 100% verified property listings in Miri, Sarawak by Jong Express Property.">
-    
+    <title>Property Listings Miri | Jong Express Property</title>
+    <meta name="description" content="Browse our 100% verified real estate listings in Miri, Sarawak. Find houses, apartments, shoplots, and land for sale or rent with zero hidden flaws.">
     <link rel="canonical" href="https://jongexpressproperty.online/listing.html" />
+    
     <link rel="icon" type="image/png" href="https://jongexpressproperty.online/photos/icononly.png">
     <link rel="apple-touch-icon" href="https://jongexpressproperty.online/photos/icononly.png">
-
+    
     <meta property="og:title" content="Verified Property Listings in Miri | Jong Express Property">
-    <meta property="og:description" content="Browse transparent, 100% verified property listings in Miri, Sarawak. Sub-sales, rentals, and developer projects.">
+    <meta property="og:description" content="Transparent, honest property listings in Miri, Sarawak. View pros, cons, and actual prices upfront.">
     <meta property="og:image" content="https://jongexpressproperty.online/photos/icononly.png">
     <meta property="og:url" content="https://jongexpressproperty.online/listing.html">
     <meta property="og:type" content="website">
-
+    
     <link rel="stylesheet" href="css/style.css">
     
+    <!-- Tracking Scripts -->
     <meta name="google-site-verification" content="DmNkWGPhpuc2D9rzCBVezIjbnLr8M6qBpZ-TYUeL4lE" />
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YNY4XZBS1T"></script>
     <script>
@@ -30,26 +31,29 @@
 <body>
 
     <header id="main-header">
-        <a href="index.html" class="logo">Jong Express Property</a>
+        <a href="/" class="logo">Jong Express Property</a>
         <nav>
-            <a href="index.html#about">Our Promise</a>
-            <a href="listing.html" style="color: var(--secondary);">Listings & FB Updates</a>
-            <a href="index.html#contact">Contact Jong</a>
+            <a href="/#about">Our Promise</a>
+            <a href="/listing.html" style="color: var(--secondary);">Listings</a>
+            <a href="/faq.html">FAQ</a>
+            <a href="/#contact">Contact</a>
         </nav>
     </header>
 
-    <section id="properties" class="featured-properties">
-        <h2>Featured Honest Listings</h2>
-        <p style="margin-bottom: 30px;">100% Verified. We show you the good, and we don't hide the bad.</p>
+    <!-- Property Section -->
+    <section class="featured-properties" style="padding-top: 40px;">
+        <h2>Our Honest Listings</h2>
+        <p style="margin-bottom: 30px; color: #4a5568;">100% Verified. We show you the good, and we don't hide the bad.</p>
         
         <div class="search-filter-wrapper">
+            
             <div class="market-tabs">
                 <button class="tab-btn active" onclick="setMarket('all', this)">All Listings</button>
                 <button class="tab-btn" onclick="setMarket('subsale', this)">Sub-Sale & Rent</button>
                 <button class="tab-btn" onclick="setMarket('project', this)">Developer Projects</button>
             </div>
             
-            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Type keywords... (e.g. Corner, Furnished, Pujut, Curtin)" onkeyup="resetAndFilter()">
+            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Search keywords... (e.g., Corner, Furnished, Pujut, Curtin)" onkeyup="resetAndFilter()">
             
             <div class="filter-container">
                 <select id="statusFilter" class="filter-select" onchange="resetAndFilter()">
@@ -64,32 +68,22 @@
                     <option value="all">All Areas</option>
                 </select>
                 <select id="sortPriceFilter" class="filter-select" onchange="resetAndFilter()">
-                    <option value="default">Sort: Default</option>
+                    <option value="default">Sort by: Default</option>
                     <option value="lowToHigh">Price: Low to High</option>
                     <option value="highToLow">Price: High to Low</option>
                 </select>
             </div>
         </div>
 
+        <!-- The fast JSON script will automatically inject the property cards here -->
         <div class="property-grid">
-            <h3 style="text-align:center; width:100%; color:var(--primary); grid-column: 1/-1;">Loading latest listings...</h3>
+            <h3 style="text-align:center; width:100%; color:var(--primary);">Loading latest listings...</h3>
         </div>
 
         <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
     </section>
-
-    <section style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
-        <h2>Our Latest Properties on Facebook</h2>
-        <p style="margin-bottom: 30px;">Check out our newest market updates below!</p>
-        <script src="https://elfsightcdn.com/platform.js" async></script>
-        <div class="elfsight-app-f8015444-62da-45e2-85d3-62c0c647068e" data-elfsight-app-lazy></div>
-    </section>
-
-    <footer>
-        <p>&copy; 2026 Jong Express Property. All rights reserved. | Represented by JONG KIAT SHAN (REN 84702) | Kommons Realty</p>
-    </footer>
-
-    <!-- LIGHTBOX MODAL FOR IMAGE PREVIEWS -->
+    
+    <!-- Lightbox Pop-up HTML -->
     <div id="lightbox" class="lightbox">
         <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
         <span class="lightbox-prev" onclick="changeLightboxImage(-1)">&#10094;</span>
@@ -97,12 +91,18 @@
         <img id="lightbox-img" class="lightbox-content" src="">
         <div id="lightbox-caption" class="lightbox-caption"></div>
     </div>
+
+    <footer style="margin-top: 60px;">
+        <p>&copy; 2026 Jong Express Property. All rights reserved. | Represented by JONG KIAT SHAN (REN 84702) | Kommons Realty</p>
+    </footer>
+
+    <!-- The fast Smart-Capture Engine -->
+    <script src="js/script.js"></script>
     
     <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" rel="noopener noreferrer" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 12px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
         💬 WhatsApp Us
     </a>
     
-    <script src="js/script.js"></script>
     <script>window.chatbaseConfig = { chatbotId: "g5wuvpEGYSCkeUYFoRiTp" };</script>
     <script src="https://www.chatbase.co/embed.min.js" chatbotId="g5wuvpEGYSCkeUYFoRiTp" defer></script>
 </body>
