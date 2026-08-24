@@ -27,6 +27,7 @@ function setMarket(marketType, btnElement) {
     resetAndFilter();
 }
 
+// Fetch the fast JSON file built by your GitHub Action
 if (document.querySelector('.property-grid')) {
     fetch('data/properties.json')
         .then(response => {
@@ -110,23 +111,38 @@ function filterProperties() {
         
         propertiesToShow.forEach((row, index) => {
             let title = row['Property Name'] || '';
-            let address = row['Area'] || '';
+            let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
+            
+            // Format Area specifically like "Miri, Sarawak" or "Luak, Miri"
+            let areaRaw = row['Area'] ? String(row['Area']).trim() : '';
+            let address = areaRaw ? `${areaRaw}, Sarawak` : 'Miri, Sarawak';
+            
             let price = row['Price'] || '';
-            let details = row['The Good (Pros)'] ? String(row['The Good (Pros)']).replace(/\n/g, '<br>') : '';
+            let formattedPrice = price ? `Sale ${price}` : 'Price on Request';
+            
             let typeValue = row['Type'] ? String(row['Type']).trim() : '';
             let isProject = (typeValue.toLowerCase().includes('project') || typeValue.toLowerCase().includes('developer'));
-            
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             
+            // --- AUTO-CAPTURE MAGIC ---
+            // 1. Automatically find Square Footage in your description
+            let builtUpMatch = rawDesc.match(/([\d,\.]+)\s*sq\.?\s*ft\.?/i);
+            let builtUp = builtUpMatch ? `Built-up: ${builtUpMatch[1]} sq. ft.` : '';
+            
+            // 2. Automatically find Furnishing status in your description
+            let furnishingMatch = rawDesc.match(/(fully furnished|partially furnished|partly furnished|unfurnished)/i);
+            let furnishing = furnishingMatch ? furnishingMatch[1].replace(/(^\w|\s\w)/g, m => m.toUpperCase()) : '';
+            
+            let detailsRow = [builtUp, furnishing].filter(Boolean).join(' | ');
+            // --------------------------
+
             let rawImages = row['Image Name'] ? String(row['Image Name']).trim() : '';
             let imagesArr = rawImages.split(',').map(url => url.trim()).filter(url => url !== '');
             let uniqueSliderId = `slider-${index}`;
-            
             lightboxGalleries[uniqueSliderId] = imagesArr;
 
             let sliderHTML = `<div class="image-slider-container">`;
             sliderHTML += `<div class="image-slider" id="${uniqueSliderId}" onscroll="updateDots('${uniqueSliderId}', ${imagesArr.length})">`;
-            
             if (imagesArr.length > 0) {
                 imagesArr.forEach((imgUrl, i) => {
                     sliderHTML += `<img src="${imgUrl}" alt="${title}" loading="lazy" class="slider-img" onclick="openLightbox('${uniqueSliderId}', ${i})" onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80'">`;
@@ -135,11 +151,9 @@ function filterProperties() {
                 sliderHTML += `<img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80" alt="Fallback Image" class="slider-img">`;
             }
             sliderHTML += `</div>`;
-            
             if (imagesArr.length > 1) {
                 sliderHTML += `<button class="slider-btn slider-btn-prev" onclick="slideImage('${uniqueSliderId}', -1)">&#10094;</button>`;
                 sliderHTML += `<button class="slider-btn slider-btn-next" onclick="slideImage('${uniqueSliderId}', 1)">&#10095;</button>`;
-                
                 sliderHTML += `<div class="slider-dots" id="dots-${uniqueSliderId}">`;
                 imagesArr.forEach((_, i) => {
                     let activeClass = i === 0 ? 'active' : '';
@@ -149,68 +163,43 @@ function filterProperties() {
             }
             sliderHTML += `</div>`;
 
+            // Icons
             let beds = row['Bedrooms'] ? String(row['Bedrooms']).trim() : '';
             let baths = row['Bathrooms'] ? String(row['Bathrooms']).trim() : '';
             let parking = row['Car Park'] ? String(row['Car Park']).trim() : '';
             let iconsHTML = '';
             if (beds || baths || parking) {
-                iconsHTML = `<div class="icon-row">`;
-                if (beds) iconsHTML += `<span>🛏️ ${beds}</span>`;
-                if (baths) iconsHTML += `<span>🛁 ${baths}</span>`;
-                if (parking) iconsHTML += `<span>🚗 ${parking}</span>`;
+                iconsHTML = `<div class="icon-row" style="display: flex; gap: 20px; color: #4a5568; font-size: 1rem; margin-bottom: 20px;">`;
+                if (beds) iconsHTML += `<span style="display:flex; align-items:center; gap:5px;">🛏️ ${beds}</span>`;
+                if (baths) iconsHTML += `<span style="display:flex; align-items:center; gap:5px;">🛁 ${baths}</span>`;
+                if (parking) iconsHTML += `<span style="display:flex; align-items:center; gap:5px;">🚗 ${parking}</span>`;
                 iconsHTML += `</div>`;
-            }
-
-            const excludeColumns = ['Property Name', 'Price', 'Image Name', 'Video Link', 'The Good (Pros)', 'Area', 'Timestamp', 'Bedrooms', 'Bathrooms', 'Car Park', 'originalId', 'slug'];
-            let pipeDetailsArr = [];
-            Object.keys(row).forEach(col => {
-                let val = row[col] ? String(row[col]).trim() : ''; 
-                if (!excludeColumns.includes(col) && val !== '') pipeDetailsArr.push(val);
-            });
-
-            let pipeHTML = '';
-            if (pipeDetailsArr.length > 0) {
-                let spans = pipeDetailsArr.map(item => `<span>${item}</span>`).join('');
-                pipeHTML = `<div class="pipe-details">${spans}</div>`;
-            }
-
-            let videoLink = row['Video Link'] ? String(row['Video Link']).trim() : '';
-            let videoHTML = '';
-            if (videoLink) {
-                let ytEmbed = getYouTubeEmbedUrl(videoLink);
-                if (ytEmbed) {
-                    videoHTML = `<div style="margin-bottom: 15px;"><iframe width="100%" height="200" src="${ytEmbed}" frameborder="0" allowfullscreen></iframe></div>`;
-                } else {
-                    videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank" rel="noopener noreferrer">🎬 Watch Video Tour</a>`;
-                }
             }
 
             let propertyUrl = `properties/${row.slug}/`;
 
+            // The Clean Property Card Layout
             allCardsHTML += `
-            <div class="property-card">
+            <div class="property-card" style="display:flex; flex-direction:column; height:100%;">
                 ${badgeHTML}
                 ${sliderHTML}
-                <div class="property-details" style="display:flex; flex-direction:column; height:100%;">
-                    <div class="card-header-flex">
-                        <div class="card-title-group">
-                            <h3><a href="${propertyUrl}" style="color: inherit; text-decoration: underline;">${title}</a></h3>
-                            ${address ? `<p class="card-address">${address}</p>` : ''}
-                        </div>
-                        <div class="card-price-group">
-                            <p class="price">${price}</p>
-                        </div>
-                    </div>
+                <div class="property-details" style="padding: 20px; display:flex; flex-direction:column; flex-grow: 1;">
+                    
+                    <h3 class="price" style="font-size: 1.5rem; color: #2d3748; margin-bottom: 15px;">${formattedPrice}</h3>
+                    
+                    <p style="font-size: 1.1rem; color: #4a5568; margin-bottom: 5px; line-height: 1.4; font-weight: 500;">${title}</p>
+                    <p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${address}</p>
+                    
+                    ${typeValue && typeValue !== 'all' ? `<p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 2px;">${typeValue}</p>` : ''}
+                    
+                    <!-- Automatically displaying your Captured Details! -->
+                    ${detailsRow ? `<p style="color: #718096; font-size: 0.9rem; margin-bottom: 20px;">${detailsRow}</p>` : ''}
+                    
                     ${iconsHTML}
-                    <div class="card-divider"></div>
-                    ${pipeHTML}
-                    <div class="pros-cons">
-                        <strong>📌 Summary:</strong><br>${details}
-                    </div>
                     
                     <div class="action-buttons" style="display: flex; gap: 10px; margin-top: auto;">
-                        <a href="${propertyUrl}" style="flex: 1; text-align: center; background-color: var(--primary); color: white; padding: 12px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.95rem;">📄 Details</a>
-                        <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" target="_blank" rel="noopener noreferrer" style="flex: 1; text-align: center; background-color: #25D366; color: white; padding: 12px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.95rem;">💬 WhatsApp</a>
+                        <a href="${propertyUrl}" style="flex: 1; text-align: center; background-color: var(--primary); color: white; padding: 10px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.9rem;">📄 Details</a>
+                        <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" target="_blank" rel="noopener noreferrer" style="flex: 1; text-align: center; background-color: #25D366; color: white; padding: 10px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.9rem;">💬 WhatsApp</a>
                     </div>
                 </div>
             </div>`;
