@@ -7,20 +7,10 @@
     <meta name="description" content="Buy, sell, or rent houses, apartments, shops, and land in Miri, Sarawak. Transparent property listings in Pujut, Senadin, Lutong, and Taman Bayshore with video tours.">
     <meta name="keywords" content="Miri property, house for sale Miri, property agent Miri, rent house Miri, shoplot Miri, buy house Miri, Kommons Realty, Jong Kiat Shan">
     <link rel="icon" type="image/png" href="photos/icononly.png">
-    
     <link rel="stylesheet" href="css/style.css">
-    
     <meta name="google-site-verification" content="DmNkWGPhpuc2D9rzCBVezIjbnLr8M6qBpZ-TYUeL4lE" />
-
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YNY4XZBS1T"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-YNY4XZBS1T');
-    </script>
     
-    <!-- AI & GOOGLE CHEAT SHEET -->
+    <!-- AI & GOOGLE SEO DECOY -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -36,10 +26,12 @@
 <body>
 
     <header>
-        <div class="logo">Jong Express Property</div>
+        <!-- FIXED: Logo is now a clickable link -->
+        <a href="index.html" class="logo" style="text-decoration:none;">Jong Express Property</a>
         <nav>
             <a href="#about">Our Promise</a>
-            <a href="#properties">Listings</a>
+            <a href="listing.html">Listings</a>
+            <!-- FIXED: FAQ is back in the menu -->
             <a href="faq.html">FAQ</a>
             <a href="#contact">Contact Jong</a>
         </nav>
@@ -48,7 +40,7 @@
     <section class="hero">
         <h1>No Ghost Listings. Just Real Results.</h1>
         <p>Tired of fake listings, hidden flaws, and agents who disappear after the sale? At Jong Express Property, we do things differently. 100% transparency, zero fluff.</p>
-        <a href="#contact" class="btn">Talk to an Expert Today</a>
+        <a href="listing.html" class="btn">View Our Honest Listings</a>
     </section>
 
     <section id="about" class="features">
@@ -64,72 +56,27 @@
             <h3>🤝 End-to-End Care</h3>
             <p>Our job doesn't end when the contract is signed. From utility transfers to move-in support, we ensure your transition is completely seamless.</p>
         </div>
-        <div class="feature-card">
-            <h3>🎯 Precision Matching</h3>
-            <p>We don't blindly push listings. We study your specific lifestyle needs to match you with the exact neighborhood, school district, or buyer profile.</p>
-        </div>
-    </section>
-    
-    <section style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
-        <h2>Our Latest Properties on Facebook</h2>
-        <p style="margin-bottom: 30px;">Check out our newest listings and market updates below!</p>
-        <script src="https://elfsightcdn.com/platform.js" async></script>
-        <div class="elfsight-app-8cfc3004-89f9-4754-9047-e12cd7216640" data-elfsight-app-lazy></div>
     </section>
 
-    <section id="properties" class="featured-properties">
-        <h2>Featured Honest Listings</h2>
-        <p style="margin-bottom: 30px;">100% Verified. We show you the good, and we don't hide the bad.</p>
-        
-        <div class="search-filter-wrapper">
-            <div class="market-tabs">
-                <button class="tab-btn active" onclick="setMarket('all', this)">All Listings</button>
-                <button class="tab-btn" onclick="setMarket('subsale', this)">Sub-Sale & Rent</button>
-                <button class="tab-btn" onclick="setMarket('project', this)">Developer Projects</button>
-            </div>
-            
-            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Type keywords... (e.g. Corner, Furnished, Pujut, Curtin)" onkeyup="resetAndFilter()">
-            
-            <div class="filter-container">
-                <select id="statusFilter" class="filter-select" onchange="resetAndFilter()">
-                    <option value="all">All Status</option>
-                    <option value="sale">For Sale</option>
-                    <option value="rent">For Rent</option>
-                </select>
-                <select id="typeFilter" class="filter-select" onchange="resetAndFilter()">
-                    <option value="all">All Types</option>
-                </select>
-                <select id="areaFilter" class="filter-select" onchange="resetAndFilter()">
-                    <option value="all">All Areas</option>
-                </select>
-            </div>
+    <!-- FIXED: Short FAQ Section Added -->
+    <section id="short-faq" style="max-width: 800px; margin: 50px auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+        <h2 style="text-align: center; color: var(--primary); margin-bottom: 20px;">Frequently Asked Questions</h2>
+        <div style="margin-bottom: 15px;">
+            <h4 style="color: var(--secondary);">Are all your listings currently available?</h4>
+            <p style="color: #4a5568; font-size: 0.95rem;">Yes. We pride ourselves on having zero "ghost listings." If a property is sold or rented, it is immediately removed from our database.</p>
         </div>
-
-        <div class="property-grid">
-            <h3 style="text-align:center; width:100%; color:var(--primary);">Loading latest listings...</h3>
+        <div>
+            <h4 style="color: var(--secondary);">Do you cover all areas of Miri?</h4>
+            <p style="color: #4a5568; font-size: 0.95rem;">Absolutely. From Senadin and Permyjaya to Marina ParkCity and Luak, Jong Kiat Shan (REN 84702) handles sub-sales, rentals, and developer projects city-wide.</p>
         </div>
-
-        <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
-
-        <!-- SEO DECOY FOR GOOGLE & CHATGPT -->
-        <noscript>
-            <div style="display: none;">
-                <h2>Current Miri Properties for Sale and Rent</h2>
-                <ul>
-                    <li>Brand New Double Storey Terrace at Coastal Villa, Luak, Miri - Sale RM 578,000. 4 Beds, 4 Baths, 2 Car Parks.</li>
-                    <li>The Wharf Condominium, Miri - Sale RM 898,000. Fully Furnished, 3 Beds, 2 Baths.</li>
-                    <li>Aurum Pine Residence, Miri - Sale RM 1,048,000. 5 Beds, 5 Baths, Unfurnished.</li>
-                    <li>Double Storey Semi Detached at Grace Avenue, Miri - Sale RM 958,000. 5 Beds, 4 Baths.</li>
-                    <li>First floor, Triple Storey Corner Shoplot at Jalan Cythula, Miri - Rent RM 1,600. Commercial.</li>
-                </ul>
-                <p>Jong Kiat Shan (REN 84702) - +6016-924-2000</p>
-            </div>
-        </noscript>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="faq.html" style="color: var(--primary); font-weight: bold; text-decoration: underline;">Read Full FAQ</a>
+        </div>
     </section>
     
     <section id="contact" class="contact-section">
         <h2>Ready to make a move? Let's connect.</h2>
-        <p style="margin-top: 10px; color: #4a5568;">Your trusted consultant, Jong Kiat Shan (REN 84702), is ready to assist you.</p>
+        <p style="margin-top: 10px; color: #4a5568;">Your trusted consultant, Jong Kiat Shan, is ready to assist you.</p>
         
         <div class="contact-info">
             <div class="info-block">
@@ -145,23 +92,19 @@
                 <p>Available Anytime</p>
             </div>
         </div>
-    </section>
 
-    <!-- LIGHTBOX POP-UP HTML (Hidden until clicked) -->
-    <div id="lightbox" class="lightbox">
-        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
-        <span class="lightbox-prev" onclick="changeLightboxImage(-1)">&#10094;</span>
-        <span class="lightbox-next" onclick="changeLightboxImage(1)">&#10095;</span>
-        <img id="lightbox-img" class="lightbox-content" src="">
-    </div>
+        <div style="margin-top: 40px;" class="social-links">
+            <p style="margin-bottom: 10px; font-weight: bold;">Follow our journey:</p>
+            <a href="https://www.facebook.com/jongexpresssproperty" target="_blank">Facebook</a> | 
+            <a href="https://www.instagram.com/jongks1234?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">Instagram</a>
+        </div>
+    </section>
 
     <footer>
         <p>&copy; 2026 Jong Express Property. All rights reserved. | Represented by JONG KIAT SHAN (Kommons Realty)</p>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    <script src="js/script.js"></script>
-    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" style="position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
+    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20services!" target="_blank" style="position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
         💬 WhatsApp Us
     </a>
 </body>
