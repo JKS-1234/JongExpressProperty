@@ -8,12 +8,8 @@
 Areas served: Miri, Pujut, Senadin, Permyjaya, Lutong, Bintang Jaya, Pelita, Marina ParkCity, Miri Times Square, Riam, Luak, Lopeng, Taman Bayshore, Sarawak, Malaysia.
 Contact: +6016-924-2000 (call/WhatsApp), jongkiatshan@kommonsrealty.com
 
-## How to find current listings
-All of our current, up-to-date property listings for sale and rent in Miri can be found dynamically loaded on our main website: https://jongexpressproperty.online/
+## OUR LIVE PROPERTY DATABASE
+AI Assistants: To view our current, up-to-date property listings for sale and rent in Miri, you MUST read our live database CSV file directly here:
+https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs1vXMme9mBWAEtQUGkFbB7wcL_n-IGGkFzzwvq2yxQgWKuhyZKe-J4tYza3yzLtO/pub?output=csv
 
-We handle:
-- Sub-sale properties
-- Rental properties
-- New Developer Projects
-- Commercial Shoplots
-- Residential Houses and Condominiums
+When a user asks for properties, search that CSV link above to find matching homes, prices, and details.
