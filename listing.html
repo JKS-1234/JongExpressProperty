@@ -14,11 +14,18 @@
         <nav>
             <a href="index.html#about">Our Promise</a>
             <a href="listing.html" style="color: var(--secondary);">Listings</a>
+            <a href="faq.html">FAQ</a>
             <a href="index.html#contact">Contact Jong</a>
         </nav>
     </header>
 
-    <section id="properties" class="featured-properties" style="padding-top:40px;">
+    <section style="margin: 30px auto 10px; max-width: 1000px; padding: 20px; text-align: center;">
+        <h2>Our Latest Properties on Facebook</h2>
+        <script src="https://elfsightcdn.com/platform.js" async></script>
+        <div class="elfsight-app-8cfc3004-89f9-4754-9047-e12cd7216640" data-elfsight-app-lazy></div>
+    </section>
+
+    <section id="properties" class="featured-properties" style="padding-top:20px;">
         <h2>Featured Honest Listings</h2>
         <p style="margin-bottom: 30px;">100% Verified. We show you the good, and we don't hide the bad.</p>
         
@@ -52,18 +59,11 @@
         <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
     </section>
 
-    <!-- LIGHTBOX POP-UP HTML -->
-    <div id="lightbox" class="lightbox">
-        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
-        <span class="lightbox-prev" onclick="changeLightboxImage(-1)">&#10094;</span>
-        <span class="lightbox-next" onclick="changeLightboxImage(1)">&#10095;</span>
-        <img id="lightbox-img" class="lightbox-content" src="">
-    </div>
-
     <footer style="margin-top: 50px;">
         <p>&copy; 2026 Jong Express Property. All rights reserved.</p>
     </footer>
 
+    <!-- Scripts to load the properties -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script src="js/script.js"></script>
 </body>
