@@ -6,14 +6,6 @@ let lightboxGalleries = {};
 let currentGalleryId = null;
 let currentImageIndex = 0;
 
-function getYouTubeEmbedUrl(url) {
-    if (!url || (!url.includes('youtube.com') && !url.includes('youtu.be'))) { return null; }
-    let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    let match = url.match(regExp);
-    if (match && match[2].length === 11) { return `https://www.youtube.com/embed/${match[2]}`; }
-    return null;
-}
-
 function parsePrice(priceStr) {
     if (!priceStr) return 0;
     return parseInt(String(priceStr).replace(/[^0-9]/g, ''), 10) || 0;
@@ -27,7 +19,6 @@ function setMarket(marketType, btnElement) {
     resetAndFilter();
 }
 
-// Fetch the lightning-fast JSON file built by your GitHub Action
 if (document.querySelector('.property-grid')) {
     fetch('data/properties.json')
         .then(response => {
@@ -36,7 +27,6 @@ if (document.querySelector('.property-grid')) {
         })
         .then(data => {
             allProperties = data;
-
             const uniqueAreas = new Set();
             const uniqueTypes = new Set();
 
@@ -68,7 +58,6 @@ if (document.querySelector('.property-grid')) {
         .catch(error => {
             const grid = document.querySelector('.property-grid');
             if (grid) grid.innerHTML = '<h3 style="text-align:center; width:100%; color:#e53e3e; grid-column: 1/-1;">Building latest listings... Please wait a few minutes and refresh the page.</h3>';
-            console.error("Error fetching properties.json:", error);
         });
 }
 
@@ -105,22 +94,20 @@ function filterProperties() {
     lightboxGalleries = {};
 
     if (filteredData.length === 0) {
-        allCardsHTML = '<div class="no-results-msg" style="grid-column: 1/-1; text-align: center; color: #718096; padding: 40px 0; font-size: 1.1rem;">No properties found matching your criteria.</div>';
+        allCardsHTML = '<div class="no-results-msg" style="grid-column: 1/-1; text-align: center; padding: 40px 0;">No properties found matching your criteria.</div>';
     } else {
         const propertiesToShow = filteredData.slice(0, currentLimit);
         
         propertiesToShow.forEach((row, index) => {
             let title = row['Property Name'] || '';
             let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
-            
             let areaRaw = row['Area'] ? String(row['Area']).trim() : '';
             let address = areaRaw ? `${areaRaw}, Sarawak` : 'Miri, Sarawak';
             
-            // SMART PRICE FIX
+            // SMART PRICE LOGIC
             let priceStr = row['Price'] ? String(row['Price']).trim() : '';
             let propStatus = row['Status'] ? String(row['Status']).toLowerCase().trim() : 'sale';
             let formattedPrice = 'Price on Request';
-            
             if (priceStr) {
                 if (priceStr.toLowerCase().includes('rent') || priceStr.toLowerCase().includes('sale')) {
                     formattedPrice = priceStr;
@@ -133,13 +120,11 @@ function filterProperties() {
             let isProject = (typeValue.toLowerCase().includes('project') || typeValue.toLowerCase().includes('developer'));
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             
-            // AUTO-CAPTURE SPECS
+            // AUTO CAPTURE LOGIC
             let builtUpMatch = rawDesc.match(/([\d,\.]+)\s*sq\.?\s*ft\.?/i);
             let builtUp = builtUpMatch ? `Built-up: ${builtUpMatch[1]} sq. ft.` : '';
-            
             let furnishingMatch = rawDesc.match(/(fully furnished|partially furnished|partly furnished|unfurnished)/i);
             let furnishing = furnishingMatch ? furnishingMatch[1].replace(/(^\w|\s\w)/g, m => m.toUpperCase()) : '';
-            
             let detailsRow = [builtUp, furnishing].filter(Boolean).join(' | ');
 
             let rawImages = row['Image Name'] ? String(row['Image Name']).trim() : '';
@@ -147,25 +132,15 @@ function filterProperties() {
             let uniqueSliderId = `slider-${index}`;
             lightboxGalleries[uniqueSliderId] = imagesArr;
 
-            let sliderHTML = `<div class="image-slider-container">`;
-            sliderHTML += `<div class="image-slider" id="${uniqueSliderId}" onscroll="updateDots('${uniqueSliderId}', ${imagesArr.length})">`;
+            let sliderHTML = `<div class="image-slider-container"><div class="image-slider" id="${uniqueSliderId}">`;
             if (imagesArr.length > 0) {
                 imagesArr.forEach((imgUrl, i) => {
-                    sliderHTML += `<img src="${imgUrl}" alt="${title}" loading="lazy" class="slider-img" onclick="openLightbox('${uniqueSliderId}', ${i})" onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80'">`;
+                    sliderHTML += `<img src="${imgUrl}" alt="${title}" loading="lazy" class="slider-img" onclick="openLightbox('${uniqueSliderId}', ${i})">`;
                 });
-            } else {
-                sliderHTML += `<img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80" alt="Fallback Image" class="slider-img">`;
             }
             sliderHTML += `</div>`;
             if (imagesArr.length > 1) {
-                sliderHTML += `<button class="slider-btn slider-btn-prev" onclick="slideImage('${uniqueSliderId}', -1)">&#10094;</button>`;
-                sliderHTML += `<button class="slider-btn slider-btn-next" onclick="slideImage('${uniqueSliderId}', 1)">&#10095;</button>`;
-                sliderHTML += `<div class="slider-dots" id="dots-${uniqueSliderId}">`;
-                imagesArr.forEach((_, i) => {
-                    let activeClass = i === 0 ? 'active' : '';
-                    sliderHTML += `<div class="dot ${activeClass}"></div>`;
-                });
-                sliderHTML += `</div>`;
+                sliderHTML += `<button class="slider-btn slider-btn-prev" onclick="slideImage('${uniqueSliderId}', -1)">&#10094;</button><button class="slider-btn slider-btn-next" onclick="slideImage('${uniqueSliderId}', 1)">&#10095;</button>`;
             }
             sliderHTML += `</div>`;
 
@@ -175,9 +150,9 @@ function filterProperties() {
             let iconsHTML = '';
             if (beds || baths || parking) {
                 iconsHTML = `<div class="icon-row" style="display: flex; gap: 20px; color: #4a5568; font-size: 1rem; margin-bottom: 20px;">`;
-                if (beds) iconsHTML += `<span style="display:flex; align-items:center; gap:5px;">🛏️ ${beds}</span>`;
-                if (baths) iconsHTML += `<span style="display:flex; align-items:center; gap:5px;">🛁 ${baths}</span>`;
-                if (parking) iconsHTML += `<span style="display:flex; align-items:center; gap:5px;">🚗 ${parking}</span>`;
+                if (beds) iconsHTML += `<span>🛏️ ${beds}</span>`;
+                if (baths) iconsHTML += `<span>🛁 ${baths}</span>`;
+                if (parking) iconsHTML += `<span>🚗 ${parking}</span>`;
                 iconsHTML += `</div>`;
             }
 
@@ -189,14 +164,13 @@ function filterProperties() {
                 ${sliderHTML}
                 <div class="property-details" style="padding: 20px; display:flex; flex-direction:column; flex-grow: 1;">
                     <h3 class="price" style="font-size: 1.5rem; color: #2d3748; margin-bottom: 15px;">${formattedPrice}</h3>
-                    <p style="font-size: 1.1rem; color: #4a5568; margin-bottom: 5px; line-height: 1.4; font-weight: 500;">${title}</p>
+                    <p style="font-size: 1.1rem; color: #4a5568; margin-bottom: 5px; font-weight: 500;">${title}</p>
                     <p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${address}</p>
-                    ${typeValue && typeValue !== 'all' ? `<p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 2px;">${typeValue}</p>` : ''}
                     ${detailsRow ? `<p style="color: #718096; font-size: 0.9rem; margin-bottom: 20px;">${detailsRow}</p>` : ''}
                     ${iconsHTML}
                     <div class="action-buttons" style="display: flex; gap: 10px; margin-top: auto;">
-                        <a href="${propertyUrl}" style="flex: 1; text-align: center; background-color: var(--primary); color: white; padding: 10px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.9rem;">📄 Details</a>
-                        <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" target="_blank" rel="noopener noreferrer" style="flex: 1; text-align: center; background-color: #25D366; color: white; padding: 10px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.9rem;">💬 WhatsApp</a>
+                        <a href="${propertyUrl}" style="flex: 1; text-align: center; background-color: var(--primary); color: white; padding: 10px; border-radius: 5px; text-decoration: none; font-weight: bold;">📄 Details</a>
+                        <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" target="_blank" style="flex: 1; text-align: center; background-color: #25D366; color: white; padding: 10px; border-radius: 5px; text-decoration: none; font-weight: bold;">💬 WhatsApp</a>
                     </div>
                 </div>
             </div>`;
@@ -206,22 +180,20 @@ function filterProperties() {
     grid.innerHTML = allCardsHTML;
 
     const loadMoreBtn = document.getElementById('loadMoreBtn');
-    if (loadMoreBtn) {
-        loadMoreBtn.style.display = (filteredData.length > currentLimit) ? 'block' : 'none';
-    }
+    if (loadMoreBtn) loadMoreBtn.style.display = (filteredData.length > currentLimit) ? 'block' : 'none';
 }
 
 function openLightbox(galleryId, imgIndex) {
     currentGalleryId = galleryId;
     currentImageIndex = imgIndex;
-    updateLightboxView();
-    const lightbox = document.getElementById('lightbox');
-    if (lightbox) lightbox.style.display = 'block';
+    let gallery = lightboxGalleries[currentGalleryId];
+    const imgEl = document.getElementById('lightbox-img');
+    if (imgEl && gallery) imgEl.src = gallery[currentImageIndex];
+    document.getElementById('lightbox').style.display = 'block';
 }
 
 function closeLightbox() {
-    const lightbox = document.getElementById('lightbox');
-    if (lightbox) lightbox.style.display = 'none';
+    document.getElementById('lightbox').style.display = 'none';
 }
 
 function changeLightboxImage(direction) {
@@ -230,36 +202,13 @@ function changeLightboxImage(direction) {
     currentImageIndex += direction;
     if (currentImageIndex >= gallery.length) currentImageIndex = 0;
     else if (currentImageIndex < 0) currentImageIndex = gallery.length - 1;
-    updateLightboxView();
-}
-
-function updateLightboxView() {
-    let gallery = lightboxGalleries[currentGalleryId];
-    const imgEl = document.getElementById('lightbox-img');
-    const captionEl = document.getElementById('lightbox-caption');
-    if (imgEl && gallery) imgEl.src = gallery[currentImageIndex];
-    if (captionEl && gallery) captionEl.innerText = `📸 Image ${currentImageIndex + 1} of ${gallery.length}`;
+    document.getElementById('lightbox-img').src = gallery[currentImageIndex];
 }
 
 function slideImage(sliderId, direction) {
     const slider = document.getElementById(sliderId);
     if (!slider) return;
-    const scrollAmount = slider.clientWidth;
-    slider.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
-}
-
-function updateDots(sliderId, totalImages) {
-    const slider = document.getElementById(sliderId);
-    const dotsContainer = document.getElementById(`dots-${sliderId}`);
-    if (!slider || !dotsContainer) return;
-    const scrollPosition = slider.scrollLeft;
-    const imageWidth = slider.clientWidth;
-    const currentIndex = Math.round(scrollPosition / imageWidth);
-    const dots = dotsContainer.children;
-    for (let i = 0; i < dots.length; i++) {
-        if (i === currentIndex) dots[i].classList.add('active');
-        else dots[i].classList.remove('active');
-    }
+    slider.scrollBy({ left: slider.clientWidth * direction, behavior: 'smooth' });
 }
 
 function resetAndFilter() {
@@ -270,19 +219,3 @@ function showMoreListings() {
     currentLimit += 6;
     filterProperties();
 }
-
-let lastScrollTop = 0;
-const header = document.getElementById('main-header');
-window.addEventListener('scroll', function() {
-    if (header && window.innerWidth <= 768) {
-        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-        if (currentScroll > lastScrollTop && currentScroll > 100) {
-            header.style.top = "-150px"; 
-        } else {
-            header.style.top = "0";
-        }
-        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; 
-    } else if (header) {
-        header.style.top = "0";
-    }
-});
