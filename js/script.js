@@ -27,7 +27,7 @@ function setMarket(marketType, btnElement) {
     resetAndFilter();
 }
 
-// Fetch the fast JSON file built by your GitHub Action
+// Fetch the lightning-fast JSON file built by your GitHub Action
 if (document.querySelector('.property-grid')) {
     fetch('data/properties.json')
         .then(response => {
@@ -113,28 +113,38 @@ function filterProperties() {
             let title = row['Property Name'] || '';
             let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
             
-            // Format Area specifically like "Miri, Sarawak" or "Luak, Miri"
+            // Format Area specifically like "Miri, Sarawak"
             let areaRaw = row['Area'] ? String(row['Area']).trim() : '';
             let address = areaRaw ? `${areaRaw}, Sarawak` : 'Miri, Sarawak';
             
-            let price = row['Price'] || '';
-            let formattedPrice = price ? `Sale ${price}` : 'Price on Request';
+            // --- THE SMART PRICE FIX ---
+            let priceStr = row['Price'] ? String(row['Price']).trim() : '';
+            let propStatus = row['Status'] ? String(row['Status']).toLowerCase().trim() : 'sale';
+            let formattedPrice = 'Price on Request';
+            
+            if (priceStr) {
+                // If the spreadsheet already includes "Rent", "Sale", or emojis, just use exactly what is typed.
+                if (priceStr.toLowerCase().includes('rent') || priceStr.toLowerCase().includes('sale')) {
+                    formattedPrice = priceStr;
+                } else {
+                    // Otherwise, safely add the correct word in front.
+                    formattedPrice = propStatus === 'rent' ? `Rent ${priceStr}` : `Sale ${priceStr}`;
+                }
+            }
+            // ---------------------------
             
             let typeValue = row['Type'] ? String(row['Type']).trim() : '';
             let isProject = (typeValue.toLowerCase().includes('project') || typeValue.toLowerCase().includes('developer'));
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             
-            // --- AUTO-CAPTURE MAGIC ---
-            // 1. Automatically find Square Footage in your description
+            // Auto-Capture Specs
             let builtUpMatch = rawDesc.match(/([\d,\.]+)\s*sq\.?\s*ft\.?/i);
             let builtUp = builtUpMatch ? `Built-up: ${builtUpMatch[1]} sq. ft.` : '';
             
-            // 2. Automatically find Furnishing status in your description
             let furnishingMatch = rawDesc.match(/(fully furnished|partially furnished|partly furnished|unfurnished)/i);
             let furnishing = furnishingMatch ? furnishingMatch[1].replace(/(^\w|\s\w)/g, m => m.toUpperCase()) : '';
             
             let detailsRow = [builtUp, furnishing].filter(Boolean).join(' | ');
-            // --------------------------
 
             let rawImages = row['Image Name'] ? String(row['Image Name']).trim() : '';
             let imagesArr = rawImages.split(',').map(url => url.trim()).filter(url => url !== '');
@@ -178,7 +188,6 @@ function filterProperties() {
 
             let propertyUrl = `properties/${row.slug}/`;
 
-            // The Clean Property Card Layout
             allCardsHTML += `
             <div class="property-card" style="display:flex; flex-direction:column; height:100%;">
                 ${badgeHTML}
@@ -192,7 +201,6 @@ function filterProperties() {
                     
                     ${typeValue && typeValue !== 'all' ? `<p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 2px;">${typeValue}</p>` : ''}
                     
-                    <!-- Automatically displaying your Captured Details! -->
                     ${detailsRow ? `<p style="color: #718096; font-size: 0.9rem; margin-bottom: 20px;">${detailsRow}</p>` : ''}
                     
                     ${iconsHTML}
