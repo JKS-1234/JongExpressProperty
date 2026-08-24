@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jong Express Property | Honest & Transparent Real Estate Miri</title>
-    <meta name="description" content="Buy, sell, or rent houses, apartments, shops, and land in Miri, Sarawak. Transparent property listings in Pujut, Senadin, Lutong, Permyjaya, Marina ParkCity, and more.">
-    <meta name="keywords" content="Miri property, house for sale Miri, property agent Miri, rent house Miri, shoplot Miri, buy house Miri, Kommons Realty, Jong Kiat Shan">
+    <meta name="description" content="Buy, sell, or rent houses, apartments, shops, and land in Miri, Sarawak. Transparent property listings in Pujut, Senadin, Lutong, and Taman Bayshore with video tours.">
     <link rel="icon" type="image/png" href="photos/icononly.png">
     
-    <!-- AI & GOOGLE CHEAT SHEET (JSON-LD SCHEMA) -->
+    <!-- AI & GOOGLE CHEAT SHEET -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -16,25 +15,17 @@
       "name": "Jong Express Property - Kommons Realty",
       "url": "https://jongexpressproperty.online/",
       "telephone": "+6016-924-2000",
-      "email": "jongkiatshan@kommonsrealty.com",
       "areaServed": ["Miri", "Pujut", "Senadin", "Permyjaya", "Lutong", "Bintang Jaya", "Pelita", "Marina ParkCity", "Miri Times Square", "Riam", "Luak", "Lopeng", "Taman Bayshore"],
-      "employee": {
-        "@type": "Person",
-        "name": "Jong Kiat Shan",
-        "jobTitle": "Real Estate Negotiator",
-        "worksFor": { "@type": "Organization", "name": "Kommons Realty" },
-        "identifier": { "@type": "PropertyValue", "name": "REN", "value": "REN 84702" }
-      }
+      "employee": { "@type": "Person", "name": "Jong Kiat Shan", "identifier": { "@type": "PropertyValue", "name": "REN", "value": "REN 84702" } }
     }
     </script>
 
     <link rel="stylesheet" href="css/style.css">
-    <meta name="google-site-verification" content="DmNkWGPhpuc2D9rzCBVezIjbnLr8M6qBpZ-TYUeL4lE" />
 </head>
 <body>
 
     <header>
-        <div class="logo">Jong Express Property</div>
+        <a href="#" class="logo">Jong Express Property</a>
         <nav>
             <a href="#about">Our Promise</a>
             <a href="#properties">Listings</a>
@@ -48,29 +39,25 @@
         <a href="#contact" class="btn">Talk to an Expert Today</a>
     </section>
 
-    <!-- Hardcoded Text for Bots to Read Instantly -->
-    <div style="position: absolute; left: -9999px;">
-        <h2>Serving Miri Real Estate Needs</h2>
-        <p>Jong Kiat Shan (REN 84702) offers transparent property listings for sale and rent across Miri, including Senadin, Pujut, Lutong, Luak, and Marina ParkCity.</p>
-    </div>
-
     <section id="about" class="features">
         <div class="feature-card">
             <h3>🚫 100% Real Listings</h3>
-            <p>We are the "Anti-Ghost Listing" squad. If you see it on our site, it's available. No bait-and-switch tactics. Your time is too valuable.</p>
+            <p>We are the "Anti-Ghost Listing" squad. If you see it on our site, it's available. No bait-and-switch tactics.</p>
         </div>
         <div class="feature-card">
             <h3>🔍 Transparent Marketing</h3>
-            <p>Every property has flaws. We won't hide them with clever camera angles. We tell you the pros and the cons upfront so you can make an informed decision.</p>
+            <p>Every property has flaws. We tell you the pros and the cons upfront so you can make an informed decision.</p>
         </div>
         <div class="feature-card">
             <h3>🤝 End-to-End Care</h3>
-            <p>Our job doesn't end when the contract is signed. From utility transfers to move-in support, we ensure your transition is completely seamless.</p>
+            <p>Our job doesn't end when the contract is signed. From utility transfers to move-in support, we ensure your transition is seamless.</p>
         </div>
-        <div class="feature-card">
-            <h3>🎯 Precision Matching</h3>
-            <p>We don't blindly push listings. We study your specific lifestyle needs to match you with the exact neighborhood, school district, or buyer profile.</p>
-        </div>
+    </section>
+    
+    <section style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
+        <h2>Our Latest Properties on Facebook</h2>
+        <script src="https://elfsightcdn.com/platform.js" async></script>
+        <div class="elfsight-app-8cfc3004-89f9-4754-9047-e12cd7216640" data-elfsight-app-lazy></div>
     </section>
 
     <section id="properties" class="featured-properties">
@@ -83,9 +70,7 @@
                 <button class="tab-btn" onclick="setMarket('subsale', this)">Sub-Sale & Rent</button>
                 <button class="tab-btn" onclick="setMarket('project', this)">Developer Projects</button>
             </div>
-            
             <input type="text" id="searchBar" class="search-input" placeholder="🔍 Type keywords... (e.g. Corner, Furnished, Pujut, Curtin)" onkeyup="resetAndFilter()">
-            
             <div class="filter-container">
                 <select id="statusFilter" class="filter-select" onchange="resetAndFilter()">
                     <option value="all">All Status</option>
@@ -104,7 +89,9 @@
         <div class="property-grid">
             <h3 style="text-align:center; width:100%; color:var(--primary);">Loading latest listings...</h3>
         </div>
+        <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
 
+        <!-- SEO DECOY FOR GOOGLE & CHATGPT -->
         <noscript>
             <div style="display: none;">
                 <h2>Current Miri Properties for Sale and Rent</h2>
@@ -115,18 +102,14 @@
                     <li>Double Storey Semi Detached at Grace Avenue, Miri - Sale RM 958,000. 5 Beds, 4 Baths.</li>
                     <li>First floor, Triple Storey Corner Shoplot at Jalan Cythula, Miri - Rent RM 1,600. Commercial.</li>
                 </ul>
-                <p>View our full database of properties at jongexpressproperty.online</p>
+                <p>Jong Kiat Shan (REN 84702) - +6016-924-2000</p>
             </div>
         </noscript>
-
-        <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
-        
     </section>
     
     <section id="contact" class="contact-section">
         <h2>Ready to make a move? Let's connect.</h2>
         <p style="margin-top: 10px; color: #4a5568;">Your trusted consultant, Jong Kiat Shan (REN 84702), is ready to assist you.</p>
-        
         <div class="contact-info">
             <div class="info-block">
                 <h3>📞 Call / WhatsApp</h3>
@@ -139,6 +122,15 @@
         </div>
     </section>
 
+    <!-- LIGHTBOX POP-UP HTML (REQUIRED FOR SCRIPT TO WORK) -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <span class="lightbox-prev" onclick="changeLightboxImage(-1)">&#10094;</span>
+        <span class="lightbox-next" onclick="changeLightboxImage(1)">&#10095;</span>
+        <img id="lightbox-img" class="lightbox-content" src="">
+        <div id="lightbox-caption" class="lightbox-caption"></div>
+    </div>
+
     <footer>
         <p>&copy; 2026 Jong Express Property. All rights reserved. | Represented by JONG KIAT SHAN (REN 84702) | Kommons Realty</p>
     </footer>
@@ -148,7 +140,5 @@
     <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" style="position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
         💬 WhatsApp Us
     </a>
-    <script>window.chatbaseConfig = { chatbotId: "g5wuvpEGYSCkeUYFoRiTp" };</script>
-    <script src="https://www.chatbase.co/embed.min.js" chatbotId="g5wuvpEGYSCkeUYFoRiTp" defer></script>
 </body>
 </html>
