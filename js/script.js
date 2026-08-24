@@ -113,31 +113,27 @@ function filterProperties() {
             let title = row['Property Name'] || '';
             let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
             
-            // Format Area specifically like "Miri, Sarawak"
             let areaRaw = row['Area'] ? String(row['Area']).trim() : '';
             let address = areaRaw ? `${areaRaw}, Sarawak` : 'Miri, Sarawak';
             
-            // --- THE SMART PRICE FIX ---
+            // SMART PRICE FIX
             let priceStr = row['Price'] ? String(row['Price']).trim() : '';
             let propStatus = row['Status'] ? String(row['Status']).toLowerCase().trim() : 'sale';
             let formattedPrice = 'Price on Request';
             
             if (priceStr) {
-                // If the spreadsheet already includes "Rent", "Sale", or emojis, just use exactly what is typed.
                 if (priceStr.toLowerCase().includes('rent') || priceStr.toLowerCase().includes('sale')) {
                     formattedPrice = priceStr;
                 } else {
-                    // Otherwise, safely add the correct word in front.
                     formattedPrice = propStatus === 'rent' ? `Rent ${priceStr}` : `Sale ${priceStr}`;
                 }
             }
-            // ---------------------------
             
             let typeValue = row['Type'] ? String(row['Type']).trim() : '';
             let isProject = (typeValue.toLowerCase().includes('project') || typeValue.toLowerCase().includes('developer'));
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             
-            // Auto-Capture Specs
+            // AUTO-CAPTURE SPECS
             let builtUpMatch = rawDesc.match(/([\d,\.]+)\s*sq\.?\s*ft\.?/i);
             let builtUp = builtUpMatch ? `Built-up: ${builtUpMatch[1]} sq. ft.` : '';
             
@@ -173,7 +169,6 @@ function filterProperties() {
             }
             sliderHTML += `</div>`;
 
-            // Icons
             let beds = row['Bedrooms'] ? String(row['Bedrooms']).trim() : '';
             let baths = row['Bathrooms'] ? String(row['Bathrooms']).trim() : '';
             let parking = row['Car Park'] ? String(row['Car Park']).trim() : '';
@@ -193,18 +188,12 @@ function filterProperties() {
                 ${badgeHTML}
                 ${sliderHTML}
                 <div class="property-details" style="padding: 20px; display:flex; flex-direction:column; flex-grow: 1;">
-                    
                     <h3 class="price" style="font-size: 1.5rem; color: #2d3748; margin-bottom: 15px;">${formattedPrice}</h3>
-                    
                     <p style="font-size: 1.1rem; color: #4a5568; margin-bottom: 5px; line-height: 1.4; font-weight: 500;">${title}</p>
                     <p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${address}</p>
-                    
                     ${typeValue && typeValue !== 'all' ? `<p style="color: #a0aec0; font-size: 0.9rem; margin-bottom: 2px;">${typeValue}</p>` : ''}
-                    
                     ${detailsRow ? `<p style="color: #718096; font-size: 0.9rem; margin-bottom: 20px;">${detailsRow}</p>` : ''}
-                    
                     ${iconsHTML}
-                    
                     <div class="action-buttons" style="display: flex; gap: 10px; margin-top: auto;">
                         <a href="${propertyUrl}" style="flex: 1; text-align: center; background-color: var(--primary); color: white; padding: 10px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.9rem;">📄 Details</a>
                         <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" target="_blank" rel="noopener noreferrer" style="flex: 1; text-align: center; background-color: #25D366; color: white; padding: 10px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.9rem;">💬 WhatsApp</a>
