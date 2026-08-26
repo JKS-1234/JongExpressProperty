@@ -23,8 +23,7 @@
 <body>
 
     <header>
-        <!-- FIXED: Logo is now clickable -->
-        <a href="#" class="logo" style="text-decoration:none;">Jong Express Property</a>
+        <div class="logo">Jong Express Property</div>
         <nav>
             <a href="#about">Our Promise</a>
             <a href="#properties">Listings</a>
@@ -56,27 +55,12 @@
             <p>We don't blindly push listings. We study your specific lifestyle needs to match you with the exact neighborhood, school district, or buyer profile.</p>
         </div>
     </section>
-
-    <!-- THE FUN FAQ SECTION -->
-    <section id="fun-faq" style="max-width: 800px; margin: 50px auto; padding: 30px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-        <h2 style="text-align: center; color: var(--primary); margin-bottom: 25px; font-size: 2.2rem;">🤔 You Ask, Jong Answers!</h2>
-        
-        <div style="margin-bottom: 20px;">
-            <h4 style="color: var(--secondary); font-size: 1.2rem;">👻 Are there any "Ghost Listings" here?</h4>
-            <p style="color: #4a5568;">Not a chance! We are the Ghostbusters of Miri real estate. If you see it here, it is absolutely real and available.</p>
-        </div>
-        
-        <div style="margin-bottom: 20px;">
-            <h4 style="color: var(--secondary); font-size: 1.2rem;">🕵️‍♂️ Do you hide property flaws?</h4>
-            <p style="color: #4a5568;">Nope! We spill the tea on every house. We will tell you the good, the bad, and the ugly upfront so there are zero surprises on moving day.</p>
-        </div>
-    </section>
-
+    
     <section style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
         <h2>Our Latest Properties on Facebook</h2>
         <p style="margin-bottom: 30px;">Check out our newest listings and market updates below!</p>
         <script src="https://elfsightcdn.com/platform.js" async></script>
-        <!-- FIXED: Removed lazy tag so it loads immediately -->
+        <!-- FIXED: Removed data-elfsight-app-lazy so it loads instantly -->
         <div class="elfsight-app-8cfc3004-89f9-4754-9047-e12cd7216640"></div>
     </section>
 
@@ -85,6 +69,7 @@
         <p style="margin-bottom: 30px;">100% Verified. We show you the good, and we don't hide the bad.</p>
         
         <div class="search-filter-wrapper">
+            
             <div class="market-tabs">
                 <button class="tab-btn active" onclick="setMarket('all', this)">All Listings</button>
                 <button class="tab-btn" onclick="setMarket('subsale', this)">Sub-Sale & Rent</button>
@@ -133,9 +118,16 @@
                 <p>Available Anytime</p>
             </div>
         </div>
+
+        <div style="margin-top: 40px;" class="social-links">
+            <p style="margin-bottom: 10px; font-weight: bold;">Follow our journey:</p>
+            <a href="https://www.facebook.com/jongexpresssproperty" target="_blank">Facebook</a> | 
+            <a href="https://www.instagram.com/jongks1234?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">Instagram</a> |
+            <a href="https://jongks1234.github.io/JongExpressProperty/" target="_blank">Old Github Site</a>
+        </div>
     </section>
 
-    <!-- THE LIGHTBOX POP-UP CONTAINER -->
+    <!-- FIXED: Lightbox Container to show big pictures -->
     <div id="lightbox" class="lightbox">
         <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
         <span class="lightbox-prev" onclick="changeLightboxImage(-1)">&#10094;</span>
