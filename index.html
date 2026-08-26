@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jong Express Property | Honest & Transparent Real Estate Miri</title>
     <meta name="description" content="Buy, sell, or rent houses, apartments, shops, and land in Miri, Sarawak. Transparent property listings in Pujut, Senadin, Lutong, and Taman Bayshore with video tours.">
-    <meta name="keywords" content="Miri property, house for sale Miri, property agent Miri, rent house Miri, shoplot Miri, buy house Miri, Kommons Realty, Jong Kiat Shan">
     <link rel="icon" type="image/png" href="photos/icononly.png">
     
     <link rel="stylesheet" href="css/style.css">
@@ -27,7 +26,7 @@
         <nav>
             <a href="#about">Our Promise</a>
             <a href="#properties">Listings</a>
-            <a href="faq.html">FAQ</a> <!-- FIXED: FAQ Link Added Back -->
+            <a href="faq.html">FAQ</a> <!-- Added FAQ back to Menu -->
             <a href="#contact">Contact Jong</a>
         </nav>
     </header>
@@ -53,22 +52,7 @@
         </div>
     </section>
 
-    <!-- FUN FAQ SECTION -->
-    <section id="fun-faq" style="max-width: 800px; margin: 50px auto; padding: 30px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-        <h2 style="text-align: center; color: var(--primary); margin-bottom: 25px; font-size: 2.2rem;">🤔 You Ask, Jong Answers!</h2>
-        <div style="margin-bottom: 20px;">
-            <h4 style="color: var(--secondary); font-size: 1.2rem;">👻 Are there any "Ghost Listings" here?</h4>
-            <p style="color: #4a5568;">Not a chance! We are the Ghostbusters of Miri real estate. If you see it here, it is absolutely real and available.</p>
-        </div>
-        <div style="margin-bottom: 20px;">
-            <h4 style="color: var(--secondary); font-size: 1.2rem;">🕵️‍♂️ Do you hide property flaws?</h4>
-            <p style="color: #4a5568;">Nope! We spill the tea on every house. We tell you the good, the bad, and the ugly upfront so there are zero surprises.</p>
-        </div>
-        <div style="text-align: center; margin-top: 25px;">
-            <a href="faq.html" style="color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 1.1rem;">Read Our Full FAQ</a>
-        </div>
-    </section>
-
+    <!-- Listings -->
     <section id="properties" class="featured-properties">
         <h2>Featured Honest Listings</h2>
         <p style="margin-bottom: 30px;">100% Verified. We show you the good, and we don't hide the bad.</p>
@@ -100,15 +84,31 @@
         <div class="property-grid">
             <h3 style="text-align:center; width:100%; color:var(--primary);">Loading latest listings...</h3>
         </div>
+
         <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
     </section>
 
-    <!-- FIXED: FACEBOOK WIDGET MOVED BELOW LISTINGS -->
+    <!-- Fun FAQ Section -->
+    <section id="fun-faq" style="max-width: 800px; margin: 50px auto; padding: 40px 30px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <h2 style="text-align: center; color: var(--primary); margin-bottom: 30px; font-size: 2.2rem;">🤔 You Ask, Jong Answers!</h2>
+        <div style="margin-bottom: 25px;">
+            <h4 style="color: var(--secondary); font-size: 1.2rem; margin-bottom: 5px;">👻 Are there any "Ghost Listings" here?</h4>
+            <p style="color: #4a5568;">Not a chance! We are the Ghostbusters of Miri real estate. If you see it here, it is absolutely real and available to view.</p>
+        </div>
+        <div style="margin-bottom: 25px;">
+            <h4 style="color: var(--secondary); font-size: 1.2rem; margin-bottom: 5px;">🕵️‍♂️ Do you hide property flaws?</h4>
+            <p style="color: #4a5568;">Nope! We spill the tea on every house. We tell you the good, the bad, and the ugly upfront so there are absolutely zero surprises.</p>
+        </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="faq.html" style="color: white; background-color: var(--primary); padding: 12px 25px; border-radius: 5px; font-weight: bold; text-decoration: none;">Read Our Full FAQ</a>
+        </div>
+    </section>
+
+    <!-- Facebook Widget (Moved below properties & FAQ, Lazy load removed) -->
     <section style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
         <h2>Our Latest Properties on Facebook</h2>
         <p style="margin-bottom: 30px;">Check out our newest listings and market updates below!</p>
         <script src="https://elfsightcdn.com/platform.js" async></script>
-        <!-- Removed data-elfsight-app-lazy so it loads instantly -->
         <div class="elfsight-app-f8015444-62da-45e2-85d3-62c0c647068e"></div>
     </section>
     
@@ -130,9 +130,15 @@
                 <p>Available Anytime</p>
             </div>
         </div>
+
+        <div style="margin-top: 40px;" class="social-links">
+            <p style="margin-bottom: 10px; font-weight: bold;">Follow our journey:</p>
+            <a href="https://www.facebook.com/jongexpresssproperty" target="_blank">Facebook</a> | 
+            <a href="https://www.instagram.com/jongks1234" target="_blank">Instagram</a>
+        </div>
     </section>
 
-    <!-- THE NEW MASSIVE PROPERTY DETAIL WINDOW -->
+    <!-- The Detail Modal -->
     <div id="property-modal" class="property-modal">
         <span class="modal-close" onclick="closeModal()">&times;</span>
         <div class="modal-content">
@@ -172,7 +178,7 @@
         </div>
     </div>
 
-    <!-- FULLSCREEN ZOOM IMAGE -->
+    <!-- Fullscreen Zoom -->
     <div id="fullscreen-zoom" class="property-modal" style="z-index: 3000;">
         <span class="modal-close" onclick="closeFullscreenImage()">&times;</span>
         <img id="fullscreen-img" src="">
@@ -184,6 +190,5 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script src="js/script.js"></script>
-    <a href="https://wa.me/60169242000" target="_blank" style="position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">💬 WhatsApp Us</a>
 </body>
 </html>
