@@ -90,7 +90,6 @@ function filterProperties() {
         propertiesToShow.forEach((row) => {
             let globalIndex = allPropertiesData.indexOf(row); 
             let title = row['Property Name'] || '';
-            let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
             let status = row['Status'] ? row['Status'].toLowerCase().trim() : 'sale';
             let address = row['Area'] ? `${row['Area'].trim()}, Sarawak` : 'Miri, Sarawak';
             let isProject = (String(row['Type']).toLowerCase().includes('project'));
@@ -107,6 +106,8 @@ function filterProperties() {
                 }
             }
 
+            // AUTO-CAPTURE FOR CARD
+            let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
             let furnishingMatch = rawDesc.match(/(fully furnished|partially furnished|partly furnished|unfurnished)/i);
             let furnishing = furnishingMatch ? furnishingMatch[1].replace(/(^\w|\s\w)/g, m => m.toUpperCase()) : '';
 
@@ -123,18 +124,30 @@ function filterProperties() {
                 iconsHTML += `</div>`;
             }
 
+            // VIDEO & WHATSAPP FOR THE CARD
+            let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
+            let videoHTML = '';
+            if (videoLink) {
+                let ytEmbed = getYouTubeEmbedUrl(videoLink);
+                if (ytEmbed) {
+                    videoHTML = `<div class="video-container"><iframe src="${ytEmbed}" allowfullscreen></iframe></div>`;
+                } else {
+                    videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank" style="margin-bottom:15px;">🎬 Watch Video Tour</a>`;
+                }
+            }
+
             let rawImages = row['Image Name'] ? String(row['Image Name']).trim() : '';
             let imagesArr = rawImages.split(',').map(url => url.trim()).filter(url => url !== '');
             let firstImage = imagesArr.length > 0 ? imagesArr[0] : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
 
-            // Clickable Card Design
+            // CLICKABLE CARD HTML
             let cardHTML = `
             <div class="property-card clickable-card" style="display:flex; flex-direction:column; height:100%;">
                 ${badgeHTML}
                 <div onclick="openModal(${globalIndex})" style="cursor:pointer;" title="Click to view full details">
                     <img src="${firstImage}" alt="${title}">
                     <div style="padding: 20px;">
-                        <h3 style="font-size: 1.5rem; color: #1a365d; margin-bottom: 10px;">${formattedPrice}</h3>
+                        <h3 class="price">${formattedPrice}</h3>
                         <p style="font-size: 1.05rem; color: #4a5568; margin-bottom: 5px; font-weight: 500;">${title}</p>
                         <p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${address}</p>
                         ${furnishing ? `<p style="color: #718096; font-size: 0.9rem; margin-bottom: 10px;">${furnishing}</p>` : ''}
@@ -142,6 +155,7 @@ function filterProperties() {
                     </div>
                 </div>
                 <div style="padding: 0 20px 20px 20px; margin-top: auto;">
+                    ${videoHTML}
                     <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" class="whatsapp-btn" target="_blank" style="width: 100%;">💬 WhatsApp</a>
                 </div>
             </div>
@@ -158,7 +172,7 @@ function filterProperties() {
 function resetAndFilter() { currentLimit = 6; filterProperties(); }
 function showMoreListings() { currentLimit += 6; filterProperties(); }
 
-// --- BEAUTIFUL MODAL DETAIL WINDOW ---
+// --- DETAILED MODAL WITH CLEAN FORMATTING ---
 function openModal(index) {
     let row = allPropertiesData[index];
     if(!row) return;
@@ -176,7 +190,7 @@ function openModal(index) {
     let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
     
     // Auto-Capture Size (Reads "sqft" OR East Malaysian "points")
-    let builtUpMatch = rawDesc.match(/([\d,\.]+)\s*(sq\.?ft\.?|points?)/i);
+    let builtUpMatch = rawDesc.match(/([\d,\.]+)\s*(sq\.?\s*ft\.?|points?)/i);
     let propertySize = builtUpMatch ? `${builtUpMatch[1]} ${builtUpMatch[2]}` : '-';
     
     // Beds & Baths Auto-Capture
@@ -194,7 +208,7 @@ function openModal(index) {
     document.getElementById('modal-sqft').innerText = propertySize;
     document.getElementById('modal-type').innerText = typeValue;
 
-    // Build Beautiful Detail Checkmarks
+    // Beautiful Details Checkmarks
     let furnishingMatch = rawDesc.match(/(fully furnished|partially furnished|partly furnished|unfurnished)/i);
     let furnishing = furnishingMatch ? furnishingMatch[1].replace(/(^\w|\s\w)/g, m => m.toUpperCase()) : 'Unspecified';
     let detailsCheckmarksHTML = `<div class="detail-item-check">${typeValue}</div><div class="detail-item-check">${furnishing}</div>`;
@@ -203,11 +217,12 @@ function openModal(index) {
     // Subtitle
     document.getElementById('modal-subtitle').innerText = title;
 
-    // Format Description into a Beautiful List
+    // Clean Bulleted List logic
     let descLines = rawDesc.split('\n');
     let listHTML = '';
     descLines.forEach(line => {
         let cleanLine = line.trim();
+        // Remove leading dash so our CSS handles the bullet points cleanly
         if (cleanLine.startsWith('-')) {
             cleanLine = cleanLine.substring(1).trim(); 
         }
@@ -217,7 +232,7 @@ function openModal(index) {
     });
     document.getElementById('modal-description-list').innerHTML = listHTML;
 
-    // Images 
+    // Build Images
     let rawImages = row['Image Name'] ? String(row['Image Name']).trim() : '';
     let imagesArr = rawImages.split(',').map(url => url.trim()).filter(url => url !== '');
     currentGalleryId = `modal-gallery`;
@@ -230,7 +245,7 @@ function openModal(index) {
         document.getElementById('modal-main-img').src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
     }
 
-    // Video & WhatsApp Links are KEPT!
+    // Video link & WhatsApp link inside the modal
     let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
     let videoHTML = '';
     if (videoLink) {
@@ -244,6 +259,7 @@ function openModal(index) {
     document.getElementById('modal-video').innerHTML = videoHTML;
     document.getElementById('modal-whatsapp').href = `https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}`;
     
+    // Open Modal
     document.getElementById('property-modal').style.display = 'block';
 }
 
