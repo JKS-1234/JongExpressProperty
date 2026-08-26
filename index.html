@@ -19,6 +19,22 @@
         gtag('js', new Date());
         gtag('config', 'G-YNY4XZBS1T');
     </script>
+    
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window,document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+     fbq('init', '2776876486027023'); 
+    fbq('track', 'PageView');
+    </script>
+    <noscript>
+     <img height="1" width="1" src="https://www.facebook.com/tr?id=2776876486027023&ev=PageView&noscript=1"/>
+    </noscript>
 </head>
 <body>
 
@@ -55,21 +71,13 @@
             <p>We don't blindly push listings. We study your specific lifestyle needs to match you with the exact neighborhood, school district, or buyer profile.</p>
         </div>
     </section>
-    
-    <section style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
-        <h2>Our Latest Properties on Facebook</h2>
-        <p style="margin-bottom: 30px;">Check out our newest listings and market updates below!</p>
-        <script src="https://elfsightcdn.com/platform.js" async></script>
-        <!-- FIXED: Removed data-elfsight-app-lazy so it loads instantly -->
-        <div class="elfsight-app-8cfc3004-89f9-4754-9047-e12cd7216640"></div>
-    </section>
 
+    <!-- LISTINGS ARE NOW ABOVE FACEBOOK -->
     <section id="properties" class="featured-properties">
         <h2>Featured Honest Listings</h2>
         <p style="margin-bottom: 30px;">100% Verified. We show you the good, and we don't hide the bad.</p>
         
         <div class="search-filter-wrapper">
-            
             <div class="market-tabs">
                 <button class="tab-btn active" onclick="setMarket('all', this)">All Listings</button>
                 <button class="tab-btn" onclick="setMarket('subsale', this)">Sub-Sale & Rent</button>
@@ -99,6 +107,15 @@
 
         <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
     </section>
+
+    <!-- NEW FACEBOOK CODE PLACED BELOW LISTINGS -->
+    <section style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
+        <h2>Our Latest Properties on Facebook</h2>
+        <p style="margin-bottom: 30px;">Check out our newest listings and market updates below!</p>
+        <script src="https://elfsightcdn.com/platform.js" async></script>
+        <!-- Removed data-elfsight-app-lazy so it actually loads! -->
+        <div class="elfsight-app-f8015444-62da-45e2-85d3-62c0c647068e"></div>
+    </section>
     
     <section id="contact" class="contact-section">
         <h2>Ready to make a move? Let's connect.</h2>
@@ -127,7 +144,7 @@
         </div>
     </section>
 
-    <!-- FIXED: Lightbox Container to show big pictures -->
+    <!-- REQUIRED LIGHTBOX POP-UP HTML FOR ZOOMING PHOTOS -->
     <div id="lightbox" class="lightbox">
         <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
         <span class="lightbox-prev" onclick="changeLightboxImage(-1)">&#10094;</span>
@@ -142,7 +159,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script src="js/script.js"></script>
     <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" style="position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
-        💬 WhatsApp Us
+  💬 WhatsApp Us
     </a>
+    <script>
+  window.chatbaseConfig = {
+    chatbotId: "g5wuvpEGYSCkeUYFoRiTp",
+  };
+</script>
+<script
+  src="https://www.chatbase.co/embed.min.js"
+  chatbotId="g5wuvpEGYSCkeUYFoRiTp"
+  defer>
+</script>
 </body>
 </html>
