@@ -3,16 +3,20 @@ const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs
 let currentLimit = 6;
 let currentMarket = 'all'; 
 
-// Variables for the Pop-up Lightbox
+// Variables for the Pop-up Gallery
 let lightboxGalleries = {};
 let currentGalleryId = null;
 let currentImageIndex = 0;
 
 function getYouTubeEmbedUrl(url) {
-    if (!url || (!url.includes('youtube.com') && !url.includes('youtu.be'))) return null;
+    if (!url || (!url.includes('youtube.com') && !url.includes('youtu.be'))) {
+        return null;
+    }
     let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     let match = url.match(regExp);
-    if (match && match[2].length === 11) return `https://www.youtube.com/embed/${match[2]}`;
+    if (match && match[2].length === 11) {
+        return `https://www.youtube.com/embed/${match[2]}`;
+    }
     return null;
 }
 
@@ -53,67 +57,85 @@ Papa.parse(csvUrl, {
             if (rawArea) uniqueAreas.add(rawArea);
 
             let isProject = (typeValue.includes('project') || typeValue.includes('developer')) ? 'true' : 'false';
-            
-            let badgeHTML = '';
-            if (isProject === 'true') {
-                badgeHTML = `<div class="badge-new">🏢 PROJECT</div>`;
+            let badgeHTML = isProject === 'true' ? `<div class="badge-new">🏢 PROJECT</div>` : '';
+
+            // SMART PRICE LOGIC
+            let priceStr = row['Price'] ? String(row['Price']).trim() : '';
+            let formattedPrice = 'Price on Request';
+            if (priceStr) {
+                if (priceStr.toLowerCase().includes('rent') || priceStr.toLowerCase().includes('sale')) {
+                    formattedPrice = priceStr;
+                } else {
+                    formattedPrice = status === 'rent' ? `Rent ${priceStr}` : `Sale ${priceStr}`;
+                }
             }
 
-            // AUTO-CAPTURE: Price Formatting
-            let priceStr = row['Price'] ? String(row['Price']).trim() : 'Price on Request';
-            if (priceStr && !priceStr.toLowerCase().includes('rent') && !priceStr.toLowerCase().includes('sale')) {
-                priceStr = status === 'rent' ? `Rent ${priceStr}` : `Sale ${priceStr}`;
-            }
-
-            // AUTO-CAPTURE: Built-up & Furnishing from description
+            // AUTO-CAPTURE LOGIC (Built-up & Furnishing)
             let builtUpMatch = rawDesc.match(/([\d,\.]+)\s*sq\.?\s*ft\.?/i);
             let builtUp = builtUpMatch ? `Built-up: ${builtUpMatch[1]} sq. ft.` : '';
             let furnishingMatch = rawDesc.match(/(fully furnished|partially furnished|partly furnished|unfurnished)/i);
             let furnishing = furnishingMatch ? furnishingMatch[1].replace(/(^\w|\s\w)/g, m => m.toUpperCase()) : '';
             let detailsRow = [builtUp, furnishing].filter(Boolean).join(' | ');
 
-            // AUTO-CAPTURE: Beds, Baths, and Parking (Falls back to regex if columns are empty)
+            // AUTO-CAPTURE LOGIC (Rooms & Baths)
             let beds = row['Bedrooms'] ? String(row['Bedrooms']).trim() : '';
             let baths = row['Bathrooms'] ? String(row['Bathrooms']).trim() : '';
-            let parking = row['Car Park'] ? String(row['Car Park']).trim() : '';
-            
+            // If empty, automatically search description for numbers!
             if (!beds) { let bMatch = rawDesc.match(/(\d+)\s*(beds|bedroom|bedrooms)/i); if(bMatch) beds = bMatch[1]; }
             if (!baths) { let bMatch = rawDesc.match(/(\d+)\s*(baths|bathroom|bathrooms)/i); if(bMatch) baths = bMatch[1]; }
 
             let iconsHTML = '';
-            if (beds || baths || parking) {
+            if (beds || baths) {
                 iconsHTML = `<div class="icon-row">`;
                 if (beds) iconsHTML += `<span style="display:flex; align-items:center; gap:5px;">🛏️ ${beds}</span>`;
                 if (baths) iconsHTML += `<span style="display:flex; align-items:center; gap:5px;">🛁 ${baths}</span>`;
-                if (parking) iconsHTML += `<span style="display:flex; align-items:center; gap:5px;">🚗 ${parking}</span>`;
                 iconsHTML += `</div>`;
             }
 
-            // LIGHTBOX ARRAY: Prepares the images to open in big view
+            // PREPARE LIGHTBOX IMAGES
             let rawImages = row['Image Name'] ? String(row['Image Name']).trim() : '';
             let imagesArr = rawImages.split(',').map(url => url.trim()).filter(url => url !== '');
             let uniqueSliderId = `slider-${index}`;
             lightboxGalleries[uniqueSliderId] = imagesArr;
             let firstImage = imagesArr.length > 0 ? imagesArr[0] : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
 
-            // CARD HTML FORMATTED LIKE YOUR SCREENSHOT
-            let cardHTML = `
-            <div class="property-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" style="display:flex; flex-direction:column; height:100%; border: 1px solid #e2e8f0; box-shadow: none; background: #fff;">
-                ${badgeHTML}
-                <div style="position:relative;" onclick="openLightbox('${uniqueSliderId}', 0)" title="Click to view full photos">
-                    <img src="${firstImage}" alt="${title}" style="height: 220px; width: 100%; object-fit: cover;">
-                </div>
-                <div class="property-details" style="padding: 20px; display:flex; flex-direction:column; flex-grow: 1;">
-                    <h3 class="price">${priceStr}</h3>
-                    <p class="card-title" onclick="openLightbox('${uniqueSliderId}', 0)" title="Click to view details">${title}</p>
-                    <p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${address}</p>
-                    
-                    ${detailsRow ? `<p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${detailsRow}</p>` : ''}
-                    
-                    ${iconsHTML}
+            // VIDEO LINK (If any)
+            let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
+            let videoHTML = '';
+            if (videoLink) {
+                let ytEmbed = getYouTubeEmbedUrl(videoLink);
+                if (ytEmbed) {
+                    videoHTML = `<div class="video-container" style="margin-bottom: 15px;"><iframe src="${ytEmbed}" allowfullscreen></iframe></div>`;
+                } else {
+                    videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank" style="margin-bottom: 15px;">🎬 Watch Video Tour</a>`;
+                }
+            }
 
-                    <div class="action-buttons" style="display: flex; gap: 10px; margin-top: auto;">
-                        <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" class="whatsapp-btn" target="_blank" style="flex: 1; margin:0;">💬 WhatsApp</a>
+            // PERFECTED LAYOUT (Clickable Area + Full Width WhatsApp)
+            let cardHTML = `
+            <div class="property-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" style="display:flex; flex-direction:column; height:100%; border: 1px solid #e2e8f0; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                ${badgeHTML}
+                
+                <!-- EVERYTHING HERE IS CLICKABLE TO ZOOM -->
+                <div class="clickable-area" style="cursor:pointer;" onclick="openLightbox('${uniqueSliderId}', 0)" title="Click to view full photos and zoom">
+                    <img src="${firstImage}" alt="${title}" style="height: 220px; width: 100%; object-fit: cover; border-bottom: 1px solid #e2e8f0; border-radius: 4px 4px 0 0;">
+                    
+                    <div style="padding: 20px;">
+                        <h3 class="price" style="font-size: 1.5rem; color: #1a365d; margin-bottom: 15px;">${formattedPrice}</h3>
+                        <p style="font-size: 1.05rem; color: #4a5568; margin-bottom: 5px; font-weight: 500; line-height: 1.4;">${title}</p>
+                        <p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${address}</p>
+                        
+                        ${detailsRow ? `<p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${detailsRow}</p>` : ''}
+                        
+                        ${iconsHTML}
+                    </div>
+                </div>
+
+                <div class="property-details" style="padding: 0 20px 20px 20px; display:flex; flex-direction:column; flex-grow: 1;">
+                    ${videoHTML}
+                    
+                    <div class="action-buttons" style="display: flex; margin-top: auto;">
+                        <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" class="whatsapp-btn" target="_blank" style="width: 100%; background-color: #25D366; border-radius: 4px; padding: 12px; font-size: 1.05rem;">💬 WhatsApp</a>
                     </div>
                 </div>
             </div>
@@ -195,7 +217,7 @@ function showMoreListings() {
     filterProperties();
 }
 
-// LIGHTBOX LOGIC FOR BIGGER PICTURES
+// LIGHTBOX FUNCTIONS TO ZOOM PHOTOS
 function openLightbox(galleryId, imgIndex) {
     currentGalleryId = galleryId;
     currentImageIndex = imgIndex;
