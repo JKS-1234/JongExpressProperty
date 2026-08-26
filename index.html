@@ -23,10 +23,11 @@
 <body>
 
     <header>
-        <a href="#" class="logo" style="text-decoration:none;">Jong Express Property</a>
+        <a href="index.html" class="logo" style="text-decoration:none;">Jong Express Property</a>
         <nav>
             <a href="#about">Our Promise</a>
             <a href="#properties">Listings</a>
+            <a href="faq.html">FAQ</a> <!-- FIXED: FAQ Link Added Back -->
             <a href="#contact">Contact Jong</a>
         </nav>
     </header>
@@ -50,13 +51,24 @@
             <h3>🤝 End-to-End Care</h3>
             <p>Our job doesn't end when the contract is signed. From utility transfers to move-in support, we ensure your transition is completely seamless.</p>
         </div>
-        <div class="feature-card">
-            <h3>🎯 Precision Matching</h3>
-            <p>We don't blindly push listings. We study your specific lifestyle needs to match you with the exact neighborhood, school district, or buyer profile.</p>
+    </section>
+
+    <!-- FUN FAQ SECTION -->
+    <section id="fun-faq" style="max-width: 800px; margin: 50px auto; padding: 30px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <h2 style="text-align: center; color: var(--primary); margin-bottom: 25px; font-size: 2.2rem;">🤔 You Ask, Jong Answers!</h2>
+        <div style="margin-bottom: 20px;">
+            <h4 style="color: var(--secondary); font-size: 1.2rem;">👻 Are there any "Ghost Listings" here?</h4>
+            <p style="color: #4a5568;">Not a chance! We are the Ghostbusters of Miri real estate. If you see it here, it is absolutely real and available.</p>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <h4 style="color: var(--secondary); font-size: 1.2rem;">🕵️‍♂️ Do you hide property flaws?</h4>
+            <p style="color: #4a5568;">Nope! We spill the tea on every house. We tell you the good, the bad, and the ugly upfront so there are zero surprises.</p>
+        </div>
+        <div style="text-align: center; margin-top: 25px;">
+            <a href="faq.html" style="color: var(--primary); font-weight: bold; text-decoration: underline; font-size: 1.1rem;">Read Our Full FAQ</a>
         </div>
     </section>
 
-    <!-- LISTINGS ARE NOW ABOVE FACEBOOK -->
     <section id="properties" class="featured-properties">
         <h2>Featured Honest Listings</h2>
         <p style="margin-bottom: 30px;">100% Verified. We show you the good, and we don't hide the bad.</p>
@@ -88,16 +100,15 @@
         <div class="property-grid">
             <h3 style="text-align:center; width:100%; color:var(--primary);">Loading latest listings...</h3>
         </div>
-
         <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
     </section>
 
-    <!-- NEW FACEBOOK CODE PLACED BELOW LISTINGS -->
+    <!-- FIXED: FACEBOOK WIDGET MOVED BELOW LISTINGS -->
     <section style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
         <h2>Our Latest Properties on Facebook</h2>
         <p style="margin-bottom: 30px;">Check out our newest listings and market updates below!</p>
         <script src="https://elfsightcdn.com/platform.js" async></script>
-        <!-- Removed data-elfsight-app-lazy so it actually loads instantly! -->
+        <!-- Removed data-elfsight-app-lazy so it loads instantly -->
         <div class="elfsight-app-f8015444-62da-45e2-85d3-62c0c647068e"></div>
     </section>
     
@@ -119,24 +130,17 @@
                 <p>Available Anytime</p>
             </div>
         </div>
-
-        <div style="margin-top: 40px;" class="social-links">
-            <p style="margin-bottom: 10px; font-weight: bold;">Follow our journey:</p>
-            <a href="https://www.facebook.com/jongexpresssproperty" target="_blank">Facebook</a> | 
-            <a href="https://www.instagram.com/jongks1234?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank">Instagram</a> |
-            <a href="https://jongks1234.github.io/JongExpressProperty/" target="_blank">Old Github Site</a>
-        </div>
     </section>
 
-    <!-- THE NEW MASSIVE PROPERTY DETAIL WINDOW (Hidden until clicked) -->
+    <!-- THE NEW MASSIVE PROPERTY DETAIL WINDOW -->
     <div id="property-modal" class="property-modal">
         <span class="modal-close" onclick="closeModal()">&times;</span>
         <div class="modal-content">
             <div class="modal-gallery">
-                <img id="modal-main-img" src="" style="cursor: zoom-in;" onclick="openFullscreenImage()">
+                <img id="modal-main-img" src="" onclick="openFullscreenImage()">
                 <button class="modal-prev" onclick="changeModalImage(-1)">&#10094;</button>
                 <button class="modal-next" onclick="changeModalImage(1)">&#10095;</button>
-                <div style="position:absolute; bottom:15px; background:rgba(0,0,0,0.7); color:white; padding:5px 15px; border-radius:20px; font-size:0.9rem;">Click image to zoom</div>
+                <div style="position:absolute; bottom:15px; background:rgba(0,0,0,0.7); color:white; padding:5px 15px; border-radius:20px; font-size:0.9rem; pointer-events:none;">Click image to zoom</div>
             </div>
             <div class="modal-dark-header">
                 <div class="modal-header-top">
@@ -151,14 +155,15 @@
                 <div class="modal-stats">
                     <div class="stat-box"><span id="modal-beds">0</span>Beds</div>
                     <div class="stat-box"><span id="modal-baths">0</span>Baths</div>
-                    <div class="stat-box"><span id="modal-sqft">0</span>sqft</div>
+                    <div class="stat-box"><span id="modal-sqft">0</span>Size</div>
                     <div class="stat-box"><span id="modal-type">Type</span>Property</div>
                 </div>
             </div>
             <div class="modal-details-section">
                 <h3>Property details</h3>
-                <div class="details-grid" id="modal-details-grid"></div>
-                <div id="modal-description" style="margin-top: 25px; color: #4a5568; line-height: 1.8;"></div>
+                <div class="details-grid-top" id="modal-details-checkmarks"></div>
+                <p style="font-size: 1.1rem; color: #4a5568; margin-bottom: 5px; font-weight: 500;" id="modal-subtitle"></p>
+                <ul class="beautiful-list" id="modal-description-list"></ul>
                 <div id="modal-video" style="margin-top: 25px;"></div>
                 <div style="text-align: center; margin-top: 30px;">
                     <a id="modal-whatsapp" href="#" class="whatsapp-btn" target="_blank" style="display:inline-block; max-width:300px; width:100%; font-size: 1.1rem; padding: 15px;">💬 Chat on WhatsApp</a>
@@ -168,9 +173,9 @@
     </div>
 
     <!-- FULLSCREEN ZOOM IMAGE -->
-    <div id="fullscreen-zoom" class="property-modal" style="z-index: 3000; background-color: rgba(0,0,0,0.95);">
+    <div id="fullscreen-zoom" class="property-modal" style="z-index: 3000;">
         <span class="modal-close" onclick="closeFullscreenImage()">&times;</span>
-        <img id="fullscreen-img" src="" style="margin: auto; display: block; max-width: 95%; max-height: 90vh; object-fit: contain; margin-top: 5vh;">
+        <img id="fullscreen-img" src="">
     </div>
 
     <footer>
@@ -179,12 +184,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script src="js/script.js"></script>
-    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" style="position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
-  💬 WhatsApp Us
-    </a>
-    <script>
-  window.chatbaseConfig = { chatbotId: "g5wuvpEGYSCkeUYFoRiTp" };
-</script>
-<script src="https://www.chatbase.co/embed.min.js" chatbotId="g5wuvpEGYSCkeUYFoRiTp" defer></script>
+    <a href="https://wa.me/60169242000" target="_blank" style="position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">💬 WhatsApp Us</a>
 </body>
 </html>
