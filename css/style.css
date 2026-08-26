@@ -147,9 +147,11 @@ footer {
     text-align: left;
     transition: transform 0.3s ease;
     position: relative;
+    border: 1px solid #e2e8f0;
 }
 .property-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
 }
 .property-card img {
     width: 100%;
@@ -180,9 +182,9 @@ footer {
     font-size: 1.3rem;
 }
 .price {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: bold;
-    color: var(--secondary);
+    color: #1a365d;
     margin-bottom: 15px;
 }
 .video-btn {
@@ -312,7 +314,7 @@ footer {
     color: white;
 }
 
-/* --- FULL SCREEN PROPERTY DETAIL MODAL (LIKE VIDEO) --- */
+/* --- FULL SCREEN PROPERTY DETAIL MODAL --- */
 .property-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); overflow-y: auto; padding-bottom: 50px; }
 .modal-content { background-color: #fff; margin: 40px auto; width: 95%; max-width: 1200px; border-radius: 8px; overflow: hidden; box-shadow: 0 5px 25px rgba(0,0,0,0.5); }
 .modal-close { position: fixed; top: 20px; right: 40px; color: #fff; font-size: 50px; font-weight: bold; cursor: pointer; z-index: 2010; transition: color 0.3s; }
@@ -324,7 +326,7 @@ footer {
 .modal-prev:hover, .modal-next:hover { background-color: rgba(0,0,0,0.8); }
 .modal-prev { left: 20px; } .modal-next { right: 20px; }
 
-/* The Dark Header (Matches Screenshot) */
+/* The Dark Header */
 .modal-dark-header { background-color: #2d3748; color: white; padding: 40px; }
 .modal-header-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; border-bottom: 1px solid #4a5568; padding-bottom: 20px; flex-wrap: wrap; gap: 20px; }
 .modal-title-area h2 { margin-bottom: 5px; font-size: 1.8rem; color: #fff; }
@@ -334,23 +336,21 @@ footer {
 .stat-box { text-align: center; color: #a0aec0; font-size: 0.95rem; }
 .stat-box span { display: block; font-size: 1.8rem; color: white; font-weight: bold; margin-bottom: 5px; }
 
-/* --- BEAUTIFUL PROPERTY DETAILS SECTION (Matches your screenshot) --- */
+/* --- BEAUTIFUL PROPERTY DETAILS SECTION --- */
 .modal-details-section { padding: 40px; background: white; text-align: left; }
-.modal-details-section h3 { color: #1a365d; margin-bottom: 25px; font-size: 1.6rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+.modal-details-section h3 { color: #1a365d; margin-bottom: 25px; font-size: 1.6rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 15px; }
 
-/* The checkmark grid at the top */
-.details-grid-top { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; font-size: 1.1rem; color: #4a5568; font-weight: 500; }
+.details-grid-top { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 30px; font-size: 1.05rem; color: #4a5568; }
 .detail-item-check { display: flex; align-items: center; gap: 10px; }
-.detail-item-check::before { content: '✔️'; color: #48bb78; font-size: 1.2rem; }
+.detail-item-check::before { content: '✔'; color: #6b46c1; font-weight: bold; font-size: 1.1rem; } /* Purple checkmark */
 
-/* The beautiful dashed list */
 .beautiful-list { list-style: none; padding: 0; margin-top: 15px; }
-.beautiful-list li { position: relative; padding: 12px 0 12px 20px; border-bottom: 1px solid #edf2f7; color: #4a5568; font-size: 1.05rem; }
+.beautiful-list li { position: relative; padding: 12px 0 12px 20px; color: #4a5568; font-size: 1rem; }
 .beautiful-list li::before { content: '-'; position: absolute; left: 0; color: #a0aec0; font-weight: bold; }
 
-.clickable-card { cursor: pointer; transition: 0.3s; border: 1px solid #e2e8f0; }
-.clickable-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); border-color: #cbd5e0; }
-.icon-row { display: flex; gap: 15px; color: #718096; font-size: 0.95rem; margin-bottom: 15px; }
+/* Clickable card layout */
+.clickable-card { cursor: pointer; transition: 0.3s; }
+.icon-row { display: flex; gap: 15px; color: #718096; font-size: 0.95rem; margin-bottom: 15px; margin-top: 15px; }
 
 /* Fullscreen Zoom */
 #fullscreen-zoom { display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.95); }
@@ -362,10 +362,8 @@ footer {
     nav a { margin-left: 0; margin: 0 5px; font-size: 0.95rem; }
     .hero { padding: 60px 15px; }
     .hero h1 { font-size: 2rem; }
-    .hero p { font-size: 1rem; }
     .filter-container { flex-direction: column; gap: 10px; }
     .filter-select { width: 100%; min-width: 100%; }
-    .search-input { font-size: 1rem; }
     .property-card { max-width: 100%; width: 100%; }
     .contact-info { flex-direction: column; gap: 20px; }
     .info-block { width: 100%; }
@@ -373,5 +371,4 @@ footer {
     .tab-btn { width: 100%; margin-bottom: 5px; }
     .modal-stats { gap: 20px; }
     .stat-box span { font-size: 1.4rem; }
-    .modal-price-area h2 { font-size: 1.6rem; }
 }
