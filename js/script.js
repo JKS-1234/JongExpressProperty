@@ -2,7 +2,7 @@ const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs
         
 let currentLimit = 6;
 let currentMarket = 'all'; 
-let allPropertiesData = []; // Stores raw data for the modal
+let allPropertiesData = []; 
 
 // Variables for the Pop-up Gallery
 let lightboxGalleries = {};
@@ -90,7 +90,7 @@ function filterProperties() {
         const propertiesToShow = filteredData.slice(0, currentLimit);
         
         propertiesToShow.forEach((row) => {
-            let globalIndex = allPropertiesData.indexOf(row); // Link back to raw data
+            let globalIndex = allPropertiesData.indexOf(row); 
 
             let title = row['Property Name'] || '';
             let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
@@ -99,7 +99,7 @@ function filterProperties() {
             let isProject = (String(row['Type']).toLowerCase().includes('project'));
             let badgeHTML = isProject ? `<div class="badge-new">🏢 PROJECT</div>` : '';
 
-            // SMART PRICE LOGIC
+            // SMART PRICE LOGIC (Match screenshot)
             let priceStr = row['Price'] ? String(row['Price']).trim() : '';
             let formattedPrice = 'Price on Request';
             if (priceStr) {
@@ -110,13 +110,11 @@ function filterProperties() {
                 }
             }
 
-            // AUTO-CAPTURE
-            let builtUpMatch = rawDesc.match(/([\d,\.]+)\s*sq\.?\s*ft\.?/i);
-            let builtUp = builtUpMatch ? `Built-up: ${builtUpMatch[1]} sq. ft.` : '';
+            // AUTO-CAPTURE FOR CARD
             let furnishingMatch = rawDesc.match(/(fully furnished|partially furnished|partly furnished|unfurnished)/i);
             let furnishing = furnishingMatch ? furnishingMatch[1].replace(/(^\w|\s\w)/g, m => m.toUpperCase()) : '';
-            let detailsRow = [builtUp, furnishing].filter(Boolean).join(' | ');
 
+            // Auto capture beds/baths if missing in column
             let beds = row['Bedrooms'] ? String(row['Bedrooms']).trim() : '';
             let baths = row['Bathrooms'] ? String(row['Bathrooms']).trim() : '';
             if (!beds) { let bMatch = rawDesc.match(/(\d+)\s*(beds|bedroom|bedrooms)/i); if(bMatch) beds = bMatch[1]; }
@@ -124,7 +122,7 @@ function filterProperties() {
 
             let iconsHTML = '';
             if (beds || baths) {
-                iconsHTML = `<div class="icon-row" style="display: flex; gap: 15px; color: #718096; font-size: 1rem; margin-top: 15px;">`;
+                iconsHTML = `<div class="icon-row" style="display: flex; gap: 15px; color: #718096; font-size: 1.1rem; margin-top: 15px; margin-bottom: 15px;">`;
                 if (beds) iconsHTML += `<span style="display:flex; align-items:center; gap:5px;">🛏️ ${beds}</span>`;
                 if (baths) iconsHTML += `<span style="display:flex; align-items:center; gap:5px;">🛁 ${baths}</span>`;
                 iconsHTML += `</div>`;
@@ -134,17 +132,22 @@ function filterProperties() {
             let imagesArr = rawImages.split(',').map(url => url.trim()).filter(url => url !== '');
             let firstImage = imagesArr.length > 0 ? imagesArr[0] : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
 
-            // THE CLICKABLE CARD
+            // THE EXACT CLICKABLE CARD FROM SCREENSHOT
             let cardHTML = `
-            <div class="property-card clickable-card" onclick="openModal(${globalIndex})" style="display:flex; flex-direction:column; height:100%; border: 1px solid #e2e8f0; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+            <div class="property-card clickable-card" style="display:flex; flex-direction:column; height:100%; border: 1px solid #e2e8f0; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
                 ${badgeHTML}
-                <img src="${firstImage}" alt="${title}" style="height: 220px; width: 100%; object-fit: cover; border-bottom: 1px solid #e2e8f0;">
-                <div class="property-details" style="padding: 20px; display:flex; flex-direction:column; flex-grow: 1;">
-                    <h3 class="price" style="font-size: 1.5rem; color: #1a365d; margin-bottom: 15px;">${formattedPrice}</h3>
-                    <p style="font-size: 1.05rem; color: #4a5568; margin-bottom: 5px; font-weight: 500;">${title}</p>
-                    <p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${address}</p>
-                    ${detailsRow ? `<p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${detailsRow}</p>` : ''}
-                    ${iconsHTML}
+                <div onclick="openModal(${globalIndex})" style="cursor:pointer;" title="Click to view full details">
+                    <img src="${firstImage}" alt="${title}" style="height: 220px; width: 100%; object-fit: cover; border-bottom: 1px solid #e2e8f0;">
+                    <div style="padding: 20px;">
+                        <h3 style="font-size: 1.5rem; color: #1a365d; margin-bottom: 15px;">${formattedPrice}</h3>
+                        <p style="font-size: 1.05rem; color: #4a5568; margin-bottom: 5px; font-weight: 500;">${title}</p>
+                        <p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${address}</p>
+                        ${furnishing ? `<p style="color: #718096; font-size: 0.9rem; margin-bottom: 10px;">${furnishing}</p>` : ''}
+                        ${iconsHTML}
+                    </div>
+                </div>
+                <div style="padding: 0 20px 20px 20px; margin-top: auto;">
+                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" class="whatsapp-btn" target="_blank" style="width: 100%; background-color: #25D366; padding: 12px; font-size: 1.05rem;">💬 WhatsApp</a>
                 </div>
             </div>
             `;
@@ -160,7 +163,7 @@ function filterProperties() {
 function resetAndFilter() { currentLimit = 6; filterProperties(); }
 function showMoreListings() { currentLimit += 6; filterProperties(); }
 
-// --- THE NEW MODAL ENGINE ---
+// --- THE PROPERTYGURU-STYLE DETAILED MODAL ENGINE ---
 function openModal(index) {
     let row = allPropertiesData[index];
     if(!row) return;
@@ -176,6 +179,8 @@ function openModal(index) {
     }
 
     let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
+    
+    // Auto-capture for the dark header
     let builtUpMatch = rawDesc.match(/([\d,\.]+)\s*sq\.?\s*ft\.?/i);
     let builtUp = builtUpMatch ? builtUpMatch[1] : '-';
     let beds = row['Bedrooms'] ? String(row['Bedrooms']).trim() : '-';
@@ -192,7 +197,7 @@ function openModal(index) {
     document.getElementById('modal-sqft').innerText = builtUp;
     document.getElementById('modal-type').innerText = typeValue;
 
-    // Inject Property Details checkmarks
+    // Inject Property Details section below header
     let furnishingMatch = rawDesc.match(/(fully furnished|partially furnished|partly furnished|unfurnished)/i);
     let furnishing = furnishingMatch ? furnishingMatch[1].replace(/(^\w|\s\w)/g, m => m.toUpperCase()) : 'Unspecified';
     let detailsHTML = `<div class="detail-item">✔️ ${typeValue}</div><div class="detail-item">✔️ ${furnishing}</div>`;
@@ -201,7 +206,7 @@ function openModal(index) {
     document.getElementById('modal-details-grid').innerHTML = detailsHTML;
     document.getElementById('modal-description').innerHTML = rawDesc.replace(/\n/g, '<br><br>');
 
-    // Inject Images
+    // Build the Image Gallery inside the modal
     let rawImages = row['Image Name'] ? String(row['Image Name']).trim() : '';
     let imagesArr = rawImages.split(',').map(url => url.trim()).filter(url => url !== '');
     currentGalleryId = `modal-gallery`;
@@ -214,7 +219,6 @@ function openModal(index) {
         document.getElementById('modal-main-img').src = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
     }
 
-    // Video check
     let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
     let videoHTML = '';
     if (videoLink) {
@@ -227,10 +231,9 @@ function openModal(index) {
     }
     document.getElementById('modal-video').innerHTML = videoHTML;
 
-    // WhatsApp Button
     document.getElementById('modal-whatsapp').href = `https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}`;
     
-    // Open the window
+    // Show the modal
     document.getElementById('property-modal').style.display = 'block';
 }
 
@@ -238,6 +241,7 @@ function closeModal() {
     document.getElementById('property-modal').style.display = 'none';
 }
 
+// Slid the images inside the modal
 function changeModalImage(direction) {
     let gallery = lightboxGalleries[currentGalleryId];
     if (!gallery || gallery.length === 0) return;
@@ -245,4 +249,17 @@ function changeModalImage(direction) {
     if (currentImageIndex >= gallery.length) currentImageIndex = 0;
     else if (currentImageIndex < 0) currentImageIndex = gallery.length - 1;
     document.getElementById('modal-main-img').src = gallery[currentImageIndex];
+}
+
+// ZOOM image fullscreen when clicked
+function openFullscreenImage() {
+    let gallery = lightboxGalleries[currentGalleryId];
+    if (gallery && gallery.length > 0) {
+        document.getElementById('fullscreen-img').src = gallery[currentImageIndex];
+        document.getElementById('fullscreen-zoom').style.display = 'block';
+    }
+}
+
+function closeFullscreenImage() {
+    document.getElementById('fullscreen-zoom').style.display = 'none';
 }
