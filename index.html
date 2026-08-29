@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jong Express Property | Honest & Transparent Real Estate Miri</title>
     <meta name="description" content="Buy, sell, or rent houses, apartments, shops, and land in Miri, Sarawak. Transparent property listings in Pujut, Senadin, Lutong, and Taman Bayshore with video tours.">
+    <meta name="keywords" content="Miri property, house for sale Miri, property agent Miri, rent house Miri, shoplot Miri, buy house Miri, Kommons Realty, Jong Kiat Shan">
     <link rel="icon" type="image/png" href="photos/icononly.png">
     
     <link rel="stylesheet" href="css/style.css">
@@ -26,7 +27,7 @@
         <nav>
             <a href="#about">Our Promise</a>
             <a href="#properties">Listings</a>
-            <a href="faq.html">FAQ</a> <!-- Added FAQ back to Menu -->
+            <a href="faq.html">FAQ</a> 
             <a href="#contact">Contact Jong</a>
         </nav>
     </header>
@@ -104,7 +105,7 @@
         </div>
     </section>
 
-    <!-- Facebook Widget (Moved below properties & FAQ, Lazy load removed) -->
+    <!-- Facebook Widget -->
     <section style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
         <h2>Our Latest Properties on Facebook</h2>
         <p style="margin-bottom: 30px;">Check out our newest listings and market updates below!</p>
@@ -138,7 +139,7 @@
         </div>
     </section>
 
-    <!-- The Detail Modal -->
+    <!-- The Property Details Modal Window -->
     <div id="property-modal" class="property-modal">
         <span class="modal-close" onclick="closeModal()">&times;</span>
         <div class="modal-content">
@@ -178,7 +179,7 @@
         </div>
     </div>
 
-    <!-- Fullscreen Zoom -->
+    <!-- Fullscreen Image Zoom -->
     <div id="fullscreen-zoom" class="property-modal" style="z-index: 3000;">
         <span class="modal-close" onclick="closeFullscreenImage()">&times;</span>
         <img id="fullscreen-img" src="">
@@ -190,5 +191,22 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script src="js/script.js"></script>
+
+    <!-- FIXED: WhatsApp Button (Moved to the LEFT so it doesn't block the bot) -->
+    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 9999;">
+        💬 WhatsApp Us
+    </a>
+
+    <!-- CHATBASE AI BOT (Will safely load on the RIGHT) -->
+    <script>
+        window.chatbaseConfig = {
+            chatbotId: "g5wuvpEGYSCkeUYFoRiTp",
+        };
+    </script>
+    <script
+        src="https://www.chatbase.co/embed.min.js"
+        chatbotId="g5wuvpEGYSCkeUYFoRiTp"
+        defer>
+    </script>
 </body>
 </html>
