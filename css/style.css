@@ -24,7 +24,7 @@ header {
     align-items: center;
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 9999; /* Fixed mobile scroll overlapping */
 }
 .logo {
     font-size: 1.5rem;
@@ -147,14 +147,16 @@ footer {
     text-align: left;
     transition: transform 0.3s ease;
     position: relative;
+    border: 1px solid #e2e8f0;
 }
 .property-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
 }
 .property-card img {
     width: 100%;
     height: 220px;
-    object-fit: contain;
+    object-fit: cover;
     background-color: #e2e8f0; 
 }
 .badge-new {
@@ -326,78 +328,58 @@ footer {
 }
 /* --- Mobile Responsiveness (Smartphones & Tablets) --- */
 @media (max-width: 768px) {
-    /* Stack the header logo and navigation links */
     header {
         flex-direction: column;
         gap: 15px;
         text-align: center;
         padding: 1rem 15px;
     }
-    
-    /* Make navigation links wrap neatly */
     nav {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
         gap: 15px;
     }
-    
     nav a {
         margin-left: 0;
         margin: 0 5px;
         font-size: 0.95rem;
     }
-    
-    /* Adjust the hero banner text for smaller screens */
     .hero {
         padding: 60px 15px;
     }
-    
     .hero h1 {
         font-size: 2rem;
     }
-    
     .hero p {
         font-size: 1rem;
     }
-    
-    /* Stack the search and filter boxes vertically */
     .filter-container {
         flex-direction: column;
         gap: 10px;
     }
-    
     .filter-select {
         width: 100%;
         min-width: 100%;
     }
-    
     .search-input {
         font-size: 1rem;
     }
-    
-    /* Adjust property cards to take up the full screen width */
     .property-card {
         max-width: 100%;
         width: 100%;
     }
-    
-    /* Stack contact info blocks vertically */
     .contact-info {
         flex-direction: column;
         gap: 20px;
     }
-    
     .info-block {
         width: 100%;
     }
-    
-    /* Adjust the market tabs for easy tapping */
     .market-tabs {
         flex-direction: column;
         width: 100%;
     }
-    
     .tab-btn {
         width: 100%;
         margin-bottom: 5px;
@@ -405,7 +387,7 @@ footer {
 }
 
 /* ================================================================= */
-/* --- iProperty-Style Modal Detail Window Styles --- */
+/* --- iProperty-Style Modal Detail Window Styles (Restored) --- */
 /* ================================================================= */
 .property-modal { 
     display: none; 
@@ -552,7 +534,7 @@ footer {
     object-fit: contain; 
     margin-top: 5vh; 
 }
-/* --- Share Button Styles --- */
+/* --- Share Button Styles (Restored) --- */
 .share-btn {
     display: block;
     text-align: center;
