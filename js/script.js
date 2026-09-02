@@ -43,7 +43,6 @@ Papa.parse(csvUrl, {
         data.forEach((row, index) => {
             if(!row['Property Name']) return; 
 
-            let details = row['The Good (Pros)'] ? row['The Good (Pros)'].replace(/\n/g, '<br>') : '';
             let status = row['Status'] ? row['Status'].toLowerCase().trim() : 'sale';
             
             let rawType = row['Type'] ? row['Type'].trim() : '';
@@ -63,11 +62,13 @@ Papa.parse(csvUrl, {
                 badgeHTML = `<div class="badge-new">🏢 PROJECT</div>`;
             }
 
-            // We add data-project tag to the HTML so the filter knows what it is, and an onclick to open the modal
+            let firstImage = row['Image Name'] ? row['Image Name'].trim().split(',')[0] : '';
+
+            // Appended onclick to open the modal
             let cardHTML = `
             <div class="property-card clickable-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" onclick="openModal(${index})">
                 ${badgeHTML}
-                <img src="${row['Image Name'] ? row['Image Name'].split(',')[0].trim() : ''}" alt="${row['Property Name']}">
+                <img src="${firstImage}" alt="${row['Property Name']}">
                 <div class="property-details">
                     <h3>${row['Property Name']}</h3>
                     <p class="price">${row['Price']}</p>
@@ -95,8 +96,8 @@ Papa.parse(csvUrl, {
         }
 
         filterProperties();
-        
-        // Detect if a shared URL is opened, and trigger the modal automatically
+
+        // Check if a direct property link was shared
         const urlParams = new URLSearchParams(window.location.search);
         const sharedPropertyId = urlParams.get('p');
         if (sharedPropertyId !== null && allPropertiesData[sharedPropertyId]) {
@@ -160,7 +161,7 @@ function showMoreListings() {
     filterProperties();
 }
 
-// --- Detail Modal Functions ---
+// --- Restored Modal Functions ---
 function openModal(index) {
     let row = allPropertiesData[index];
     if(!row) return;
