@@ -34,6 +34,7 @@ header {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--secondary);
+    text-decoration: none;
 }
 
 nav a {
@@ -336,6 +337,7 @@ footer {
     color: var(--primary);
 }
 
+/* --- Market Category Tabs --- */
 .market-tabs {
     display: flex;
     justify-content: center;
