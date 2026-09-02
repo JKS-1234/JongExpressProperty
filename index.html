@@ -72,8 +72,8 @@
         <nav>
             <a href="#about">Our Promise</a>
             <a href="#properties">Listings</a>
-            <a href="#facebook-feed">FB Updates</a>
             <a href="#fun-faq">FAQ</a>
+            <a href="#facebook-feed">FB Updates</a>
             <a href="#contact">Contact Jong</a>
         </nav>
     </header>
@@ -152,22 +152,21 @@
         <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
     </section>
 
-    <!-- Facebook Feed Section -->
-    <section id="facebook-feed" style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
-        <h2>Our Latest Properties on Facebook</h2>
-        <p style="margin-bottom: 30px;">Check out our newest listings and market updates below!</p>
-        <!-- Elfsight Social Feed | Untitled Social Feed -->
-        <script src="https://elfsightcdn.com/platform.js" async></script>
-        <div class="elfsight-app-f8015444-62da-45e2-85d3-62c0c647068e" data-elfsight-app-lazy></div>
-    </section>
-
-    <!-- Short FAQ Section (Moved below FB Feed) -->
-    <section id="fun-faq" style="max-width: 800px; margin: 0 auto 50px auto; padding: 40px 30px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+    <!-- Short FAQ Section -->
+    <section id="fun-faq" style="max-width: 800px; margin: 50px auto; padding: 40px 30px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
         <h2 style="text-align: center; color: var(--primary); margin-bottom: 30px; font-size: 2.2rem;">🤔 You Ask, Jong Answers!</h2>
         <div style="margin-bottom: 25px;">
             <h4 style="color: var(--secondary); font-size: 1.2rem; margin-bottom: 5px;">👻 Are there any "Ghost Listings" here?</h4>
             <p style="color: #4a5568;">Not a chance! We are the Ghostbusters of Miri real estate. If you see it here, it is real and available to view.</p>
         </div>
+    </section>
+
+    <!-- Facebook Feed Section -->
+    <section id="facebook-feed" style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
+        <h2>Our Latest Properties on Facebook</h2>
+        <p style="margin-bottom: 30px;">Check out our newest listings and market updates below!</p>
+        <script src="https://elfsightcdn.com/platform.js" async></script>
+        <div class="elfsight-app-f8015444-62da-45e2-85d3-62c0c647068e"></div>
     </section>
     
     <section id="contact" class="contact-section">
@@ -240,7 +239,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script src="js/script.js"></script>
     
-    <!-- Floating WhatsApp on the Left so it does not overlap Chatbase -->
     <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
       💬 WhatsApp Us
     </a>
