@@ -48,7 +48,7 @@ footer { background-color: var(--primary); color: white; text-align: center; pad
 .tab-btn { padding: 10px 20px; border: 2px solid var(--primary); background-color: transparent; color: var(--primary); font-weight: bold; border-radius: 5px; cursor: pointer; transition: all 0.3s ease; }
 .tab-btn.active, .tab-btn:hover { background-color: var(--primary); color: white; }
 
-/* PropertyGuru Modal Styles */
+/* Modal Window Styles */
 .property-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); overflow-y: auto; padding-bottom: 50px; }
 .modal-content { background-color: #fff; margin: 40px auto; width: 95%; max-width: 1200px; border-radius: 8px; overflow: hidden; box-shadow: 0 5px 25px rgba(0,0,0,0.5); }
 .modal-close { position: fixed; top: 20px; right: 40px; color: #fff; font-size: 50px; font-weight: bold; cursor: pointer; z-index: 2010; transition: color 0.3s; }
