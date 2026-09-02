@@ -8,6 +8,7 @@
     <meta name="keywords" content="Miri property, house for sale Miri, property agent Miri, rent house Miri, shoplot Miri, buy house Miri, Kommons Realty, Jong Kiat Shan, real estate negotiator Miri">
     <link rel="canonical" href="https://jongexpressproperty.online/" />
     
+    <!-- THE FAVICON FIX -->
     <link rel="icon" type="image/png" href="https://jongexpressproperty.online/photos/icononly.png">
     <link rel="apple-touch-icon" href="https://jongexpressproperty.online/photos/icononly.png">
     <meta name="msapplication-TileImage" content="https://jongexpressproperty.online/photos/icononly.png">
@@ -18,6 +19,7 @@
     <meta property="og:url" content="https://jongexpressproperty.online/">
     <meta property="og:type" content="website">
 
+    <!-- Schema Data loaded with all major Miri areas & REN 84702 -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -56,6 +58,7 @@
     
     <link rel="stylesheet" href="css/style.css">
     
+    <!-- Tracking Scripts (Google Analytics & Facebook Pixel) -->
     <meta name="google-site-verification" content="DmNkWGPhpuc2D9rzCBVezIjbnLr8M6qBpZ-TYUeL4lE" />
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YNY4XZBS1T"></script>
     <script>
@@ -64,9 +67,23 @@
         gtag('js', new Date());
         gtag('config', 'G-YNY4XZBS1T');
     </script>
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window,document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+     fbq('init', '2776876486027023'); 
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" src="https://www.facebook.com/tr?id=2776876486027023&ev=PageView&noscript=1"/></noscript>
 </head>
 <body>
 
+    <!-- Single Page Navigation Setup -->
     <header id="main-header">
         <a href="index.html" class="logo">Jong Express Property</a>
         <nav>
@@ -103,7 +120,7 @@
         </div>
     </section>
 
-    <!-- About Your Negotiator Section -->
+    <!-- About Your Negotiator Section Restored -->
     <section style="max-width: 800px; margin: 0 auto 50px; padding: 0 5%; text-align:center;">
         <h2 style="color:var(--primary); margin-bottom:15px;">About Your Negotiator</h2>
         <p style="color:#4a5568;">
@@ -152,19 +169,23 @@
         <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
     </section>
 
-    <!-- Short FAQ Section -->
+    <!-- Short FAQ Section Restored Above FB Post -->
     <section id="fun-faq" style="max-width: 800px; margin: 50px auto; padding: 40px 30px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
         <h2 style="text-align: center; color: var(--primary); margin-bottom: 30px; font-size: 2.2rem;">🤔 You Ask, Jong Answers!</h2>
         <div style="margin-bottom: 25px;">
             <h4 style="color: var(--secondary); font-size: 1.2rem; margin-bottom: 5px;">👻 Are there any "Ghost Listings" here?</h4>
             <p style="color: #4a5568;">Not a chance! We are the Ghostbusters of Miri real estate. If you see it here, it is real and available to view.</p>
         </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="faq.html" style="color: white; background-color: var(--primary); padding: 12px 25px; border-radius: 5px; font-weight: bold; text-decoration: none;">Read Our Full FAQ</a>
+        </div>
     </section>
 
-    <!-- Facebook Feed Section -->
+    <!-- Facebook Feed Section (Using New Elfsight ID and no lazy load) -->
     <section id="facebook-feed" style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
         <h2>Our Latest Properties on Facebook</h2>
         <p style="margin-bottom: 30px;">Check out our newest listings and market updates below!</p>
+        <!-- Elfsight Social Feed | Untitled Social Feed -->
         <script src="https://elfsightcdn.com/platform.js" async></script>
         <div class="elfsight-app-f8015444-62da-45e2-85d3-62c0c647068e"></div>
     </section>
@@ -195,7 +216,7 @@
         </div>
     </section>
 
-    <!-- Detail Modal Structure -->
+    <!-- Restored Detail Modal Structure (Required for click-to-open) -->
     <div id="property-modal" class="property-modal">
         <span class="modal-close" onclick="closeModal()">&times;</span>
         <div class="modal-content">
@@ -240,8 +261,8 @@
     <script src="js/script.js"></script>
     
     <!-- Floating WhatsApp on the Left so it does not overlap Chatbase -->
-    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
-      💬 WhatsApp Us
+    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 12px 24px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
+        💬 WhatsApp Us
     </a>
     
     <script>
