@@ -95,3 +95,23 @@ footer { background-color: var(--primary); color: white; text-align: center; pad
     .modal-stats { gap: 20px; }
     .stat-box span { font-size: 1.4rem; }
 }
+/* --- Share Button Styles --- */
+.share-btn {
+    display: block;
+    text-align: center;
+    background-color: #3182ce;
+    color: white;
+    padding: 12px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    transition: background 0.3s;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    font-size: 1rem;
+}
+.share-btn:hover {
+    background-color: #2b6cb0;
+}
