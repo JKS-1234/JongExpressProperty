@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jong Express Property | Honest & Transparent Real Estate Miri</title>
+    <meta name="description" content="Buy, sell, or rent houses, apartments, shops, and land in Miri, Sarawak. Transparent property listings in Pujut, Senadin, Lutong, and Taman Bayshore with video tours.">
+    <meta name="keywords" content="Miri property, house for sale Miri, property agent Miri, rent house Miri, shoplot Miri, buy house Miri, Kommons Realty, Jong Kiat Shan">
     <link rel="icon" type="image/png" href="photos/icononly.png">
+    
     <link rel="stylesheet" href="css/style.css">
+    
     <meta name="google-site-verification" content="DmNkWGPhpuc2D9rzCBVezIjbnLr8M6qBpZ-TYUeL4lE" />
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YNY4XZBS1T"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -29,11 +34,11 @@
 
     <section class="hero">
         <h1>No Ghost Listings. Just Real Results.</h1>
-        <p>Tired of fake listings, hidden flaws, and agents who disappear after the sale? At Jong Express Property, we do things differently.</p>
+        <p>Tired of fake listings, hidden flaws, and agents who disappear after the sale? At Jong Express Property, we do things differently. 100% transparency, zero fluff.</p>
         <a href="#contact" class="btn">Talk to an Expert Today</a>
     </section>
 
-    <!-- Property Listings Section -->
+    <!-- Property Listings -->
     <section id="properties" class="featured-properties">
         <h2>Featured Honest Listings</h2>
         <p style="margin-bottom: 30px;">100% Verified. We show you the good, and we don't hide the bad.</p>
@@ -44,17 +49,28 @@
                 <button class="tab-btn" onclick="setMarket('subsale', this)">Sub-Sale & Rent</button>
                 <button class="tab-btn" onclick="setMarket('project', this)">Developer Projects</button>
             </div>
-            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Type keywords..." onkeyup="resetAndFilter()">
+            
+            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Type keywords... (e.g. Corner, Furnished, Pujut, Curtin)" onkeyup="resetAndFilter()">
+            
             <div class="filter-container">
-                <select id="statusFilter" class="filter-select" onchange="resetAndFilter()"><option value="all">All Status</option><option value="sale">For Sale</option><option value="rent">For Rent</option></select>
-                <select id="typeFilter" class="filter-select" onchange="resetAndFilter()"><option value="all">All Types</option></select>
-                <select id="areaFilter" class="filter-select" onchange="resetAndFilter()"><option value="all">All Areas</option></select>
+                <select id="statusFilter" class="filter-select" onchange="resetAndFilter()">
+                    <option value="all">All Status</option>
+                    <option value="sale">For Sale</option>
+                    <option value="rent">For Rent</option>
+                </select>
+                <select id="typeFilter" class="filter-select" onchange="resetAndFilter()">
+                    <option value="all">All Types</option>
+                </select>
+                <select id="areaFilter" class="filter-select" onchange="resetAndFilter()">
+                    <option value="all">All Areas</option>
+                </select>
             </div>
         </div>
 
         <div class="property-grid">
             <h3 style="text-align:center; width:100%; color:var(--primary);">Loading latest listings...</h3>
         </div>
+
         <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
     </section>
 
@@ -63,25 +79,38 @@
         <h2 style="text-align: center; color: var(--primary); margin-bottom: 30px; font-size: 2.2rem;">🤔 You Ask, Jong Answers!</h2>
         <div style="margin-bottom: 25px;">
             <h4 style="color: var(--secondary); font-size: 1.2rem; margin-bottom: 5px;">👻 Are there any "Ghost Listings" here?</h4>
-            <p style="color: #4a5568;">Not a chance! We are the Ghostbusters of Miri real estate.</p>
+            <p style="color: #4a5568;">Not a chance! We are the Ghostbusters of Miri real estate. If you see it here, it is real and available to view.</p>
         </div>
         <div style="text-align: center; margin-top: 30px;">
             <a href="faq.html" style="color: white; background-color: var(--primary); padding: 12px 25px; border-radius: 5px; font-weight: bold; text-decoration: none;">Read Our Full FAQ</a>
         </div>
     </section>
 
-    <!-- Facebook Feed -->
+    <!-- Facebook Feed (Below FAQ) -->
     <section style="margin: 50px auto; max-width: 1000px; padding: 20px; text-align: center;">
         <h2>Our Latest Properties on Facebook</h2>
+        <p style="margin-bottom: 30px;">Check out our newest listings and market updates below!</p>
         <script src="https://elfsightcdn.com/platform.js" async></script>
         <div class="elfsight-app-8cfc3004-89f9-4754-9047-e12cd7216640"></div>
     </section>
     
     <section id="contact" class="contact-section">
         <h2>Ready to make a move? Let's connect.</h2>
+        <p style="margin-top: 10px; color: #4a5568;">Your trusted consultant, Jong Kiat Shan, is ready to assist you.</p>
+        
         <div class="contact-info">
-            <div class="info-block"><h3>📞 Call / WhatsApp</h3><p>016-924-2000</p></div>
-            <div class="info-block"><h3>✉️ Email</h3><p>jongkiatshan@kommonsrealty.com</p></div>
+            <div class="info-block">
+                <h3>📞 Call / WhatsApp</h3>
+                <p>016-924-2000</p>
+            </div>
+            <div class="info-block">
+                <h3>✉️ Email</h3>
+                <p><a href="mailto:jongkiatshan@kommonsrealty.com" style="color: var(--primary);">jongkiatshan@kommonsrealty.com</a></p>
+            </div>
+            <div class="info-block">
+                <h3>🕒 Operating Hours</h3>
+                <p>Available Anytime</p>
+            </div>
         </div>
     </section>
 
@@ -93,11 +122,17 @@
                 <img id="modal-main-img" src="" onclick="openFullscreenImage()">
                 <button class="modal-prev" onclick="changeModalImage(-1)">&#10094;</button>
                 <button class="modal-next" onclick="changeModalImage(1)">&#10095;</button>
+                <div style="position:absolute; bottom:15px; background:rgba(0,0,0,0.7); color:white; padding:5px 15px; border-radius:20px; font-size:0.9rem; pointer-events:none;">Click image to zoom</div>
             </div>
             <div class="modal-dark-header">
                 <div class="modal-header-top">
-                    <div class="modal-title-area"><h2 id="modal-title">Title</h2><p id="modal-address">Location</p></div>
-                    <div class="modal-price-area"><h2 id="modal-price">RM 0</h2></div>
+                    <div class="modal-title-area">
+                        <h2 id="modal-title">Property Title</h2>
+                        <p id="modal-address">Location</p>
+                    </div>
+                    <div class="modal-price-area">
+                        <h2 id="modal-price">RM 0</h2>
+                    </div>
                 </div>
                 <div class="modal-stats">
                     <div class="stat-box"><span id="modal-beds">0</span>Beds</div>
@@ -109,11 +144,11 @@
             <div class="modal-details-section">
                 <h3>Property details</h3>
                 <div class="details-grid-top" id="modal-details-checkmarks"></div>
-                <p id="modal-subtitle" style="font-size: 1.1rem; color: #4a5568; font-weight: 500;"></p>
+                <p style="font-size: 1.1rem; color: #4a5568; margin-bottom: 5px; font-weight: 500;" id="modal-subtitle"></p>
                 <ul class="beautiful-list" id="modal-description-list"></ul>
                 <div id="modal-video" style="margin-top: 25px;"></div>
                 <div style="text-align: center; margin-top: 30px;">
-                    <a id="modal-whatsapp" href="#" class="whatsapp-btn" target="_blank" style="display:inline-block; max-width:300px; width:100%; padding: 15px;">💬 Chat on WhatsApp</a>
+                    <a id="modal-whatsapp" href="#" class="whatsapp-btn" target="_blank" style="display:inline-block; max-width:300px; width:100%; font-size: 1.1rem; padding: 15px;">💬 Chat on WhatsApp</a>
                 </div>
             </div>
         </div>
@@ -125,16 +160,24 @@
         <img id="fullscreen-img" src="">
     </div>
 
-    <footer><p>&copy; 2026 Jong Express Property. All rights reserved.</p></footer>
+    <footer>
+        <p>&copy; 2026 Jong Express Property. All rights reserved. | Represented by JONG KIAT SHAN (Kommons Realty)</p>
+    </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script src="js/script.js"></script>
 
-    <!-- Floating WhatsApp on the LEFT -->
-    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 12px 24px; font-weight: bold; z-index: 9999; text-decoration: none;">💬 WhatsApp Us</a>
+    <!-- Floating WhatsApp on the LEFT (Never covers the chatbot) -->
+    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 12px 24px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 9999;">
+        💬 WhatsApp Us
+    </a>
 
     <!-- Chatbase Bot on the RIGHT -->
-    <script>window.chatbaseConfig = { chatbotId: "g5wuvpEGYSCkeUYFoRiTp" };</script>
+    <script>
+        window.chatbaseConfig = {
+            chatbotId: "g5wuvpEGYSCkeUYFoRiTp",
+        };
+    </script>
     <script src="https://www.chatbase.co/embed.min.js" chatbotId="g5wuvpEGYSCkeUYFoRiTp" defer></script>
 </body>
 </html>
