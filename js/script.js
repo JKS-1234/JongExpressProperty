@@ -4,8 +4,9 @@ let currentLimit = 6;
 let currentMarket = 'all'; 
 let allPropertiesData = []; 
 
+// Function to handle YouTube video conversions
 function getYouTubeEmbedUrl(url) {
-    if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+    if (!url || (!url.includes('youtube.com') && !url.includes('youtu.be'))) {
         return null;
     }
     let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -16,6 +17,7 @@ function getYouTubeEmbedUrl(url) {
     return null;
 }
 
+// Function to handle tab clicks (All, Sub-Sale, Projects)
 function setMarket(marketType, btnElement) {
     currentMarket = marketType;
     const tabs = document.querySelectorAll('.tab-btn');
@@ -24,6 +26,7 @@ function setMarket(marketType, btnElement) {
     resetAndFilter();
 }
 
+// Pull data from your Google Sheet
 Papa.parse(csvUrl, {
     download: true,
     header: true,
@@ -40,6 +43,7 @@ Papa.parse(csvUrl, {
             if (rawArea) uniqueAreas.add(rawArea);
         });
 
+        // Populate dynamic filters
         const typeFilter = document.getElementById('typeFilter');
         if (typeFilter) {
             typeFilter.innerHTML = '<option value="all">All Types</option>';
@@ -59,6 +63,7 @@ Papa.parse(csvUrl, {
     }
 });
 
+// Filter logic based on search, dropdowns, and tabs
 function filterProperties() {
     const statusVal = document.getElementById('statusFilter') ? document.getElementById('statusFilter').value : 'all';
     const typeVal = document.getElementById('typeFilter') ? document.getElementById('typeFilter').value : 'all';
@@ -93,9 +98,9 @@ function filterProperties() {
             let badgeHTML = String(row['Type']).toLowerCase().includes('project') ? `<div class="badge-new">🏢 PROJECT</div>` : '';
             let priceStr = row['Price'] ? String(row['Price']).trim() : 'Price on Request';
             
-            // Getting your raw Make.com URL output
-            let firstImage = row['Image Name'] ? row['Image Name'].trim() : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
+            let firstImage = row['Image Name'] ? row['Image Name'].split(',')[0].trim() : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
 
+            // Clean thumbnail card that triggers the modal
             allCardsHTML += `
             <div class="property-card clickable-card" style="display:flex; flex-direction:column; height:100%;" onclick="openModal(${globalIndex})">
                 ${badgeHTML}
@@ -119,6 +124,7 @@ function filterProperties() {
 function resetAndFilter() { currentLimit = 6; filterProperties(); }
 function showMoreListings() { currentLimit += 6; filterProperties(); }
 
+// --- Modal & iProperty Style Detail Page Logic ---
 function openModal(index) {
     let row = allPropertiesData[index];
     if(!row) return;
@@ -129,14 +135,17 @@ function openModal(index) {
     let priceStr = row['Price'] ? String(row['Price']).trim() : 'Price on Request';
     let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
     
+    // Inject Title and Price
     document.getElementById('modal-title').innerText = title;
     document.getElementById('modal-address').innerText = address;
     document.getElementById('modal-price').innerText = priceStr;
     
+    // Try to detect furnishing status from the description
     let furnishingMatch = rawDesc.match(/(fully furnished|partially furnished|partly furnished|unfurnished)/i);
     let furnishing = furnishingMatch ? furnishingMatch[1].replace(/(^\w|\s\w)/g, m => m.toUpperCase()) : 'Unspecified';
     document.getElementById('modal-details-checkmarks').innerHTML = `<div class="detail-item-check">${typeValue}</div><div class="detail-item-check">${furnishing}</div>`;
     
+    // Turn the raw description text into a clean bulleted list
     let listHTML = '';
     rawDesc.split('\n').forEach(line => {
         let cleanLine = line.trim();
@@ -145,11 +154,11 @@ function openModal(index) {
     });
     document.getElementById('modal-description-list').innerHTML = listHTML;
 
-    // Load your Make.com Image
-    let mainImg = row['Image Name'] ? row['Image Name'].trim() : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
+    // Load the main image (Handles Make.com URLs correctly)
+    let mainImg = row['Image Name'] ? row['Image Name'].split(',')[0].trim() : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
     document.getElementById('modal-main-img').src = mainImg;
     
-    // Video setup
+    // Setup Video Tour if it exists
     let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
     let videoHTML = '';
     if (videoLink) {
@@ -162,19 +171,22 @@ function openModal(index) {
     }
     document.getElementById('modal-video').innerHTML = videoHTML;
 
-    // Link WhatsApp button inside the modal
+    // Set the WhatsApp message link dynamically
     document.getElementById('modal-whatsapp').href = `https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}`;
     
-    // Wire up Share Button
+    // Set the Share Button function
     document.getElementById('modal-share-btn').onclick = function() {
         shareListing(title);
     };
 
+    // Open the window
     document.getElementById('property-modal').style.display = 'block';
 }
 
+// Close the detailed window
 function closeModal() { document.getElementById('property-modal').style.display = 'none'; }
 
+// Full screen image viewer
 function openFullscreenImage() {
     let currentSrc = document.getElementById('modal-main-img').src;
     document.getElementById('fullscreen-img').src = currentSrc;
@@ -182,6 +194,7 @@ function openFullscreenImage() {
 }
 function closeFullscreenImage() { document.getElementById('fullscreen-zoom').style.display = 'none'; }
 
+// Mobile Share Logic
 function shareListing(title) {
     if (navigator.share) {
         navigator.share({
