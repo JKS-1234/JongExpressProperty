@@ -57,7 +57,7 @@ Papa.parse(csvUrl, {
         }
         filterProperties();
 
-        // Check if a direct property link was shared
+        // Open specific property if URL parameter is present
         const urlParams = new URLSearchParams(window.location.search);
         const sharedPropertyId = urlParams.get('p');
         if (sharedPropertyId !== null && allPropertiesData[sharedPropertyId]) {
