@@ -2,6 +2,7 @@ const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs
         
 let currentLimit = 6;
 let currentMarket = 'all'; // New variable to track the active tab
+let allPropertiesData = []; // Store data globally for the modal
 
 function getYouTubeEmbedUrl(url) {
     if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
@@ -32,13 +33,14 @@ Papa.parse(csvUrl, {
     header: true,
     complete: function(results) {
         const data = results.data;
+        allPropertiesData = data; // Save to global array
         const grid = document.querySelector('.property-grid');
         grid.innerHTML = ''; 
 
         const uniqueAreas = new Set();
         const uniqueTypes = new Set();
 
-        data.forEach(row => {
+        data.forEach((row, index) => {
             if(!row['Property Name']) return; 
 
             let details = row['The Good (Pros)'] ? row['The Good (Pros)'].replace(/\n/g, '<br>') : '';
@@ -61,34 +63,15 @@ Papa.parse(csvUrl, {
                 badgeHTML = `<div class="badge-new">🏢 PROJECT</div>`;
             }
 
-            let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
-            let videoHTML = '';
-
-            if (videoLink) {
-                let ytEmbed = getYouTubeEmbedUrl(videoLink);
-                if (ytEmbed) {
-                    videoHTML = `
-                    <div class="video-container">
-                        <iframe src="${ytEmbed}" allowfullscreen></iframe>
-                    </div>`;
-                } else {
-                    videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank">🎬 Watch Video Tour</a>`;
-                }
-            }
-
-            // We add data-project tag to the HTML so the filter knows what it is
+            // We add data-project tag to the HTML so the filter knows what it is, and an onclick to open the modal
             let cardHTML = `
-            <div class="property-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}">
+            <div class="property-card clickable-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" onclick="openModal(${index})">
                 ${badgeHTML}
-                <img src="${row['Image Name']}" alt="${row['Property Name']}">
+                <img src="${row['Image Name'] ? row['Image Name'].split(',')[0].trim() : ''}" alt="${row['Property Name']}">
                 <div class="property-details">
                     <h3>${row['Property Name']}</h3>
                     <p class="price">${row['Price']}</p>
-                    <div class="pros-cons">
-                        <p class="pro" style="color: #1a365d;"><strong>✅ Details:</strong><br>${details}</p>
-                    </div>
-                    ${videoHTML}
-                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(row['Property Name'])}" class="whatsapp-btn" target="_blank">Chat on WhatsApp</a>
+                    <button class="whatsapp-btn" style="width: 100%; border:none; cursor:pointer;">View Details</button>
                 </div>
             </div>
             `;
@@ -112,6 +95,13 @@ Papa.parse(csvUrl, {
         }
 
         filterProperties();
+        
+        // Detect if a shared URL is opened, and trigger the modal automatically
+        const urlParams = new URLSearchParams(window.location.search);
+        const sharedPropertyId = urlParams.get('p');
+        if (sharedPropertyId !== null && allPropertiesData[sharedPropertyId]) {
+            openModal(sharedPropertyId);
+        }
     }
 });
 
@@ -168,4 +158,79 @@ function resetAndFilter() {
 function showMoreListings() {
     currentLimit += 6;
     filterProperties();
+}
+
+// --- Detail Modal Functions ---
+function openModal(index) {
+    let row = allPropertiesData[index];
+    if(!row) return;
+
+    let title = row['Property Name'];
+    let address = row['Area'] ? `${row['Area'].trim()}, Sarawak` : 'Miri, Sarawak';
+    let typeValue = row['Type'] ? row['Type'].trim() : 'Property';
+    let priceStr = row['Price'] ? String(row['Price']).trim() : 'Price on Request';
+    let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
+    
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('modal-address').innerText = address;
+    document.getElementById('modal-price').innerText = priceStr;
+    
+    let furnishingMatch = rawDesc.match(/(fully furnished|partially furnished|partly furnished|unfurnished)/i);
+    let furnishing = furnishingMatch ? furnishingMatch[1].replace(/(^\w|\s\w)/g, m => m.toUpperCase()) : 'Unspecified';
+    document.getElementById('modal-details-checkmarks').innerHTML = `<div class="detail-item-check">${typeValue}</div><div class="detail-item-check">${furnishing}</div>`;
+    
+    let listHTML = '';
+    rawDesc.split('\n').forEach(line => {
+        let cleanLine = line.trim();
+        if (cleanLine.startsWith('-')) cleanLine = cleanLine.substring(1).trim(); 
+        if (cleanLine.length > 2) listHTML += `<li>${cleanLine}</li>`;
+    });
+    document.getElementById('modal-description-list').innerHTML = listHTML;
+
+    let mainImg = row['Image Name'] ? row['Image Name'].trim().split(',')[0] : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
+    document.getElementById('modal-main-img').src = mainImg;
+    
+    let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
+    let videoHTML = '';
+    if (videoLink) {
+        let ytEmbed = getYouTubeEmbedUrl(videoLink);
+        if (ytEmbed) {
+            videoHTML = `<div class="video-container"><iframe src="${ytEmbed}" allowfullscreen></iframe></div>`;
+        } else {
+            videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank">🎬 Watch Video Tour</a>`;
+        }
+    }
+    document.getElementById('modal-video').innerHTML = videoHTML;
+
+    document.getElementById('modal-whatsapp').href = `https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}`;
+    
+    document.getElementById('modal-share-btn').onclick = function() {
+        shareListing(title, index);
+    };
+
+    document.getElementById('property-modal').style.display = 'block';
+}
+
+function closeModal() { document.getElementById('property-modal').style.display = 'none'; }
+
+function openFullscreenImage() {
+    let currentSrc = document.getElementById('modal-main-img').src;
+    document.getElementById('fullscreen-img').src = currentSrc;
+    document.getElementById('fullscreen-zoom').style.display = 'block';
+}
+function closeFullscreenImage() { document.getElementById('fullscreen-zoom').style.display = 'none'; }
+
+function shareListing(title, index) {
+    const propertyUrl = window.location.origin + window.location.pathname + '?p=' + index;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: title,
+            text: `Check out this property listing: ${title}`,
+            url: propertyUrl,
+        }).catch((error) => console.log('Sharing failed', error));
+    } else {
+        navigator.clipboard.writeText(propertyUrl);
+        alert("Listing link copied to clipboard!\n" + propertyUrl);
+    }
 }
