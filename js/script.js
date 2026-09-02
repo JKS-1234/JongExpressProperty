@@ -2,7 +2,7 @@ const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs
         
 let currentLimit = 6;
 let currentMarket = 'all'; // New variable to track the active tab
-let allPropertiesData = []; // Store data globally for the modal
+let allPropertiesData = []; // Store global reference for the modal
 
 function getYouTubeEmbedUrl(url) {
     if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
@@ -33,7 +33,7 @@ Papa.parse(csvUrl, {
     header: true,
     complete: function(results) {
         const data = results.data;
-        allPropertiesData = data; // Save to global array
+        allPropertiesData = data; // Keep the data for modal usage
         const grid = document.querySelector('.property-grid');
         grid.innerHTML = ''; 
 
@@ -43,6 +43,7 @@ Papa.parse(csvUrl, {
         data.forEach((row, index) => {
             if(!row['Property Name']) return; 
 
+            let details = row['The Good (Pros)'] ? row['The Good (Pros)'].replace(/\n/g, '<br>') : '';
             let status = row['Status'] ? row['Status'].toLowerCase().trim() : 'sale';
             
             let rawType = row['Type'] ? row['Type'].trim() : '';
@@ -62,17 +63,34 @@ Papa.parse(csvUrl, {
                 badgeHTML = `<div class="badge-new">🏢 PROJECT</div>`;
             }
 
-            let firstImage = row['Image Name'] ? row['Image Name'].trim().split(',')[0] : '';
+            let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
+            let videoHTML = '';
 
-            // Appended onclick to open the modal
+            if (videoLink) {
+                let ytEmbed = getYouTubeEmbedUrl(videoLink);
+                if (ytEmbed) {
+                    videoHTML = `
+                    <div class="video-container">
+                        <iframe src="${ytEmbed}" allowfullscreen></iframe>
+                    </div>`;
+                } else {
+                    videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank">🎬 Watch Video Tour</a>`;
+                }
+            }
+
+            // Injects onclick to open the modal using the original index
             let cardHTML = `
             <div class="property-card clickable-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" onclick="openModal(${index})">
                 ${badgeHTML}
-                <img src="${firstImage}" alt="${row['Property Name']}">
+                <img src="${row['Image Name']}" alt="${row['Property Name']}">
                 <div class="property-details">
                     <h3>${row['Property Name']}</h3>
                     <p class="price">${row['Price']}</p>
-                    <button class="whatsapp-btn" style="width: 100%; border:none; cursor:pointer;">View Details</button>
+                    <div class="pros-cons">
+                        <p class="pro" style="color: #1a365d;"><strong>✅ Details:</strong><br>${details}</p>
+                    </div>
+                    ${videoHTML}
+                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(row['Property Name'])}" class="whatsapp-btn" target="_blank">Chat on WhatsApp</a>
                 </div>
             </div>
             `;
@@ -97,7 +115,7 @@ Papa.parse(csvUrl, {
 
         filterProperties();
 
-        // Check if a direct property link was shared
+        // Detect if a shared URL is opened, and trigger the modal automatically
         const urlParams = new URLSearchParams(window.location.search);
         const sharedPropertyId = urlParams.get('p');
         if (sharedPropertyId !== null && allPropertiesData[sharedPropertyId]) {
@@ -161,7 +179,7 @@ function showMoreListings() {
     filterProperties();
 }
 
-// --- Restored Modal Functions ---
+// --- Detail Modal Functions ---
 function openModal(index) {
     let row = allPropertiesData[index];
     if(!row) return;
@@ -188,6 +206,7 @@ function openModal(index) {
     });
     document.getElementById('modal-description-list').innerHTML = listHTML;
 
+    // Handles the Make.com URL image list
     let mainImg = row['Image Name'] ? row['Image Name'].trim().split(',')[0] : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
     document.getElementById('modal-main-img').src = mainImg;
     
