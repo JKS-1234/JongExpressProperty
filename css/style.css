@@ -337,7 +337,6 @@ footer {
     color: var(--primary);
 }
 
-/* --- Market Category Tabs --- */
 .market-tabs {
     display: flex;
     justify-content: center;
