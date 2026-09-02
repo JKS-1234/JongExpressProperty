@@ -57,7 +57,7 @@ Papa.parse(csvUrl, {
         }
         filterProperties();
 
-        // Detect if a shared URL is opened, and trigger the modal automatically
+        // Check if a direct property link was shared
         const urlParams = new URLSearchParams(window.location.search);
         const sharedPropertyId = urlParams.get('p');
         if (sharedPropertyId !== null && allPropertiesData[sharedPropertyId]) {
@@ -185,7 +185,6 @@ function openFullscreenImage() {
 function closeFullscreenImage() { document.getElementById('fullscreen-zoom').style.display = 'none'; }
 
 function shareListing(title, index) {
-    // Generate a unique URL for this specific property
     const propertyUrl = window.location.origin + window.location.pathname + '?p=' + index;
     
     if (navigator.share) {
