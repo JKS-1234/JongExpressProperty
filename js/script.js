@@ -57,7 +57,7 @@ Papa.parse(csvUrl, {
         }
         filterProperties();
 
-        // Detect if a shared URL is opened, and trigger the modal automatically
+        // Check if a direct property link was shared
         const urlParams = new URLSearchParams(window.location.search);
         const sharedPropertyId = urlParams.get('p');
         if (sharedPropertyId !== null && allPropertiesData[sharedPropertyId]) {
