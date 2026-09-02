@@ -170,6 +170,7 @@ footer {
     text-align: left;
     transition: transform 0.3s ease;
     position: relative;
+    border: 1px solid #e2e8f0;
 }
 
 .property-card:hover {
@@ -180,13 +181,8 @@ footer {
 .property-card img {
     width: 100%;
     height: 220px;
-    object-fit: cover; /* Makes sure the thumbnail fills the box beautifully */
+    object-fit: cover;
     background-color: #e2e8f0; 
-}
-
-.clickable-card {
-    cursor: pointer;
-    transition: 0.3s;
 }
 
 .badge-new {
@@ -215,24 +211,10 @@ footer {
 }
 
 .price {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: bold;
-    color: var(--secondary);
+    color: var(--primary);
     margin-bottom: 15px;
-}
-
-.pros-cons {
-    background: white;
-    border-left: 4px solid var(--primary);
-    padding: 15px;
-    border-radius: 0 5px 5px 0;
-    margin-bottom: 20px;
-    font-size: 0.95rem;
-}
-
-.pro {
-    color: #2f855a;
-    margin-bottom: 10px;
 }
 
 .video-btn {
@@ -354,7 +336,6 @@ footer {
     color: var(--primary);
 }
 
-/* --- Market Category Tabs --- */
 .market-tabs {
     display: flex;
     justify-content: center;
@@ -378,7 +359,6 @@ footer {
     background-color: var(--primary);
     color: white;
 }
-
 
 /* ================================================================= */
 /* --- iProperty-Style Modal Detail Window Styles --- */
@@ -524,6 +504,11 @@ footer {
     font-weight: bold; 
 }
 
+.clickable-card { 
+    cursor: pointer; 
+    transition: 0.3s; 
+}
+
 #fullscreen-zoom { 
     display: none; 
     position: fixed; 
@@ -566,65 +551,17 @@ footer {
     background-color: #2b6cb0;
 }
 
-
-/* ================================================================= */
-/* --- Mobile Responsiveness (Smartphones & Tablets) --- */
-/* ================================================================= */
 @media (max-width: 768px) {
-    header {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-        padding: 1rem 15px;
-    }
-    nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
-    }
-    nav a {
-        margin-left: 0;
-        margin: 0 5px;
-        font-size: 0.95rem;
-    }
-    .hero {
-        padding: 60px 15px;
-    }
-    .hero h1 {
-        font-size: 2rem;
-    }
-    .hero p {
-        font-size: 1rem;
-    }
-    .filter-container {
-        flex-direction: column;
-        gap: 10px;
-    }
-    .filter-select {
-        width: 100%;
-        min-width: 100%;
-    }
-    .search-input {
-        font-size: 1rem;
-    }
-    .property-card {
-        max-width: 100%;
-        width: 100%;
-    }
-    .contact-info {
-        flex-direction: column;
-        gap: 20px;
-    }
-    .info-block {
-        width: 100%;
-    }
-    .market-tabs {
-        flex-direction: column;
-        width: 100%;
-    }
-    .tab-btn {
-        width: 100%;
-        margin-bottom: 5px;
-    }
+    header { flex-direction: column; gap: 15px; text-align: center; padding: 1rem 15px; }
+    nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+    nav a { margin-left: 0; margin: 0 5px; font-size: 0.95rem; }
+    .hero { padding: 60px 15px; }
+    .hero h1 { font-size: 2rem; }
+    .filter-container { flex-direction: column; gap: 10px; }
+    .filter-select { width: 100%; min-width: 100%; }
+    .property-card { max-width: 100%; width: 100%; }
+    .contact-info { flex-direction: column; gap: 20px; }
+    .info-block { width: 100%; }
+    .market-tabs { flex-direction: column; width: 100%; }
+    .tab-btn { width: 100%; margin-bottom: 5px; }
 }
