@@ -1,24 +1,29 @@
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs1vXMme9mBWAEtQUGkFbB7wcL_n-IGGkFzzwvq2yxQgWKuhyZKe-J4tYza3yzLtO/pub?output=csv";
+        
 let currentLimit = 6;
-let currentMarket = 'all'; 
-let allPropertiesData = []; 
-let lightboxGalleries = {};
-let currentGalleryId = null;
-let currentImageIndex = 0;
+let currentMarket = 'all'; // New variable to track the active tab
 
 function getYouTubeEmbedUrl(url) {
-    if (!url || (!url.includes('youtube.com') && !url.includes('youtu.be'))) return null;
+    if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+        return null;
+    }
     let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     let match = url.match(regExp);
-    if (match && match[2].length === 11) return `https://www.youtube.com/embed/${match[2]}`;
+    if (match && match[2].length === 11) {
+        return `https://www.youtube.com/embed/${match[2]}`;
+    }
     return null;
 }
 
+// Function to handle tab clicking
 function setMarket(marketType, btnElement) {
     currentMarket = marketType;
+    
+    // Update the button colors
     const tabs = document.querySelectorAll('.tab-btn');
     tabs.forEach(tab => tab.classList.remove('active'));
     btnElement.classList.add('active');
+
     resetAndFilter();
 }
 
@@ -26,23 +31,90 @@ Papa.parse(csvUrl, {
     download: true,
     header: true,
     complete: function(results) {
-        allPropertiesData = results.data.filter(row => row['Property Name']);
+        const data = results.data;
+        const grid = document.querySelector('.property-grid');
+        grid.innerHTML = ''; 
+
         const uniqueAreas = new Set();
         const uniqueTypes = new Set();
-        allPropertiesData.forEach(row => {
-            if (row['Type']) uniqueTypes.add(row['Type'].trim());
-            if (row['Area']) uniqueAreas.add(row['Area'].trim());
+
+        data.forEach(row => {
+            if(!row['Property Name']) return; 
+
+            let details = row['The Good (Pros)'] ? row['The Good (Pros)'].replace(/\n/g, '<br>') : '';
+            let status = row['Status'] ? row['Status'].toLowerCase().trim() : 'sale';
+            
+            let rawType = row['Type'] ? row['Type'].trim() : '';
+            let typeValue = rawType.toLowerCase();
+            
+            let rawArea = row['Area'] ? row['Area'].trim() : '';
+            let areaValue = rawArea.toLowerCase();
+
+            if (rawType) uniqueTypes.add(rawType);
+            if (rawArea) uniqueAreas.add(rawArea);
+
+           // Determine if this is a Project or Sub-sale/Rent
+            let isProject = (typeValue.includes('project') || typeValue.includes('developer')) ? 'true' : 'false';
+            
+            let badgeHTML = '';
+            if (isProject === 'true') {
+                badgeHTML = `<div class="badge-new">🏢 PROJECT</div>`;
+            }
+
+            let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
+            let videoHTML = '';
+
+            if (videoLink) {
+                let ytEmbed = getYouTubeEmbedUrl(videoLink);
+                if (ytEmbed) {
+                    videoHTML = `
+                    <div class="video-container">
+                        <iframe src="${ytEmbed}" allowfullscreen></iframe>
+                    </div>`;
+                } else {
+                    videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank">🎬 Watch Video Tour</a>`;
+                }
+            }
+            
+            // Clean title for the share function
+            let safeTitle = row['Property Name'].replace(/'/g, "\\'");
+
+            // We add data-project tag to the HTML so the filter knows what it is
+            let cardHTML = `
+            <div class="property-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}">
+                ${badgeHTML}
+                <img src="${row['Image Name']}" alt="${row['Property Name']}">
+                <div class="property-details">
+                    <h3>${row['Property Name']}</h3>
+                    <p class="price">${row['Price']}</p>
+                    <div class="pros-cons">
+                        <p class="pro" style="color: #1a365d;"><strong>✅ Details:</strong><br>${details}</p>
+                    </div>
+                    ${videoHTML}
+                    <button class="share-btn" onclick="shareListing('${safeTitle}')">🔗 Share Listing</button>
+                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(row['Property Name'])}" class="whatsapp-btn" target="_blank">Chat on WhatsApp</a>
+                </div>
+            </div>
+            `;
+            grid.innerHTML += cardHTML;
         });
+
         const typeFilter = document.getElementById('typeFilter');
         if (typeFilter) {
             typeFilter.innerHTML = '<option value="all">All Types</option>';
-            Array.from(uniqueTypes).sort().forEach(typeName => typeFilter.innerHTML += `<option value="${typeName.toLowerCase()}">${typeName}</option>`);
+            Array.from(uniqueTypes).sort().forEach(typeName => {
+                typeFilter.innerHTML += `<option value="${typeName.toLowerCase()}">${typeName}</option>`;
+            });
         }
+
         const areaFilter = document.getElementById('areaFilter');
         if (areaFilter) {
             areaFilter.innerHTML = '<option value="all">All Areas</option>';
-            Array.from(uniqueAreas).sort().forEach(areaName => areaFilter.innerHTML += `<option value="${areaName.toLowerCase()}">${areaName}</option>`);
+            Array.from(uniqueAreas).sort().forEach(areaName => {
+                areaFilter.innerHTML += `<option value="${areaName.toLowerCase()}">${areaName}</option>`;
+            });
         }
+
         filterProperties();
     }
 });
@@ -53,140 +125,66 @@ function filterProperties() {
     const areaVal = document.getElementById('areaFilter') ? document.getElementById('areaFilter').value : 'all';
     const searchVal = document.getElementById('searchBar') ? document.getElementById('searchBar').value.toLowerCase().trim() : '';
     
-    let filteredData = allPropertiesData.filter(row => {
-        let status = row['Status'] ? String(row['Status']).toLowerCase().trim() : 'sale';
-        let typeValue = row['Type'] ? String(row['Type']).trim().toLowerCase() : '';
-        let areaValue = row['Area'] ? String(row['Area']).trim().toLowerCase() : '';
-        let isProject = (typeValue.includes('project') || typeValue.includes('developer'));
-        const matchMarket = (currentMarket === 'all') || (currentMarket === 'project' && isProject) || (currentMarket === 'subsale' && !isProject);
-        const rowText = Object.values(row).join(' ').toLowerCase();
+    const cards = document.querySelectorAll('.property-card');
+    let matchedCount = 0;
+    
+    cards.forEach(card => {
+        const matchStatus = (statusVal === 'all' || card.getAttribute('data-status') === statusVal);
+        const matchType = (typeVal === 'all' || card.getAttribute('data-type') === typeVal);
+        const matchArea = (areaVal === 'all' || card.getAttribute('data-area') === areaVal);
         
-        return (statusVal === 'all' || status === statusVal) && 
-               (typeVal === 'all' || typeValue === typeVal) && 
-               (areaVal === 'all' || areaValue === areaVal) && 
-               (searchVal === '' || rowText.includes(searchVal)) && matchMarket;
-    });
-
-    const grid = document.querySelector('.property-grid');
-    if (!grid) return;
-    
-    let allCardsHTML = '';
-    if (filteredData.length === 0) {
-        allCardsHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px 0;">No properties found.</div>';
-    } else {
-        filteredData.slice(0, currentLimit).forEach((row) => {
-            let globalIndex = allPropertiesData.indexOf(row); 
-            let title = row['Property Name'] || '';
-            let address = row['Area'] ? `${row['Area'].trim()}, Sarawak` : 'Miri, Sarawak';
-            let badgeHTML = String(row['Type']).toLowerCase().includes('project') ? `<div class="badge-new">🏢 PROJECT</div>` : '';
-            
-            let priceStr = row['Price'] ? String(row['Price']).trim() : 'Price on Request';
-            let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
-            let furnishingMatch = rawDesc.match(/(fully furnished|partially furnished|partly furnished|unfurnished)/i);
-            let furnishing = furnishingMatch ? furnishingMatch[1].replace(/(^\w|\s\w)/g, m => m.toUpperCase()) : '';
-
-            let beds = row['Bedrooms'] ? String(row['Bedrooms']).trim() : '';
-            let baths = row['Bathrooms'] ? String(row['Bathrooms']).trim() : '';
-            if (!beds) { let bMatch = rawDesc.match(/(\d+)\s*(beds|bedroom|bedrooms)/i); if(bMatch) beds = bMatch[1]; }
-            if (!baths) { let bMatch = rawDesc.match(/(\d+)\s*(baths|bathroom|bathrooms)/i); if(bMatch) baths = bMatch[1]; }
-
-            let iconsHTML = '';
-            if (beds || baths) {
-                iconsHTML = `<div class="icon-row"><span style="display:flex; align-items:center; gap:5px;">🛏️ ${beds}</span><span style="display:flex; align-items:center; gap:5px;">🛁 ${baths}</span></div>`;
+        // Check if the card matches the clicked Tab
+        const isProjectCard = card.getAttribute('data-project');
+        const matchMarket = (currentMarket === 'all') || 
+                            (currentMarket === 'project' && isProjectCard === 'true') || 
+                            (currentMarket === 'subsale' && isProjectCard === 'false');
+        
+        const cardText = card.innerText.toLowerCase();
+        const matchSearch = (searchVal === '' || cardText.includes(searchVal));
+        
+        if (matchStatus && matchType && matchArea && matchSearch && matchMarket) {
+            matchedCount++;
+            if (matchedCount <= currentLimit) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
             }
-
-            let rawImages = row['Image Name'] ? String(row['Image Name']).trim() : '';
-            let firstImage = rawImages.split(',').map(url => url.trim()).filter(url => url !== '')[0] || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
-
-            allCardsHTML += `
-            <div class="property-card clickable-card" style="display:flex; flex-direction:column; height:100%;">
-                ${badgeHTML}
-                <div onclick="openModal(${globalIndex})" style="cursor:pointer;">
-                    <img src="${firstImage}" alt="${title}">
-                    <div style="padding: 20px;">
-                        <h3 class="price">${priceStr}</h3>
-                        <p style="font-size: 1.05rem; color: #4a5568; margin-bottom: 5px; font-weight: 500;">${title}</p>
-                        <p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${address}</p>
-                        ${furnishing ? `<p style="color: #718096; font-size: 0.9rem; margin-bottom: 10px;">${furnishing}</p>` : ''}
-                        ${iconsHTML}
-                    </div>
-                </div>
-                <div style="padding: 0 20px 20px 20px; margin-top: auto;">
-                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}" class="whatsapp-btn" target="_blank" style="width: 100%;">💬 WhatsApp</a>
-                </div>
-            </div>`;
-        });
-    }
-    grid.innerHTML = allCardsHTML;
-    const loadMoreBtn = document.getElementById('loadMoreBtn');
-    if (loadMoreBtn) loadMoreBtn.style.display = (filteredData.length > currentLimit) ? 'block' : 'none';
-}
-
-function resetAndFilter() { currentLimit = 6; filterProperties(); }
-function showMoreListings() { currentLimit += 6; filterProperties(); }
-
-function openModal(index) {
-    let row = allPropertiesData[index];
-    if(!row) return;
-
-    let title = row['Property Name'];
-    let address = row['Area'] ? `${row['Area'].trim()}, Sarawak` : 'Miri, Sarawak';
-    let typeValue = row['Type'] ? row['Type'].trim() : 'Property';
-    let priceStr = row['Price'] ? String(row['Price']).trim() : 'Price on Request';
-    let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
-    
-    let builtUpMatch = rawDesc.match(/([\d,\.]+)\s*(sq\.?\s*ft\.?|points?)/i);
-    let propertySize = builtUpMatch ? `${builtUpMatch[1]} ${builtUpMatch[2]}` : '-';
-    
-    let beds = row['Bedrooms'] || '-';
-    let baths = row['Bathrooms'] || '-';
-
-    document.getElementById('modal-title').innerText = title;
-    document.getElementById('modal-address').innerText = address;
-    document.getElementById('modal-price').innerText = priceStr;
-    document.getElementById('modal-beds').innerText = beds;
-    document.getElementById('modal-baths').innerText = baths;
-    document.getElementById('modal-sqft').innerText = propertySize;
-    document.getElementById('modal-type').innerText = typeValue;
-
-    let furnishingMatch = rawDesc.match(/(fully furnished|partially furnished|partly furnished|unfurnished)/i);
-    let furnishing = furnishingMatch ? furnishingMatch[1].replace(/(^\w|\s\w)/g, m => m.toUpperCase()) : 'Unspecified';
-    document.getElementById('modal-details-checkmarks').innerHTML = `<div class="detail-item-check">${typeValue}</div><div class="detail-item-check">${furnishing}</div>`;
-    document.getElementById('modal-subtitle').innerText = title;
-
-    let listHTML = '';
-    rawDesc.split('\n').forEach(line => {
-        let cleanLine = line.trim();
-        if (cleanLine.startsWith('-')) cleanLine = cleanLine.substring(1).trim(); 
-        if (cleanLine.length > 2) listHTML += `<li>${cleanLine}</li>`;
+        } else {
+            card.style.display = 'none';
+        }
     });
-    document.getElementById('modal-description-list').innerHTML = listHTML;
 
-    let rawImages = row['Image Name'] ? String(row['Image Name']).trim() : '';
-    let imagesArr = rawImages.split(',').map(url => url.trim()).filter(url => url !== '');
-    currentGalleryId = `modal-gallery`;
-    lightboxGalleries[currentGalleryId] = imagesArr;
-    currentImageIndex = 0;
-    
-    document.getElementById('modal-main-img').src = imagesArr.length > 0 ? imagesArr[0] : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
-    document.getElementById('modal-whatsapp').href = `https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}`;
-    document.getElementById('property-modal').style.display = 'block';
-}
-
-function closeModal() { document.getElementById('property-modal').style.display = 'none'; }
-
-function changeModalImage(direction) {
-    let gallery = lightboxGalleries[currentGalleryId];
-    if (!gallery || gallery.length === 0) return;
-    currentImageIndex = (currentImageIndex + direction + gallery.length) % gallery.length;
-    document.getElementById('modal-main-img').src = gallery[currentImageIndex];
-}
-
-function openFullscreenImage() {
-    let gallery = lightboxGalleries[currentGalleryId];
-    if (gallery && gallery.length > 0) {
-        document.getElementById('fullscreen-img').src = gallery[currentImageIndex];
-        document.getElementById('fullscreen-zoom').style.display = 'block';
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (loadMoreBtn) {
+        if (matchedCount > currentLimit) {
+            loadMoreBtn.style.display = 'block';
+        } else {
+            loadMoreBtn.style.display = 'none';
+        }
     }
 }
-function closeFullscreenImage() { document.getElementById('fullscreen-zoom').style.display = 'none'; }
+
+function resetAndFilter() {
+    currentLimit = 6;
+    filterProperties();
+}
+
+function showMoreListings() {
+    currentLimit += 6;
+    filterProperties();
+}
+
+// Function to handle the Share Button click
+function shareListing(title) {
+    if (navigator.share) {
+        navigator.share({
+            title: title,
+            text: `Check out this property: ${title}`,
+            url: window.location.href,
+        }).catch((error) => console.log('Sharing failed', error));
+    } else {
+        // Fallback for older browsers
+        navigator.clipboard.writeText(window.location.href);
+        alert("Listing link copied to clipboard!");
+    }
+}
