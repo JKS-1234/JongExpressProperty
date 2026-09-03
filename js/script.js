@@ -2,7 +2,7 @@ const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs
         
 let currentLimit = 6;
 let currentMarket = 'all'; // New variable to track the active tab
-let allPropertiesData = []; // Store global reference for the modal
+let allPropertiesData = []; // Store the data so the pop-up modal can read it
 
 function getYouTubeEmbedUrl(url) {
     if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
@@ -33,7 +33,7 @@ Papa.parse(csvUrl, {
     header: true,
     complete: function(results) {
         const data = results.data;
-        allPropertiesData = data; // Keep the data for modal usage
+        allPropertiesData = data; // Save to global array for the modal
         const grid = document.querySelector('.property-grid');
         grid.innerHTML = ''; 
 
@@ -78,11 +78,14 @@ Papa.parse(csvUrl, {
                 }
             }
 
-            // Injects onclick to open the modal using the original index
+            let firstImage = row['Image Name'] ? row['Image Name'].split(',')[0].trim() : '';
+
+            // We add data-project tag to the HTML so the filter knows what it is
+            // AND we add onclick="openModal(${index})" to open the iProperty style view
             let cardHTML = `
             <div class="property-card clickable-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" onclick="openModal(${index})">
                 ${badgeHTML}
-                <img src="${row['Image Name']}" alt="${row['Property Name']}">
+                <img src="${firstImage}" alt="${row['Property Name']}">
                 <div class="property-details">
                     <h3>${row['Property Name']}</h3>
                     <p class="price">${row['Price']}</p>
@@ -90,7 +93,7 @@ Papa.parse(csvUrl, {
                         <p class="pro" style="color: #1a365d;"><strong>✅ Details:</strong><br>${details}</p>
                     </div>
                     ${videoHTML}
-                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(row['Property Name'])}" class="whatsapp-btn" target="_blank">Chat on WhatsApp</a>
+                    <button class="whatsapp-btn" style="width: 100%; border:none; cursor:pointer;">View Details</button>
                 </div>
             </div>
             `;
@@ -115,7 +118,7 @@ Papa.parse(csvUrl, {
 
         filterProperties();
 
-        // Detect if a shared URL is opened, and trigger the modal automatically
+        // Check if a direct property link was shared
         const urlParams = new URLSearchParams(window.location.search);
         const sharedPropertyId = urlParams.get('p');
         if (sharedPropertyId !== null && allPropertiesData[sharedPropertyId]) {
@@ -179,7 +182,7 @@ function showMoreListings() {
     filterProperties();
 }
 
-// --- Detail Modal Functions ---
+// --- Restored Detail Modal Functions ---
 function openModal(index) {
     let row = allPropertiesData[index];
     if(!row) return;
@@ -206,7 +209,6 @@ function openModal(index) {
     });
     document.getElementById('modal-description-list').innerHTML = listHTML;
 
-    // Handles the Make.com URL image list
     let mainImg = row['Image Name'] ? row['Image Name'].trim().split(',')[0] : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
     document.getElementById('modal-main-img').src = mainImg;
     
