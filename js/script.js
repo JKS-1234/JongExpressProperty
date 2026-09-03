@@ -49,18 +49,47 @@ Papa.parse(csvUrl, {
             if (rawArea) uniqueAreas.add(rawArea);
 
             let isProject = (typeValue.includes('project') || typeValue.includes('developer')) ? 'true' : 'false';
+            
+            // Generate Project Badge
             let badgeHTML = '';
             if (isProject === 'true') {
                 badgeHTML = `<div class="badge-new">🏢 PROJECT</div>`;
             }
 
+            // Generate Dynamic Status Badge (Sale, Rent, Sold)
+            let statusText = 'FOR SALE';
+            let statusClass = 'status-sale';
+            
+            if (status.includes('rent')) {
+                statusText = 'FOR RENT';
+                statusClass = 'status-rent';
+            } else if (status.includes('sold')) {
+                statusText = 'SOLD';
+                statusClass = 'status-sold';
+            }
+            let statusBadgeHTML = `<div class="status-badge ${statusClass}">${statusText}</div>`;
+
+            // Dynamically Extract Bedrooms & Bathrooms from description
+            let desc = row['The Good (Pros)'] || '';
+            let bedMatch = desc.match(/(\d+)\s*Bedroom/i);
+            let bathMatch = desc.match(/(\d+)\s*Bathroom/i);
+            let beds = row['Bedrooms'] || (bedMatch ? bedMatch[1] : '-');
+            let baths = row['Bathrooms'] || (bathMatch ? bathMatch[1] : '-');
+            
+            let amenitiesHTML = `<div class="amenities-badge">🛏️ ${beds} &nbsp;|&nbsp; 🚿 ${baths}</div>`;
+
             let firstImage = row['Image Name'] ? row['Image Name'].split(',')[0].trim() : '';
 
+            // Output Card with Image Wrapper to hold overlays
             let cardHTML = `
             <div class="property-card clickable-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" onclick="openModal(${index})" style="display:flex; flex-direction:column; height:100%;">
-                ${badgeHTML}
-                <img src="${firstImage}" alt="${row['Property Name']}">
-                <div style="padding: 20px;">
+                <div class="image-wrapper">
+                    ${statusBadgeHTML}
+                    ${badgeHTML}
+                    ${amenitiesHTML}
+                    <img src="${firstImage}" alt="${row['Property Name']}">
+                </div>
+                <div class="property-details">
                     <h3 class="price">${row['Price']}</h3>
                     <p style="font-size: 1.05rem; color: #4a5568; margin-bottom: 5px; font-weight: 500;">${row['Property Name']}</p>
                     <p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${row['Area'] ? row['Area'].trim() + ', Sarawak' : 'Miri, Sarawak'}</p>
@@ -142,9 +171,17 @@ function filterProperties() {
     }
 }
 
-function resetAndFilter() { currentLimit = 6; filterProperties(); }
-function showMoreListings() { currentLimit += 6; filterProperties(); }
+function resetAndFilter() {
+    currentLimit = 6;
+    filterProperties();
+}
 
+function showMoreListings() {
+    currentLimit += 6;
+    filterProperties();
+}
+
+// --- Detail Modal Functions Restored ---
 function openModal(index) {
     let row = allPropertiesData[index];
     if(!row) return;
@@ -195,18 +232,28 @@ function openModal(index) {
     document.getElementById('property-modal').style.display = 'block';
 }
 
-function closeModal() { document.getElementById('property-modal').style.display = 'none'; }
+function closeModal() { 
+    document.getElementById('property-modal').style.display = 'none'; 
+}
+
 function openFullscreenImage() {
     let currentSrc = document.getElementById('modal-main-img').src;
     document.getElementById('fullscreen-img').src = currentSrc;
     document.getElementById('fullscreen-zoom').style.display = 'block';
 }
-function closeFullscreenImage() { document.getElementById('fullscreen-zoom').style.display = 'none'; }
+
+function closeFullscreenImage() { 
+    document.getElementById('fullscreen-zoom').style.display = 'none'; 
+}
 
 function shareListing(title, index) {
     const propertyUrl = window.location.origin + window.location.pathname + '?p=' + index;
     if (navigator.share) {
-        navigator.share({ title: title, text: `Check out this property listing: ${title}`, url: propertyUrl }).catch(() => {});
+        navigator.share({
+            title: title,
+            text: `Check out this property listing: ${title}`,
+            url: propertyUrl,
+        }).catch((error) => console.log('Sharing failed', error));
     } else {
         navigator.clipboard.writeText(propertyUrl);
         alert("Listing link copied to clipboard!\n" + propertyUrl);
