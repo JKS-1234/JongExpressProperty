@@ -24,7 +24,7 @@ header {
     align-items: center;
     position: sticky;
     top: 0;
-    z-index: 9999; /* Updated to 9999 to stay on top for desktop */
+    z-index: 9999;
 }
 .logo {
     font-size: 1.5rem;
@@ -185,18 +185,6 @@ footer {
     color: var(--secondary);
     margin-bottom: 15px;
 }
-.pros-cons {
-    background: white;
-    border-left: 4px solid var(--primary);
-    padding: 15px;
-    border-radius: 0 5px 5px 0;
-    margin-bottom: 20px;
-    font-size: 0.95rem;
-}
-.pro {
-    color: #2f855a;
-    margin-bottom: 10px;
-}
 .video-btn {
     display: block;
     text-align: center;
@@ -324,14 +312,14 @@ footer {
     background-color: var(--primary);
     color: white;
 }
-/* --- Mobile Responsiveness (Smartphones & Tablets) --- */
+/* --- Mobile Responsiveness --- */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
         gap: 15px;
         text-align: center;
         padding: 1rem 15px;
-        position: relative; /* Turns off sticky behavior on mobile */
+        position: relative; 
     }
     nav {
         display: flex;
@@ -409,20 +397,29 @@ footer {
     overflow: hidden; 
     box-shadow: 0 5px 25px rgba(0,0,0,0.5); 
 }
+
+/* FIXED X BUTTON SO IT IS ALWAYS CLEAR */
 .modal-close { 
     position: fixed; 
-    top: 20px; 
-    right: 40px; 
+    top: 15px; 
+    right: 25px; 
     color: #fff; 
-    font-size: 50px; 
+    font-size: 40px; 
     font-weight: bold; 
     cursor: pointer; 
-    z-index: 2010; 
-    transition: color 0.3s; 
+    z-index: 2050; 
+    background: rgba(0,0,0,0.5); 
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border-radius: 50%;
+    transition: 0.3s; 
 }
 .modal-close:hover { 
-    color: var(--secondary); 
+    background: var(--secondary); 
 }
+
 .modal-gallery { 
     position: relative; 
     width: 100%; 
