@@ -1,11 +1,11 @@
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs1vXMme9mBWAEtQUGkFbB7wcL_n-IGGkFzzwvq2yxQgWKuhyZKe-J4tYza3yzLtO/pub?output=csv";
         
 let currentLimit = 6;
-let currentMarket = 'all'; // New variable to track the active tab
-let allPropertiesData = []; // Store the data so the pop-up modal can read it
+let currentMarket = 'all'; 
+let allPropertiesData = []; // Store the data globally for the modal
 
 function getYouTubeEmbedUrl(url) {
-    if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+    if (!url || (!url.includes('youtube.com') && !url.includes('youtu.be'))) {
         return null;
     }
     let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -33,7 +33,7 @@ Papa.parse(csvUrl, {
     header: true,
     complete: function(results) {
         const data = results.data;
-        allPropertiesData = data; // Save to global array for the modal
+        allPropertiesData = data; // Assign data to global array
         const grid = document.querySelector('.property-grid');
         grid.innerHTML = ''; 
 
@@ -43,7 +43,6 @@ Papa.parse(csvUrl, {
         data.forEach((row, index) => {
             if(!row['Property Name']) return; 
 
-            let details = row['The Good (Pros)'] ? row['The Good (Pros)'].replace(/\n/g, '<br>') : '';
             let status = row['Status'] ? row['Status'].toLowerCase().trim() : 'sale';
             
             let rawType = row['Type'] ? row['Type'].trim() : '';
@@ -63,25 +62,9 @@ Papa.parse(csvUrl, {
                 badgeHTML = `<div class="badge-new">🏢 PROJECT</div>`;
             }
 
-            let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
-            let videoHTML = '';
-
-            if (videoLink) {
-                let ytEmbed = getYouTubeEmbedUrl(videoLink);
-                if (ytEmbed) {
-                    videoHTML = `
-                    <div class="video-container">
-                        <iframe src="${ytEmbed}" allowfullscreen></iframe>
-                    </div>`;
-                } else {
-                    videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank">🎬 Watch Video Tour</a>`;
-                }
-            }
-
             let firstImage = row['Image Name'] ? row['Image Name'].split(',')[0].trim() : '';
 
-            // We add data-project tag to the HTML so the filter knows what it is
-            // AND we add onclick="openModal(${index})" to open the iProperty style view
+            // Clean card: no pros/cons or video link directly on the main grid. Only triggers openModal
             let cardHTML = `
             <div class="property-card clickable-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" onclick="openModal(${index})">
                 ${badgeHTML}
@@ -89,10 +72,6 @@ Papa.parse(csvUrl, {
                 <div class="property-details">
                     <h3>${row['Property Name']}</h3>
                     <p class="price">${row['Price']}</p>
-                    <div class="pros-cons">
-                        <p class="pro" style="color: #1a365d;"><strong>✅ Details:</strong><br>${details}</p>
-                    </div>
-                    ${videoHTML}
                     <button class="whatsapp-btn" style="width: 100%; border:none; cursor:pointer;">View Details</button>
                 </div>
             </div>
@@ -182,7 +161,7 @@ function showMoreListings() {
     filterProperties();
 }
 
-// --- Restored Detail Modal Functions ---
+// --- Detail Modal Functions Restored ---
 function openModal(index) {
     let row = allPropertiesData[index];
     if(!row) return;
