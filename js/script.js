@@ -50,16 +50,15 @@ Papa.parse(csvUrl, {
 
             let isProject = (typeValue.includes('project') || typeValue.includes('developer')) ? 'true' : 'false';
             
-            // Generate Project Badge
+            // 1. Dynamic Project Badge
             let badgeHTML = '';
             if (isProject === 'true') {
                 badgeHTML = `<div class="badge-new">🏢 PROJECT</div>`;
             }
 
-            // Generate Dynamic Status Badge (Sale, Rent, Sold)
+            // 2. Dynamic Status Badge (Sale, Rent, Sold)
             let statusText = 'FOR SALE';
             let statusClass = 'status-sale';
-            
             if (status.includes('rent')) {
                 statusText = 'FOR RENT';
                 statusClass = 'status-rent';
@@ -69,18 +68,25 @@ Papa.parse(csvUrl, {
             }
             let statusBadgeHTML = `<div class="status-badge ${statusClass}">${statusText}</div>`;
 
-            // Dynamically Extract Bedrooms & Bathrooms from description
+            // 3. Extract Bedrooms & Bathrooms
             let desc = row['The Good (Pros)'] || '';
-            let bedMatch = desc.match(/(\d+)\s*Bedroom/i);
-            let bathMatch = desc.match(/(\d+)\s*Bathroom/i);
-            let beds = row['Bedrooms'] || (bedMatch ? bedMatch[1] : '-');
-            let baths = row['Bathrooms'] || (bathMatch ? bathMatch[1] : '-');
+            let beds = row['Room'] || row['room'] || row['Bedrooms'] || '-';
+            let baths = row['Toilet'] || row['toilet'] || row['Bathrooms'] || '-';
             
+            // Fallback to reading the description text if columns are empty
+            if (beds === '-') {
+                let bedMatch = desc.match(/(\d+)\s*Bedroom/i);
+                if (bedMatch) beds = bedMatch[1];
+            }
+            if (baths === '-') {
+                let bathMatch = desc.match(/(\d+)\s*Bathroom/i);
+                if (bathMatch) baths = bathMatch[1];
+            }
             let amenitiesHTML = `<div class="amenities-badge">🛏️ ${beds} &nbsp;|&nbsp; 🚿 ${baths}</div>`;
 
             let firstImage = row['Image Name'] ? row['Image Name'].split(',')[0].trim() : '';
 
-            // Output Card with Image Wrapper to hold overlays
+            // Clean card HTML integrating the new badges
             let cardHTML = `
             <div class="property-card clickable-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" onclick="openModal(${index})" style="display:flex; flex-direction:column; height:100%;">
                 <div class="image-wrapper">
@@ -171,15 +177,8 @@ function filterProperties() {
     }
 }
 
-function resetAndFilter() {
-    currentLimit = 6;
-    filterProperties();
-}
-
-function showMoreListings() {
-    currentLimit += 6;
-    filterProperties();
-}
+function resetAndFilter() { currentLimit = 6; filterProperties(); }
+function showMoreListings() { currentLimit += 6; filterProperties(); }
 
 // --- Detail Modal Functions Restored ---
 function openModal(index) {
@@ -260,7 +259,7 @@ function shareListing(title, index) {
     }
 }
 
-// Allows user to click outside the white card to close the modal
+// Click outside overlay listener
 window.onclick = function(event) {
     let modal = document.getElementById('property-modal');
     let zoom = document.getElementById('fullscreen-zoom');
