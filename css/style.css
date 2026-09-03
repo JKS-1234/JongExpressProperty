@@ -24,7 +24,7 @@ header {
     align-items: center;
     position: sticky;
     top: 0;
-    z-index: 9999;
+    z-index: 100;
 }
 .logo {
     font-size: 1.5rem;
@@ -185,6 +185,18 @@ footer {
     color: var(--secondary);
     margin-bottom: 15px;
 }
+.pros-cons {
+    background: white;
+    border-left: 4px solid var(--primary);
+    padding: 15px;
+    border-radius: 0 5px 5px 0;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+.pro {
+    color: #2f855a;
+    margin-bottom: 10px;
+}
 .video-btn {
     display: block;
     text-align: center;
@@ -312,61 +324,80 @@ footer {
     background-color: var(--primary);
     color: white;
 }
-/* --- Mobile Responsiveness --- */
+/* --- Mobile Responsiveness (Smartphones & Tablets) --- */
 @media (max-width: 768px) {
+    /* Stack the header logo and navigation links */
     header {
         flex-direction: column;
         gap: 15px;
         text-align: center;
         padding: 1rem 15px;
-        position: relative; 
     }
+    
+    /* Make navigation links wrap neatly */
     nav {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
         gap: 15px;
     }
+    
     nav a {
         margin-left: 0;
         margin: 0 5px;
         font-size: 0.95rem;
     }
+    
+    /* Adjust the hero banner text for smaller screens */
     .hero {
         padding: 60px 15px;
     }
+    
     .hero h1 {
         font-size: 2rem;
     }
+    
     .hero p {
         font-size: 1rem;
     }
+    
+    /* Stack the search and filter boxes vertically */
     .filter-container {
         flex-direction: column;
         gap: 10px;
     }
+    
     .filter-select {
         width: 100%;
         min-width: 100%;
     }
+    
     .search-input {
         font-size: 1rem;
     }
+    
+    /* Adjust property cards to take up the full screen width */
     .property-card {
         max-width: 100%;
         width: 100%;
     }
+    
+    /* Stack contact info blocks vertically */
     .contact-info {
         flex-direction: column;
         gap: 20px;
     }
+    
     .info-block {
         width: 100%;
     }
+    
+    /* Adjust the market tabs for easy tapping */
     .market-tabs {
         flex-direction: column;
         width: 100%;
     }
+    
     .tab-btn {
         width: 100%;
         margin-bottom: 5px;
@@ -374,7 +405,7 @@ footer {
 }
 
 /* ================================================================= */
-/* --- iProperty-Style Modal Detail Window Styles --- */
+/* --- Modal Detail Window & X Button Styles --- */
 /* ================================================================= */
 .property-modal { 
     display: none; 
@@ -398,17 +429,17 @@ footer {
     box-shadow: 0 5px 25px rgba(0,0,0,0.5); 
 }
 
-/* FIXED X BUTTON SO IT IS ALWAYS CLEAR */
+/* The fixed X button with circular background */
 .modal-close { 
     position: fixed; 
     top: 15px; 
     right: 25px; 
     color: #fff; 
-    font-size: 40px; 
+    font-size: 30px; 
     font-weight: bold; 
     cursor: pointer; 
     z-index: 2050; 
-    background: rgba(0,0,0,0.5); 
+    background: rgba(0, 0, 0, 0.6); 
     width: 50px;
     height: 50px;
     line-height: 50px;
@@ -418,6 +449,7 @@ footer {
 }
 .modal-close:hover { 
     background: var(--secondary); 
+    color: var(--primary);
 }
 
 .modal-gallery { 
@@ -512,6 +544,10 @@ footer {
     cursor: pointer; 
     transition: 0.3s; 
 }
+.clickable-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+}
 #fullscreen-zoom { 
     display: none; 
     position: fixed; 
@@ -530,7 +566,6 @@ footer {
     object-fit: contain; 
     margin-top: 5vh; 
 }
-/* --- Share Button Styles --- */
 .share-btn {
     display: block;
     text-align: center;
