@@ -1,11 +1,11 @@
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs1vXMme9mBWAEtQUGkFbB7wcL_n-IGGkFzzwvq2yxQgWKuhyZKe-J4tYza3yzLtO/pub?output=csv";
         
 let currentLimit = 6;
-let currentMarket = 'all'; // New variable to track the active tab
-let allPropertiesData = []; // Store data globally for the modal
+let currentMarket = 'all'; 
+let allPropertiesData = []; 
 
 function getYouTubeEmbedUrl(url) {
-    if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+    if (!url || (!url.includes('youtube.com') && !url.includes('youtu.be'))) {
         return null;
     }
     let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -16,15 +16,11 @@ function getYouTubeEmbedUrl(url) {
     return null;
 }
 
-// Function to handle tab clicking
 function setMarket(marketType, btnElement) {
     currentMarket = marketType;
-    
-    // Update the button colors
     const tabs = document.querySelectorAll('.tab-btn');
     tabs.forEach(tab => tab.classList.remove('active'));
     btnElement.classList.add('active');
-
     resetAndFilter();
 }
 
@@ -33,7 +29,7 @@ Papa.parse(csvUrl, {
     header: true,
     complete: function(results) {
         const data = results.data;
-        allPropertiesData = data; // Save to global array
+        allPropertiesData = data; 
         const grid = document.querySelector('.property-grid');
         grid.innerHTML = ''; 
 
@@ -44,34 +40,32 @@ Papa.parse(csvUrl, {
             if(!row['Property Name']) return; 
 
             let status = row['Status'] ? row['Status'].toLowerCase().trim() : 'sale';
-            
             let rawType = row['Type'] ? row['Type'].trim() : '';
             let typeValue = rawType.toLowerCase();
-            
             let rawArea = row['Area'] ? row['Area'].trim() : '';
             let areaValue = rawArea.toLowerCase();
 
             if (rawType) uniqueTypes.add(rawType);
             if (rawArea) uniqueAreas.add(rawArea);
 
-           // Determine if this is a Project or Sub-sale/Rent
             let isProject = (typeValue.includes('project') || typeValue.includes('developer')) ? 'true' : 'false';
-            
             let badgeHTML = '';
             if (isProject === 'true') {
                 badgeHTML = `<div class="badge-new">🏢 PROJECT</div>`;
             }
 
-            let firstImage = row['Image Name'] ? row['Image Name'].trim().split(',')[0] : '';
+            let firstImage = row['Image Name'] ? row['Image Name'].split(',')[0].trim() : '';
 
-            // Clean card: no pros/cons directly on the main grid. Only triggers openModal
             let cardHTML = `
-            <div class="property-card clickable-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" onclick="openModal(${index})">
+            <div class="property-card clickable-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" onclick="openModal(${index})" style="display:flex; flex-direction:column; height:100%;">
                 ${badgeHTML}
                 <img src="${firstImage}" alt="${row['Property Name']}">
-                <div class="property-details">
-                    <h3>${row['Property Name']}</h3>
-                    <p class="price">${row['Price']}</p>
+                <div style="padding: 20px;">
+                    <h3 class="price">${row['Price']}</h3>
+                    <p style="font-size: 1.05rem; color: #4a5568; margin-bottom: 5px; font-weight: 500;">${row['Property Name']}</p>
+                    <p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${row['Area'] ? row['Area'].trim() + ', Sarawak' : 'Miri, Sarawak'}</p>
+                </div>
+                <div style="padding: 0 20px 20px 20px; margin-top: auto;">
                     <button class="whatsapp-btn" style="width: 100%; border:none; cursor:pointer;">View Details</button>
                 </div>
             </div>
@@ -96,6 +90,12 @@ Papa.parse(csvUrl, {
         }
 
         filterProperties();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const sharedPropertyId = urlParams.get('p');
+        if (sharedPropertyId !== null && allPropertiesData[sharedPropertyId]) {
+            openModal(sharedPropertyId);
+        }
     }
 });
 
@@ -112,8 +112,6 @@ function filterProperties() {
         const matchStatus = (statusVal === 'all' || card.getAttribute('data-status') === statusVal);
         const matchType = (typeVal === 'all' || card.getAttribute('data-type') === typeVal);
         const matchArea = (areaVal === 'all' || card.getAttribute('data-area') === areaVal);
-        
-        // Check if the card matches the clicked Tab
         const isProjectCard = card.getAttribute('data-project');
         const matchMarket = (currentMarket === 'all') || 
                             (currentMarket === 'project' && isProjectCard === 'true') || 
@@ -144,17 +142,9 @@ function filterProperties() {
     }
 }
 
-function resetAndFilter() {
-    currentLimit = 6;
-    filterProperties();
-}
+function resetAndFilter() { currentLimit = 6; filterProperties(); }
+function showMoreListings() { currentLimit += 6; filterProperties(); }
 
-function showMoreListings() {
-    currentLimit += 6;
-    filterProperties();
-}
-
-// --- Detail Modal Functions ---
 function openModal(index) {
     let row = allPropertiesData[index];
     if(!row) return;
@@ -205,39 +195,28 @@ function openModal(index) {
     document.getElementById('property-modal').style.display = 'block';
 }
 
-function closeModal() { 
-    document.getElementById('property-modal').style.display = 'none'; 
-}
-
+function closeModal() { document.getElementById('property-modal').style.display = 'none'; }
 function openFullscreenImage() {
     let currentSrc = document.getElementById('modal-main-img').src;
     document.getElementById('fullscreen-img').src = currentSrc;
     document.getElementById('fullscreen-zoom').style.display = 'block';
 }
-
-function closeFullscreenImage() { 
-    document.getElementById('fullscreen-zoom').style.display = 'none'; 
-}
+function closeFullscreenImage() { document.getElementById('fullscreen-zoom').style.display = 'none'; }
 
 function shareListing(title, index) {
     const propertyUrl = window.location.origin + window.location.pathname + '?p=' + index;
     if (navigator.share) {
-        navigator.share({
-            title: title,
-            text: `Check out this property listing: ${title}`,
-            url: propertyUrl,
-        }).catch((error) => console.log('Sharing failed', error));
+        navigator.share({ title: title, text: `Check out this property listing: ${title}`, url: propertyUrl }).catch(() => {});
     } else {
         navigator.clipboard.writeText(propertyUrl);
         alert("Listing link copied to clipboard!\n" + propertyUrl);
     }
 }
 
-// Allows the user to click the dark background overlay to close the modal window
+// Allows user to click outside the white card to close the modal
 window.onclick = function(event) {
     let modal = document.getElementById('property-modal');
     let zoom = document.getElementById('fullscreen-zoom');
-    
     if (event.target == modal) {
         closeModal();
     }
