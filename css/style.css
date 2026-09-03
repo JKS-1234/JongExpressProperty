@@ -547,3 +547,49 @@ footer {
 .share-btn:hover {
     background-color: #2b6cb0;
 }
+/* --- Image Overlay Badges --- */
+.image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 220px; /* Matches your existing image height */
+    background-color: #e2e8f0;
+}
+.image-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Status Badge (Top Left) */
+.badge-status {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    color: white;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    border-radius: 4px;
+    z-index: 10;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    letter-spacing: 0.5px;
+}
+.badge-sale { background-color: #3182ce; } /* Blue for Sale */
+.badge-rent { background-color: #38a169; } /* Green for Rent */
+.badge-sold { background-color: #e53e3e; } /* Red for Sold */
+
+/* Amenities Badge (Bottom Right) */
+.amenities-badge {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    display: flex;
+    gap: 12px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    z-index: 10;
+}
