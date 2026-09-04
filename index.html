@@ -103,7 +103,10 @@
                 <select id="statusFilter" class="filter-select" onchange="resetAndFilter()">
                     <option value="all">All Status</option>
                     <option value="sale">For Sale</option>
-                    <option value="rent">For Rent</option>
+                    <option value="rent">For Rent</option>\
+                    <button onclick="clearAllFilters()" style="background-color: #e53e3e; color: white; padding: 12px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; flex: 1; min-width: 140px; transition: 0.3s; margin-top: 10px;">
+    ✖ Clear Filters
+</button>
                 </select>
                 <select id="typeFilter" class="filter-select" onchange="resetAndFilter()">
                     <option value="all">All Types</option>
