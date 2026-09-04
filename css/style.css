@@ -588,3 +588,18 @@ footer {
 .share-btn:hover {
     background-color: #2b6cb0;
 }
+/* Enables smooth gliding when clicking menu links */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Creates the premium hover zoom effect on property photos */
+.image-wrapper {
+    overflow: hidden; 
+}
+.image-wrapper img {
+    transition: transform 0.4s ease;
+}
+.property-card:hover .image-wrapper img {
+    transform: scale(1.08);
+}
