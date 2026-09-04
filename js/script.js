@@ -32,7 +32,12 @@ Papa.parse(csvUrl, {
         allPropertiesData = data; 
         const grid = document.querySelector('.property-grid');
         grid.innerHTML = '';
-        document.getElementById('loading-spinner').style.display = 'none';
+        
+        // Safety check added so it doesn't crash if the spinner is missing
+        const spinner = document.getElementById('loading-spinner');
+        if (spinner) {
+            spinner.style.display = 'none';
+        }
 
         const uniqueAreas = new Set();
         const uniqueTypes = new Set();
@@ -51,7 +56,7 @@ Papa.parse(csvUrl, {
 
             let isProject = (typeValue.includes('project') || typeValue.includes('developer')) ? 'true' : 'false';
             
-            // 1. Dynamic Project Badge
+            // 1. Dynamic Project Badge (Emoji fixed)
             let badgeHTML = '';
             if (isProject === 'true') {
                 badgeHTML = `<div class="badge-new">🏢 PROJECT</div>`;
@@ -69,7 +74,7 @@ Papa.parse(csvUrl, {
             }
             let statusBadgeHTML = `<div class="status-badge ${statusClass}">${statusText}</div>`;
 
-            // 3. Extract Bedrooms & Bathrooms
+            // 3. Extract Bedrooms & Bathrooms (Emojis fixed)
             let desc = row['The Good (Pros)'] || '';
             let beds = row['Room'] || row['room'] || row['Bedrooms'] || '-';
             let baths = row['Toilet'] || row['toilet'] || row['Bathrooms'] || '-';
@@ -176,8 +181,8 @@ function filterProperties() {
             loadMoreBtn.style.display = 'none';
         }
     }
-}
-// Show "No Results" message if nothing matches the search
+    
+    // MOVED: The "No Results" message is now safely inside the function!
     const noResultsMsg = document.getElementById('no-results-message');
     if (noResultsMsg) {
         if (matchedCount === 0) {
@@ -186,6 +191,7 @@ function filterProperties() {
             noResultsMsg.style.display = 'none';
         }
     }
+}
 
 function resetAndFilter() { currentLimit = 6; filterProperties(); }
 function showMoreListings() { currentLimit += 6; filterProperties(); }
@@ -227,6 +233,7 @@ function openModal(index) {
         if (ytEmbed) {
             videoHTML = `<div class="video-container"><iframe src="${ytEmbed}" allowfullscreen></iframe></div>`;
         } else {
+            // Emoji fixed here too!
             videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank">🎬 Watch Video Tour</a>`;
         }
     }
@@ -280,6 +287,7 @@ window.onclick = function(event) {
         closeFullscreenImage();
     }
 }
+
 // Resets all search bars and dropdowns, then reloads the grid
 function clearAllFilters() {
     // Reset the text and dropdowns
