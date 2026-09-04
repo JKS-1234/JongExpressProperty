@@ -117,11 +117,14 @@
 
     <header id="main-header">
         <a href="index.html" class="logo">Jong Express Property</a>
-        <nav>
+        <nav style="display: flex; align-items: center; flex-wrap: wrap;">
             <a href="index.html#about">Our Promise</a>
-            <a href="index.html#properties">Listings & FB Updates</a>
-            <a href="faq.html" style="color: var(--secondary);">FAQ</a>
-            <a href="index.html#contact">Contact Jong</a>
+            <a href="index.html#properties">Listings</a>
+            <a href="faq.html">FAQ</a>
+            <a href="index.html#contact">Contact <span class="notranslate">Jong</span></a>
+            
+            <!-- Google Translate Dropdown -->
+            <div id="google_translate_element" style="margin-left: 20px; margin-top: 5px;"></div>
         </nav>
     </header>
 
@@ -176,5 +179,16 @@
 
     <script>window.chatbaseConfig = { chatbotId: "g5wuvpEGYSCkeUYFoRiTp" };</script>
     <script src="https://www.chatbase.co/embed.min.js" chatbotId="g5wuvpEGYSCkeUYFoRiTp" defer></script>
+    <!-- Google Translate Script -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,ms,zh-CN,zh-TW',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
