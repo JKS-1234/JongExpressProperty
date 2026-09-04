@@ -31,7 +31,8 @@ Papa.parse(csvUrl, {
         const data = results.data;
         allPropertiesData = data; 
         const grid = document.querySelector('.property-grid');
-        grid.innerHTML = ''; 
+        grid.innerHTML = '';
+        document.getElementById('loading-spinner').style.display = 'none';
 
         const uniqueAreas = new Set();
         const uniqueTypes = new Set();
