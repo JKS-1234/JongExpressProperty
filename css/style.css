@@ -603,3 +603,17 @@ html {
 .property-card:hover .image-wrapper img {
     transform: scale(1.08);
 }
+/* --- Premium Loading Spinner --- */
+.loader {
+    border: 5px solid #e2e8f0;
+    border-top: 5px solid var(--secondary); /* Uses your gold color */
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin: 40px auto 20px auto;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
