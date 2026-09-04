@@ -68,11 +68,14 @@
 
     <header>
         <div class="logo">Jong Express Property</div>
-        <nav>
+        <nav style="display: flex; align-items: center; flex-wrap: wrap;">
             <a href="#about">Our Promise</a>
             <a href="#properties">Listings</a>
             <a href="faq.html">FAQ</a>
             <a href="#contact">Contact Jong</a>
+            
+            <!-- Google Translate Dropdown -->
+            <div id="google_translate_element" style="margin-left: 20px; margin-top: 5px;"></div>
         </nav>
     </header>
 
@@ -261,5 +264,17 @@
   chatbotId="g5wuvpEGYSCkeUYFoRiTp"
   defer>
 </script>
+<!-- Google Translate Script -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                // This limits the dropdown to English, Malay, Simplified Chinese, and Traditional Chinese
+                includedLanguages: 'en,ms,zh-CN,zh-TW',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
