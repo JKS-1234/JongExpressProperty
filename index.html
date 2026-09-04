@@ -118,8 +118,18 @@
         </div>
 
         <div class="property-grid">
-            <h3 style="text-align:center; width:100%; color:var(--primary);">Loading latest listings...</h3>
+            <!-- This spinner shows while Google Sheets is loading -->
+            <div style="width: 100%; text-align: center;" id="loading-spinner">
+                <div class="loader"></div>
+                <h3 style="color:var(--primary);">Fetching Honest Listings...</h3>
+            </div>
         </div>
+
+    <!-- This hidden message shows if a search has 0 results -->
+    <div id="no-results-message" style="display: none; width: 100%; text-align: center; padding: 50px 20px;">
+        <h3 style="color: var(--primary); font-size: 1.8rem; margin-bottom: 10px;">🕵️‍♂️ No exact matches found.</h3>
+        <p style="color: #4a5568; font-size: 1.1rem;">Try clearing your filters or searching for a different area in Miri.</p>
+    </div>
 
         <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
     </section>
