@@ -617,3 +617,22 @@ html {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+/* --- Google Translate Widget Styling --- */
+.goog-te-gadget-simple {
+    background-color: var(--light) !important;
+    border: none !important;
+    padding: 6px 10px !important;
+    border-radius: 4px !important;
+    font-weight: bold !important;
+    font-size: 0.9rem !important;
+}
+.goog-te-gadget-simple span {
+    color: var(--primary) !important;
+}
+/* Hides the annoying top translation bar Google tries to force */
+.skiptranslate iframe {
+    display: none !important;
+}
+body {
+    top: 0px !important; 
+}
