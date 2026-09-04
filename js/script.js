@@ -270,3 +270,20 @@ window.onclick = function(event) {
         closeFullscreenImage();
     }
 }
+// Resets all search bars and dropdowns, then reloads the grid
+function clearAllFilters() {
+    // Reset the text and dropdowns
+    document.getElementById('searchBar').value = '';
+    document.getElementById('statusFilter').value = 'all';
+    document.getElementById('typeFilter').value = 'all';
+    document.getElementById('areaFilter').value = 'all';
+    
+    // Resets the top market tabs back to "All Listings"
+    currentMarket = 'all';
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    if(tabs.length > 0) tabs[0].classList.add('active'); 
+
+    // Run the filter function to show all properties again
+    resetAndFilter();
+}
