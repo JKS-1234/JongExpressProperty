@@ -177,6 +177,15 @@ function filterProperties() {
         }
     }
 }
+// Show "No Results" message if nothing matches the search
+    const noResultsMsg = document.getElementById('no-results-message');
+    if (noResultsMsg) {
+        if (matchedCount === 0) {
+            noResultsMsg.style.display = 'block';
+        } else {
+            noResultsMsg.style.display = 'none';
+        }
+    }
 
 function resetAndFilter() { currentLimit = 6; filterProperties(); }
 function showMoreListings() { currentLimit += 6; filterProperties(); }
