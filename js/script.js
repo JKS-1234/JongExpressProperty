@@ -130,6 +130,15 @@ Papa.parse(csvUrl, {
             });
         }
 
+        // Auto-search if someone shares a link with ?q=Keyword
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchQuery = urlParams.get('q');
+        if (searchQuery) {
+            const searchBar = document.getElementById('searchBar');
+            if (searchBar) searchBar.value = searchQuery;
+        }
+
+        filterProperties();
         filterProperties();
 
         const urlParams = new URLSearchParams(window.location.search);
@@ -148,6 +157,7 @@ function filterProperties() {
     
     const cards = document.querySelectorAll('.property-card');
     let matchedCount = 0;
+    let visibleCount = 0;
     
     cards.forEach(card => {
         const matchStatus = (statusVal === 'all' || card.getAttribute('data-status') === statusVal);
@@ -165,6 +175,7 @@ function filterProperties() {
             matchedCount++;
             if (matchedCount <= currentLimit) {
                 card.style.display = 'block';
+                visibleCount++;
             } else {
                 card.style.display = 'none';
             }
@@ -173,23 +184,24 @@ function filterProperties() {
         }
     });
 
+    // Update the iProperty-style counter (e.g. "Showing 4 of 28 properties")
+    const visibleElem = document.getElementById('visible-count');
+    const totalElem = document.getElementById('total-count');
+    if (visibleElem && totalElem) {
+        visibleElem.innerText = visibleCount;
+        totalElem.innerText = matchedCount;
+    }
+
+    // Toggle the "Load More" button
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     if (loadMoreBtn) {
-        if (matchedCount > currentLimit) {
-            loadMoreBtn.style.display = 'block';
-        } else {
-            loadMoreBtn.style.display = 'none';
-        }
+        loadMoreBtn.style.display = (matchedCount > currentLimit) ? 'block' : 'none';
     }
-    
-    // MOVED: The "No Results" message is now safely inside the function!
+
+    // Toggle "No Results" message
     const noResultsMsg = document.getElementById('no-results-message');
     if (noResultsMsg) {
-        if (matchedCount === 0) {
-            noResultsMsg.style.display = 'block';
-        } else {
-            noResultsMsg.style.display = 'none';
-        }
+        noResultsMsg.style.display = (matchedCount === 0) ? 'block' : 'none';
     }
 }
 
@@ -304,4 +316,19 @@ function clearAllFilters() {
 
     // Run the filter function to show all properties again
     resetAndFilter();
+}
+// Function for one-click tag searches (e.g. clicking 'Pujut')
+function quickSearch(keyword) {
+    const searchBar = document.getElementById('searchBar');
+    if (!searchBar) return;
+    searchBar.value = keyword;
+    
+    // Also update the browser URL query so people can share the search link!
+    const newUrl = window.location.pathname + '?q=' + encodeURIComponent(keyword);
+    window.history.replaceState(null, '', newUrl);
+    
+    resetAndFilter();
+
+    // Smooth scroll straight down to the results
+    document.querySelector('.property-grid').scrollIntoView({ behavior: 'smooth' });
 }
