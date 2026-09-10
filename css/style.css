@@ -636,3 +636,65 @@ html {
 body {
     top: 0px !important; 
 }
+/* --- Quick Search Clickable Chips --- */
+.quick-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: -5px;
+    margin-bottom: 5px;
+}
+.tag-label {
+    font-size: 0.85rem;
+    color: #718096;
+    font-weight: 600;
+}
+.quick-tag-btn {
+    background: #edf2f7;
+    border: 1px solid #cbd5e0;
+    color: var(--primary);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.quick-tag-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+/* --- Clear Filters Button --- */
+.clear-btn {
+    background-color: #e53e3e;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    flex: 1;
+    min-width: 140px;
+    transition: 0.3s;
+}
+.clear-btn:hover {
+    background-color: #c53030;
+}
+
+/* --- iProperty Results Count Bar --- */
+.results-count-bar {
+    text-align: left;
+    font-size: 1rem;
+    color: #4a5568;
+    padding: 10px 5px 0 5px;
+    border-top: 1px solid #e2e8f0;
+    font-weight: 500;
+}
+.results-count-bar span {
+    font-weight: 700;
+    color: var(--primary);
+}
