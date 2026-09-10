@@ -139,9 +139,8 @@ Papa.parse(csvUrl, {
         }
 
         filterProperties();
-        filterProperties();
 
-        const urlParams = new URLSearchParams(window.location.search);
+        // Check if someone shared a specific property link to open the modal
         const sharedPropertyId = urlParams.get('p');
         if (sharedPropertyId !== null && allPropertiesData[sharedPropertyId]) {
             openModal(sharedPropertyId);
