@@ -119,34 +119,57 @@
     <section id="properties" class="featured-properties">
         <h2>Featured Honest Listings</h2>
         <p style="margin-bottom: 30px;">100% Verified. We show you the good, and we don't hide the bad.</p>
-        
+
         <div class="search-filter-wrapper">
-            
-            <div class="market-tabs">
-                <button class="tab-btn active" onclick="setMarket('all', this)">All Listings</button>
-                <button class="tab-btn" onclick="setMarket('subsale', this)">Sub-Sale & Rent</button>
-                <button class="tab-btn" onclick="setMarket('project', this)">Developer Projects</button>
-            </div>
-            
-            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Type keywords... (e.g. Corner, Furnished, Pujut, Curtin)" onkeyup="resetAndFilter()">
-            
-            <div class="filter-container">
-                <select id="statusFilter" class="filter-select" onchange="resetAndFilter()">
-                    <option value="all">All Status</option>
-                    <option value="sale">For Sale</option>
-                    <option value="rent">For Rent</option>\
-                    <button onclick="clearAllFilters()" style="background-color: #e53e3e; color: white; padding: 12px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; flex: 1; min-width: 140px; transition: 0.3s; margin-top: 10px;">
-    ✖ Clear Filters
-</button>
-                </select>
-                <select id="typeFilter" class="filter-select" onchange="resetAndFilter()">
-                    <option value="all">All Types</option>
-                </select>
-                <select id="areaFilter" class="filter-select" onchange="resetAndFilter()">
-                    <option value="all">All Areas</option>
-                </select>
-            </div>
-        </div>
+    <div class="market-tabs">
+        <button class="tab-btn active" onclick="setMarket('all', this)">All Listings</button>
+        <button class="tab-btn" onclick="setMarket('subsale', this)">Sub-Sale & Rent</button>
+        <button class="tab-btn" onclick="setMarket('project', this)">Developer Projects</button>
+    </div>
+    
+    <input type="text" id="searchBar" class="search-input" placeholder="🔍 Type keywords... (e.g. Corner, Furnished, Pujut, Curtin)" onkeyup="resetAndFilter()">
+    
+    <!-- Quick Search Clickable Keyword Tags -->
+    <div class="quick-tags">
+        <span class="tag-label">Popular:</span>
+        <button type="button" class="quick-tag-btn" onclick="quickSearch('Pujut')">Pujut</button>
+        <button type="button" class="quick-tag-btn" onclick="quickSearch('Permy')">Permy</button>
+        <button type="button" class="quick-tag-btn" onclick="quickSearch('Pelita')">Pelita</button>
+        <button type="button" class="quick-tag-btn" onclick="quickSearch('Marina')">Marina</button>
+        <button type="button" class="quick-tag-btn" onclick="quickSearch('Miri Times Square')">Miri Times Square</button>
+        <button type="button" class="quick-tag-btn" onclick="quickSearch('Riam')">Riam</button>
+        <button type="button" class="quick-tag-btn" onclick="quickSearch('Luak')">Luak</button>
+        <button type="button" class="quick-tag-btn" onclick="quickSearch('Lopeng')">Lopeng</button>
+        <button type="button" class="quick-tag-btn" onclick="quickSearch('Senadin')">Senadin</button>
+        <button type="button" class="quick-tag-btn" onclick="quickSearch('Piasau')">Bintang</button>
+        <button type="button" class="quick-tag-btn" onclick="quickSearch('Lutong')">Lutong</button>
+        <button type="button" class="quick-tag-btn" onclick="quickSearch('Bayshore')">Bayshore</button>
+        <button type="button" class="quick-tag-btn" onclick="quickSearch('Semi Detached')">Semi-D</button>
+        <button type="button" class="quick-tag-btn" onclick="quickSearch('Furnished')">Furnished</button>
+    </div>
+
+    <div class="filter-container">
+        <select id="statusFilter" class="filter-select" onchange="resetAndFilter()">
+            <option value="all">All Status</option>
+            <option value="sale">For Sale</option>
+            <option value="rent">For Rent</option>
+        </select>
+        <select id="typeFilter" class="filter-select" onchange="resetAndFilter()">
+            <option value="all">All Types</option>
+        </select>
+        <select id="areaFilter" class="filter-select" onchange="resetAndFilter()">
+            <option value="all">All Areas</option>
+        </select>
+        <button onclick="clearAllFilters()" class="clear-btn">
+            ✖ Clear Filters
+        </button>
+    </div>
+
+    <!-- iProperty-style Live Result Counter -->
+    <div id="results-count-bar" class="results-count-bar">
+        Showing <span id="visible-count">0</span> of <span id="total-count">0</span> properties
+    </div>
+</div>
 
         <div class="property-grid">
             <!-- This spinner shows while Google Sheets is loading -->
