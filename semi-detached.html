@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- THE SEO GOLD: Highly targeted Title and Description just for Semi-D -->
+    <title>Semi-Detached Houses for Sale & Rent in Miri | Jong Express Property</title>
+    <meta name="description" content="Browse the best Semi-Detached (Semi-D) houses for sale and rent in Miri, Sarawak. 100% verified listings by Jong Kiat Shan (REN 84702).">
+    <meta name="keywords" content="Semi D Miri, Semi detached house for sale Miri, rent semi d Miri, Jong Express Property">
+    
+    <link rel="icon" type="image/png" href="photos/icononly.png">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo"><span class="notranslate">Jong Express Property</span></div>
+        <nav style="display: flex; align-items: center; flex-wrap: wrap;">
+            <a href="index.html">🏠 Back to Main Site</a>
+            <div id="google_translate_element" style="margin-left: 20px; margin-top: 5px;"></div>
+        </nav>
+    </header>
+
+    <section class="hero" style="padding: 60px 20px;">
+        <h1>Semi-Detached Houses in Miri</h1>
+        <p>Spacious living, corner lots, and premium neighborhoods. Find your perfect Semi-D below.</p>
+    </section>
+
+    <section id="properties" class="featured-properties">
+        <div class="search-filter-wrapper">
+            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Search specific areas (e.g. Pujut, Luak)..." onkeyup="resetAndFilter()">
+            
+            <div class="filter-container">
+                <select id="statusFilter" class="filter-select" onchange="resetAndFilter()">
+                    <option value="all">All Status</option>
+                    <option value="sale">For Sale</option>
+                    <option value="rent">For Rent</option>
+                </select>
+            </div>
+            
+            <div id="results-count-bar" class="results-count-bar">
+                Showing <span id="visible-count">0</span> of <span id="total-count">0</span> Semi-Detached properties
+            </div>
+        </div>
+
+        <div class="property-grid">
+            <div style="width: 100%; text-align: center;" id="loading-spinner">
+                <div class="loader"></div>
+                <h3 style="color:var(--primary);">Fetching Semi-D Listings...</h3>
+            </div>
+        </div>
+
+        <div id="no-results-message" style="display: none; width: 100%; text-align: center; padding: 50px 20px;">
+            <h3 style="color: var(--primary); font-size: 1.8rem; margin-bottom: 10px;">🕵️‍♂️ No exact matches found.</h3>
+            <p style="color: #4a5568; font-size: 1.1rem;">Try clearing your filters or searching for a different area.</p>
+        </div>
+        <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
+    </section>
+
+    <!-- Detail Modal Structure (Required for popups to work) -->
+    <div id="property-modal" class="property-modal">
+        <span class="modal-close" onclick="closeModal()">✖</span>
+        <div class="modal-content">
+            <div class="modal-gallery">
+                <img id="modal-main-img" src="" onclick="openFullscreenImage()">
+            </div>
+            <div class="modal-dark-header">
+                <div class="modal-header-top">
+                    <div class="modal-title-area">
+                        <h2 id="modal-title">Property Title</h2>
+                        <p id="modal-address">Location</p>
+                    </div>
+                    <div class="modal-price-area">
+                        <h2 id="modal-price">RM 0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-details-section">
+                <h3>Property details</h3>
+                <div class="details-grid-top" id="modal-details-checkmarks"></div>
+                <ul class="beautiful-list" id="modal-description-list"></ul>
+                <div id="modal-video" style="margin-top: 25px;"></div>
+                <div style="text-align: center; margin-top: 30px; display: flex; flex-direction: column; gap: 15px; align-items: center;">
+                    <a id="modal-whatsapp" href="#" class="whatsapp-btn" target="_blank" style="max-width:300px; width:100%; font-size: 1.1rem; padding: 15px;">💬 Chat on WhatsApp</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="fullscreen-zoom" class="property-modal" style="z-index: 3000;">
+        <span class="modal-close" onclick="closeFullscreenImage()">✖</span>
+        <img id="fullscreen-img" src="">
+    </div>
+
+    <footer>
+        <p>&copy; 2026 <span class="notranslate">Jong Express Property</span>.</p>
+    </footer>
+
+    <!-- Load your exact same Master Scripts! -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="js/script.js"></script>
+    
+    <!-- Auto-Filter Script: Forces the page to only show Semi Detached! -->
+    <script>
+        // Wait 1.5 seconds for PapaParse to download your Google Sheet, then trigger the search
+        setTimeout(function() {
+            let searchInput = document.getElementById('searchBar');
+            if(searchInput) {
+                searchInput.value = 'Semi Detached';
+                resetAndFilter();
+            }
+        }, 1500);
+    </script>
+</body>
+</html>
