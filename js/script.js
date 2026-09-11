@@ -35,6 +35,7 @@ Papa.parse(csvUrl, {
         const grid = document.querySelector('.property-grid');
         grid.innerHTML = '';
         
+        // Safety check added so it doesn't crash if the spinner is missing
         const spinner = document.getElementById('loading-spinner');
         if (spinner) {
             spinner.style.display = 'none';
@@ -57,11 +58,13 @@ Papa.parse(csvUrl, {
 
             let isProject = (typeValue.includes('project') || typeValue.includes('developer')) ? 'true' : 'false';
             
+            // 1. Dynamic Project Badge (Emoji fixed)
             let badgeHTML = '';
             if (isProject === 'true') {
                 badgeHTML = `<div class="badge-new">🏢 PROJECT</div>`;
             }
 
+            // 2. Dynamic Status Badge (Sale, Rent, Sold)
             let statusText = 'FOR SALE';
             let statusClass = 'status-sale';
             if (status.includes('rent')) {
@@ -73,10 +76,12 @@ Papa.parse(csvUrl, {
             }
             let statusBadgeHTML = `<div class="status-badge ${statusClass}">${statusText}</div>`;
 
+            // 3. Extract Bedrooms & Bathrooms (Emojis fixed)
             let desc = row['The Good (Pros)'] || '';
             let beds = row['Room'] || row['room'] || row['Bedrooms'] || '-';
             let baths = row['Toilet'] || row['toilet'] || row['Bathrooms'] || '-';
             
+            // Fallback to reading the description text if columns are empty
             if (beds === '-') {
                 let bedMatch = desc.match(/(\d+)\s*Bedroom/i);
                 if (bedMatch) beds = bedMatch[1];
@@ -87,23 +92,16 @@ Papa.parse(csvUrl, {
             }
             let amenitiesHTML = `<div class="amenities-badge">🛏️ ${beds} &nbsp;|&nbsp; 🚿 ${baths}</div>`;
 
-            // --- SMART IMAGE URL LOGIC ---
             let firstImage = row['Image Name'] ? row['Image Name'].split(',')[0].trim() : '';
-            let finalImageUrl = firstImage;
-            
-            // If it's a short link like "photos/img.jpg", force the full URL
-            if (firstImage && !firstImage.startsWith('http')) {
-                finalImageUrl = 'https://jongks1234.github.io/JongExpressProperty/' + firstImage;
-            }
 
+            // Clean card HTML integrating the new badges
             let cardHTML = `
             <div class="property-card clickable-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" onclick="openModal(${index})" style="display:flex; flex-direction:column; height:100%;">
                 <div class="image-wrapper">
                     ${statusBadgeHTML}
                     ${badgeHTML}
                     ${amenitiesHTML}
-                    <!-- Added onerror fallback image -->
-                    <img src="${finalImageUrl}" alt="${row['Property Name']}" onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60';">
+                    <img src="${firstImage}" alt="${row['Property Name']}">
                 </div>
                 <div class="property-details">
                     <h3 class="price">${row['Price']}</h3>
@@ -134,6 +132,7 @@ Papa.parse(csvUrl, {
             });
         }
 
+        // Auto-search if someone shares a link with ?q=Keyword
         const urlParams = new URLSearchParams(window.location.search);
         const searchQuery = urlParams.get('q');
         if (searchQuery) {
@@ -143,6 +142,7 @@ Papa.parse(csvUrl, {
 
         filterProperties();
 
+        // Check if someone shared a specific property link to open the modal
         const sharedPropertyId = urlParams.get('p');
         if (sharedPropertyId !== null && allPropertiesData[sharedPropertyId]) {
             openModal(sharedPropertyId);
@@ -185,6 +185,7 @@ function filterProperties() {
         }
     });
 
+    // Update the iProperty-style counter (e.g. "Showing 4 of 28 properties")
     const visibleElem = document.getElementById('visible-count');
     const totalElem = document.getElementById('total-count');
     if (visibleElem && totalElem) {
@@ -192,11 +193,13 @@ function filterProperties() {
         totalElem.innerText = matchedCount;
     }
 
+    // Toggle the "Load More" button
     const loadMoreBtn = document.getElementById('loadMoreBtn');
     if (loadMoreBtn) {
         loadMoreBtn.style.display = (matchedCount > currentLimit) ? 'block' : 'none';
     }
 
+    // Toggle "No Results" message
     const noResultsMsg = document.getElementById('no-results-message');
     if (noResultsMsg) {
         noResultsMsg.style.display = (matchedCount === 0) ? 'block' : 'none';
@@ -206,6 +209,7 @@ function filterProperties() {
 function resetAndFilter() { currentLimit = 6; filterProperties(); }
 function showMoreListings() { currentLimit += 6; filterProperties(); }
 
+// --- Detail Modal Functions Restored ---
 function openModal(index) {
     let row = allPropertiesData[index];
     if(!row) return;
@@ -232,15 +236,8 @@ function openModal(index) {
     });
     document.getElementById('modal-description-list').innerHTML = listHTML;
 
-    // --- SMART IMAGE URL FOR MODAL ---
-    let mainImgRaw = row['Image Name'] ? row['Image Name'].trim().split(',')[0] : '';
-    let mainImgUrl = mainImgRaw;
-    if (mainImgRaw && !mainImgRaw.startsWith('http')) {
-        mainImgUrl = 'https://jongks1234.github.io/JongExpressProperty/' + mainImgRaw;
-    }
-    if (!mainImgUrl) mainImgUrl = 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
-    
-    document.getElementById('modal-main-img').src = mainImgUrl;
+    let mainImg = row['Image Name'] ? row['Image Name'].trim().split(',')[0] : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
+    document.getElementById('modal-main-img').src = mainImg;
     
     let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
     let videoHTML = '';
@@ -249,6 +246,7 @@ function openModal(index) {
         if (ytEmbed) {
             videoHTML = `<div class="video-container"><iframe src="${ytEmbed}" allowfullscreen></iframe></div>`;
         } else {
+            // Emoji fixed here too!
             videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank">🎬 Watch Video Tour</a>`;
         }
     }
@@ -261,11 +259,6 @@ function openModal(index) {
     };
 
     document.getElementById('property-modal').style.display = 'block';
-    
-    // Call similar properties engine
-    if (typeof renderSimilarProperties === "function") {
-        renderSimilarProperties(row['Area'], row['Type'], title);
-    }
 }
 
 function closeModal() { 
@@ -296,6 +289,7 @@ function shareListing(title, index) {
     }
 }
 
+// Click outside overlay listener
 window.onclick = function(event) {
     let modal = document.getElementById('property-modal');
     let zoom = document.getElementById('fullscreen-zoom');
@@ -307,32 +301,39 @@ window.onclick = function(event) {
     }
 }
 
+// Resets all search bars and dropdowns, then reloads the grid
 function clearAllFilters() {
+    // Reset the text and dropdowns
     document.getElementById('searchBar').value = '';
     document.getElementById('statusFilter').value = 'all';
     document.getElementById('typeFilter').value = 'all';
     document.getElementById('areaFilter').value = 'all';
     
+    // Resets the top market tabs back to "All Listings"
     currentMarket = 'all';
     const tabs = document.querySelectorAll('.tab-btn');
     tabs.forEach(tab => tab.classList.remove('active'));
     if(tabs.length > 0) tabs[0].classList.add('active'); 
 
+    // Run the filter function to show all properties again
     resetAndFilter();
 }
-
+// Function for one-click tag searches (e.g. clicking 'Pujut')
 function quickSearch(keyword) {
     const searchBar = document.getElementById('searchBar');
     if (!searchBar) return;
     searchBar.value = keyword;
     
+    // Also update the browser URL query so people can share the search link!
     const newUrl = window.location.pathname + '?q=' + encodeURIComponent(keyword);
     window.history.replaceState(null, '', newUrl);
     
     resetAndFilter();
+
+    // Smooth scroll straight down to the results
     document.querySelector('.property-grid').scrollIntoView({ behavior: 'smooth' });
 }
-
+// --- Custom AI Chatbot Logic ---
 function toggleChat() {
     const chatWindow = document.getElementById('chat-window');
     chatWindow.style.display = chatWindow.style.display === 'none' ? 'flex' : 'none';
@@ -344,14 +345,18 @@ async function sendMessage() {
     if (!msgText) return;
 
     const msgBox = document.getElementById('chat-messages');
+    
+    // 1. Instantly display the user's message
     msgBox.innerHTML += `<div class="user-msg">${msgText}</div>`;
     input.value = '';
     msgBox.scrollTop = msgBox.scrollHeight;
 
+    // 2. Instantly display the "Typing..." animation
     const typingId = 'typing-' + Date.now();
     msgBox.innerHTML += `<div id="${typingId}" class="bot-msg" style="font-style: italic; color: #a0aec0; background: transparent; border: 1px solid #e2e8f0;">🤖 Jong's AI is typing...</div>`;
     msgBox.scrollTop = msgBox.scrollHeight;
 
+    // YOUR MAKE.COM WEBHOOK URL:
     const makeWebhookUrl = 'https://hook.eu1.make.com/dehy3kvt2y8tyecybk9vkpqrn330g45b';
 
     try {
@@ -362,32 +367,37 @@ async function sendMessage() {
         });
         const data = await response.text(); 
         
+        // 3. Delete the "Typing..." indicator once the real answer arrives
         const typingElement = document.getElementById(typingId);
         if (typingElement) typingElement.remove();
         
+        // 4. Display the final AI response
         msgBox.innerHTML += `<div class="bot-msg">${data}</div>`;
         msgBox.scrollTop = msgBox.scrollHeight;
     } catch (error) {
+        // Remove typing indicator on error
         const typingElement = document.getElementById(typingId);
         if (typingElement) typingElement.remove();
         
         msgBox.innerHTML += `<div class="bot-msg">Sorry, the system is busy. Please WhatsApp Jong directly!</div>`;
     }
 }
-
+// --- "Similar Properties" Recommendation Engine ---
 function renderSimilarProperties(currentArea, currentType, currentName) {
     const similarGrid = document.getElementById('similar-grid');
     const similarSection = document.getElementById('similar-properties-section');
     if (!similarGrid || !similarSection) return;
     
-    similarGrid.innerHTML = ''; 
+    similarGrid.innerHTML = ''; // Clear old recommendations
     let similarMatches = [];
     
     if (window.allPropertyData) {
         similarMatches = window.allPropertyData.filter(row => {
             if (!row['Property Name']) return false;
+            // Don't recommend the exact same house they are already looking at
             if (row['Property Name'] === currentName) return false; 
             
+            // Find a match based on identical Area OR identical Type
             let rowArea = row['Area'] ? row['Area'].toLowerCase().trim() : '';
             let rowType = row['Type'] ? row['Type'].toLowerCase().trim() : '';
             
@@ -395,25 +405,21 @@ function renderSimilarProperties(currentArea, currentType, currentName) {
         });
     }
     
+    // Grab only the top 3 matches
     similarMatches = similarMatches.slice(0, 3);
     
     if (similarMatches.length === 0) {
-        similarSection.style.display = 'none'; 
+        similarSection.style.display = 'none'; // Hide if no matches exist
         return;
     }
     
     similarSection.style.display = 'block';
     
     similarMatches.forEach(row => {
-        let rawImage = row['Image Name'] ? row['Image Name'].trim() : '';
-        let simImgUrl = rawImage;
-        if (rawImage && !rawImage.startsWith('http')) {
-            simImgUrl = 'https://jongks1234.github.io/JongExpressProperty/' + rawImage;
-        }
-
+        // Create a mini-card for the similar property
         let card = `
             <div style="min-width: 220px; max-width: 220px; background: #f7fafc; border-radius: 8px; overflow: hidden; box-shadow: 0 3px 6px rgba(0,0,0,0.1); flex-shrink: 0; border: 1px solid #e2e8f0;">
-                <img src="${simImgUrl}" onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60';" style="width: 100%; height: 140px; object-fit: cover; background: #cbd5e0;">
+                <img src="${row['Image Name']}" style="width: 100%; height: 140px; object-fit: cover; background: #cbd5e0;">
                 <div style="padding: 12px;">
                     <h4 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${row['Property Name']}</h4>
                     <p style="color: var(--secondary); font-weight: bold; font-size: 1rem; margin-bottom: 10px;">${row['Price']}</p>
