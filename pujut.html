@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Optimization specifically for Pujut -->
+    <title>Properties for Sale & Rent in Pujut, Miri | Jong Express Property</title>
+    <meta name="description" content="Browse verified houses, shoplots, and land for sale and rent in the prime neighborhood of Pujut, Miri. 100% real listings by Jong Kiat Shan (REN 84702).">
+    <meta name="keywords" content="Pujut property, house for sale Pujut Miri, rent house Pujut, buy house Pujut Miri, Jong Express Property, Kommons Realty">
+    
+    <link rel="icon" type="image/png" href="photos/icononly.png">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo" style="text-decoration: none; color: var(--secondary);">
+            <span class="notranslate">Jong Express Property</span>
+        </a>
+        <nav style="display: flex; align-items: center; flex-wrap: wrap;">
+            <a href="index.html#properties" style="font-weight: 600;">🔍 Back to Main Search</a>
+        </nav>
+    </header>
+
+    <!-- Breadcrumb Navigation -->
+    <div style="background: #edf2f7; padding: 12px 5%; font-size: 0.9rem; color: #718096;">
+        <a href="index.html" style="color: var(--primary); text-decoration: none; font-weight: 500;">Home</a> 
+        <span style="margin: 0 8px;">/</span> 
+        <span style="color: #4a5568; font-weight: 600;">Pujut Properties</span>
+    </div>
+
+    <section class="hero" style="padding: 60px 20px;">
+        <h1 style="font-size: 2.4rem; margin-bottom: 12px;">Pujut Real Estate & Properties</h1>
+        <p style="font-size: 1.15rem; max-width: 750px; margin: 0 auto;">Discover the best sub-sale and rental opportunities in one of Miri's most mature and highly sought-after central neighborhoods.</p>
+    </section>
+
+    <!-- SEO Content Block for Google Indexing -->
+    <section style="max-width: 850px; margin: 35px auto 10px; padding: 25px 30px; background: white; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); text-align: center; border-top: 4px solid var(--secondary);">
+        <h2 style="color: var(--primary); font-size: 1.6rem; margin-bottom: 12px;">Living in Pujut, Miri</h2>
+        <p style="color: #4a5568; font-size: 1.05rem; line-height: 1.7;">
+            Pujut is known for its excellent connectivity, established amenities, and strong community feel. Whether you are searching for a spacious corner terrace for a growing family or a strategic commercial shoplot, Pujut offers long-term value and immediate convenience. Browse our 100% verified available units below.
+        </p>
+    </section>
+
+    <section id="properties" class="featured-properties">
+        <div class="search-filter-wrapper">
+            <!-- Pre-populated to filter for 'Pujut' automatically -->
+            <input type="text" id="searchBar" class="search-input" value="Pujut" placeholder="🔍 Search specific types (e.g. Corner, Terrace)..." onkeyup="resetAndFilter()">
+            
+            <div class="filter-container">
+                <select id="statusFilter" class="filter-select" onchange="resetAndFilter()">
+                    <option value="all">All Status</option>
+                    <option value="sale">For Sale</option>
+                    <option value="rent">For Rent</option>
+                </select>
+                <select id="typeFilter" class="filter-select" onchange="resetAndFilter()">
+                    <option value="all">All Types</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="property-grid">
+            <h3 style="text-align:center; width:100%; color:var(--primary);">Loading Pujut listings...</h3>
+        </div>
+
+        <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 <span class="notranslate">Jong Express Property</span>. All rights reserved. | Represented by <span class="notranslate">JONG KIAT SHAN</span> (Kommons Realty)</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="js/script.js"></script>
+    
+    <!-- WhatsApp Button (Forced to Bottom-Left to prevent blocking Chatbase) -->
+    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20properties%20in%20Pujut!" target="_blank" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
+        💬 WhatsApp Us
+    </a>
+    
+    <!-- Chatbase Widget -->
+    <script>
+      window.chatbaseConfig = {
+        chatbotId: "g5wuvpEGYSCkeUYFoRiTp",
+      };
+    </script>
+    <script src="https://www.chatbase.co/embed.min.js" chatbotId="g5wuvpEGYSCkeUYFoRiTp" defer></script>
+</body>
+</html>
