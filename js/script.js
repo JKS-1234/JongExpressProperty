@@ -343,8 +343,15 @@ async function sendMessage() {
     if (!msgText) return;
 
     const msgBox = document.getElementById('chat-messages');
+    
+    // 1. Instantly display the user's message
     msgBox.innerHTML += `<div class="user-msg">${msgText}</div>`;
     input.value = '';
+    msgBox.scrollTop = msgBox.scrollHeight;
+
+    // 2. Instantly display the "Typing..." animation
+    const typingId = 'typing-' + Date.now();
+    msgBox.innerHTML += `<div id="${typingId}" class="bot-msg" style="font-style: italic; color: #a0aec0; background: transparent; border: 1px solid #e2e8f0;">🤖 Jong's AI is typing...</div>`;
     msgBox.scrollTop = msgBox.scrollHeight;
 
     // YOUR MAKE.COM WEBHOOK URL:
@@ -358,9 +365,18 @@ async function sendMessage() {
         });
         const data = await response.text(); 
         
+        // 3. Delete the "Typing..." indicator once the real answer arrives
+        const typingElement = document.getElementById(typingId);
+        if (typingElement) typingElement.remove();
+        
+        // 4. Display the final AI response
         msgBox.innerHTML += `<div class="bot-msg">${data}</div>`;
         msgBox.scrollTop = msgBox.scrollHeight;
     } catch (error) {
+        // Remove typing indicator on error
+        const typingElement = document.getElementById(typingId);
+        if (typingElement) typingElement.remove();
+        
         msgBox.innerHTML += `<div class="bot-msg">Sorry, the system is busy. Please WhatsApp Jong directly!</div>`;
     }
 }
