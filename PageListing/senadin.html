@@ -3,18 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- SEO Optimization for Senadin, Miri -->
     <title>Properties for Sale & Rent in Senadin, Miri | Jong Express Property</title>
-    <meta name="description" content="Find the best investment properties, student rentals, and family homes in Senadin, Miri. 100% verified listings near Curtin University and Knewton Global Schools.">
-    <meta name="keywords" content="Senadin property, house for sale Senadin Miri, Curtin University accommodation, rent house Senadin, Senadin investment, Jong Express Property, Kommons Realty">
+    <meta name="description" content="Find the best investment properties, student rentals, and family homes in Senadin, Miri. 100% verified listings near Curtin University.">
     
-    <link rel="icon" type="image/png" href="photos/icononly.png">
-    <link rel="stylesheet" href="css/style.css">
+    <!-- FIX 1: Added ../ to tell the page where to find your Icon and CSS -->
+    <link rel="icon" type="image/png" href="../photos/icononly.png">
+    <link rel="stylesheet" href="../css/style.css">
     
     <meta name="google-site-verification" content="DmNkWGPhpuc2D9rzCBVezIjbnLr8M6qBpZ-TYUeL4lE" />
 
-    <!-- Google Analytics (GA4) -->
+    <!-- Google Analytics & Meta Pixel -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YNY4XZBS1T"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -22,8 +20,6 @@
         gtag('js', new Date());
         gtag('config', 'G-YNY4XZBS1T');
     </script>
-    
-    <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
     {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -36,50 +32,31 @@
      fbq('init', '2776876486027023'); 
     fbq('track', 'PageView');
     </script>
-    <noscript>
-     <img height="1" width="1" src="https://www.facebook.com/tr?id=2776876486027023&ev=PageView&noscript=1"/>
-    </noscript>
 </head>
 <body>
 
-    <!-- Header -->
     <header>
-        <a href="index.html" class="logo" style="text-decoration: none;">Jong Express Property</a>
+        <!-- FIX 2: Links point back to your main index.html -->
+        <a href="../index.html" class="logo" style="text-decoration: none;">Jong Express Property</a>
         <nav>
-            <a href="index.html#properties">🔍 Back to All Listings</a>
-            <a href="index.html#about">Our Promise</a>
+            <a href="../index.html#about">Our Promise</a>
+            <a href="../index.html#properties">All Listings</a>
             <a href="#contact">Contact Jong</a>
         </nav>
     </header>
 
-    <!-- Breadcrumb -->
+    <!-- Breadcrumb for Navigation -->
     <div style="background: #edf2f7; padding: 12px 5%; font-size: 0.9rem; color: #718096;">
-        <a href="index.html" style="color: var(--primary); text-decoration: none; font-weight: 500;">Home</a> 
+        <a href="../index.html" style="color: var(--primary); text-decoration: none; font-weight: 500;">Home</a> 
         <span style="margin: 0 8px;">/</span> 
         <span style="color: #4a5568; font-weight: 600;">Senadin Properties</span>
     </div>
 
-    <!-- Hero Banner -->
-    <section class="hero">
-        <h1>Properties in Senadin, Miri</h1>
-        <p>Your gateway to high-yield investment properties and vibrant family living in Miri's northern educational hub.</p>
-        <a href="#properties" class="btn">View Senadin Listings</a>
+    <section class="hero" style="padding: 60px 20px;">
+        <h1 style="font-size: 2.5rem; margin-bottom: 15px;">Properties in Senadin, Miri</h1>
+        <p style="font-size: 1.1rem;">High-yield investment properties and vibrant family living near Curtin University.</p>
     </section>
 
-    <!-- Static SEO Section (Eliminates Google Soft 404s) -->
-    <section style="max-width: 900px; margin: 40px auto 10px; padding: 25px 30px; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.06); text-align: center; border-left: 5px solid var(--secondary);">
-        <h2 style="color: var(--primary); font-size: 1.6rem; margin-bottom: 12px;">Why Invest or Live in Senadin?</h2>
-        <p style="color: #4a5568; font-size: 1.05rem; line-height: 1.8; margin-bottom: 15px;">
-            Senadin is a rapidly growing township renowned as Miri's premier educational and industrial corridor. Home to Curtin University Malaysia and Knewton Global Schools, it offers exceptional rental yield opportunities for student and faculty housing. With quick access to the Kuala Baram industrial estate, Nam Leong commercial areas, and affordable residential phases, Senadin is ideal for both first-time homebuyers and savvy investors.
-        </p>
-        <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-            <span style="background: var(--light); color: var(--primary); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #e2e8f0;">🎓 Near Curtin University</span>
-            <span style="background: var(--light); color: var(--primary); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #e2e8f0;">📈 High Rental Yield</span>
-            <span style="background: var(--light); color: var(--primary); padding: 6px 14px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; border: 1px solid #e2e8f0;">🏢 Commercial Access</span>
-        </div>
-    </section>
-
-    <!-- Property Listings Section -->
     <section id="properties" class="featured-properties">
         <h2>Verified Senadin Listings</h2>
         <p style="margin-bottom: 30px;">100% Real Listings. No Ghost Listings. Just Real Results.</p>
@@ -91,8 +68,8 @@
                 <button class="tab-btn" onclick="setMarket('project', this)">Developer Projects</button>
             </div>
             
-            <!-- Pre-filled with 'Senadin' to auto-filter on page load -->
-            <input type="text" id="searchBar" class="search-input" value="Senadin" placeholder="🔍 Type keywords (e.g. Corner, Terrace)..." onkeyup="resetAndFilter()">
+            <!-- Pre-filled with 'Senadin' so it auto-filters -->
+            <input type="text" id="searchBar" class="search-input" value="Senadin" placeholder="🔍 Type keywords..." onkeyup="resetAndFilter()">
             
             <div class="filter-container">
                 <select id="statusFilter" class="filter-select" onchange="resetAndFilter()">
@@ -115,11 +92,10 @@
 
         <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
     </section>
-
-    <!-- Contact Section -->
+    
     <section id="contact" class="contact-section">
-        <h2>Ready to explore Senadin?</h2>
-        <p style="margin-top: 10px; color: #4a5568;">Connect with Jong Kiat Shan (Kommons Realty) for transparent advice and viewing arrangements.</p>
+        <h2>Ready to make a move? Let's connect.</h2>
+        <p style="margin-top: 10px; color: #4a5568;">Your trusted consultant, Jong Kiat Shan, is ready to assist you.</p>
         
         <div class="contact-info">
             <div class="info-block">
@@ -137,25 +113,22 @@
         <p>&copy; 2026 Jong Express Property. All rights reserved. | Represented by JONG KIAT SHAN (Kommons Realty)</p>
     </footer>
 
-    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    <script src="js/script.js"></script>
-
-    <!-- WhatsApp Floating Action Button (Positioned Bottom-Left to avoid Chatbase collision) -->
-    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20properties%20in%20Senadin!" target="_blank" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
-        💬 WhatsApp Us
+    
+    <!-- FIX 3: Added ../ to tell the page where to find your Javascript -->
+    <script src="../js/script.js"></script>
+    
+    <!-- FIX 4: Changed WhatsApp to "left: 20px" so it doesn't overlap with Chatbase -->
+    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20Senadin%20properties!" target="_blank" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
+  💬 WhatsApp Us
     </a>
-
-    <!-- Chatbase Embed Script (Positioned Bottom-Right) -->
+    
+    <!-- Chatbase Widget -->
     <script>
       window.chatbaseConfig = {
         chatbotId: "g5wuvpEGYSCkeUYFoRiTp",
       };
     </script>
-    <script
-      src="https://www.chatbase.co/embed.min.js"
-      chatbotId="g5wuvpEGYSCkeUYFoRiTp"
-      defer>
-    </script>
+    <script src="https://www.chatbase.co/embed.min.js" chatbotId="g5wuvpEGYSCkeUYFoRiTp" defer></script>
 </body>
 </html>
