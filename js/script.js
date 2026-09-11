@@ -331,3 +331,36 @@ function quickSearch(keyword) {
     // Smooth scroll straight down to the results
     document.querySelector('.property-grid').scrollIntoView({ behavior: 'smooth' });
 }
+// --- Custom AI Chatbot Logic ---
+function toggleChat() {
+    const chatWindow = document.getElementById('chat-window');
+    chatWindow.style.display = chatWindow.style.display === 'none' ? 'flex' : 'none';
+}
+
+async function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const msgText = input.value.trim();
+    if (!msgText) return;
+
+    const msgBox = document.getElementById('chat-messages');
+    msgBox.innerHTML += `<div class="user-msg">${msgText}</div>`;
+    input.value = '';
+    msgBox.scrollTop = msgBox.scrollHeight;
+
+    // YOUR MAKE.COM WEBHOOK URL:
+    const makeWebhookUrl = 'https://hook.eu1.make.com/dehy3kvt2y8tyecybk9vkpqrn330g45b';
+
+    try {
+        const response = await fetch(makeWebhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: msgText })
+        });
+        const data = await response.text(); 
+        
+        msgBox.innerHTML += `<div class="bot-msg">${data}</div>`;
+        msgBox.scrollTop = msgBox.scrollHeight;
+    } catch (error) {
+        msgBox.innerHTML += `<div class="bot-msg">Sorry, the system is busy. Please WhatsApp Jong directly!</div>`;
+    }
+}
