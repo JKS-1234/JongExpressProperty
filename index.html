@@ -121,55 +121,55 @@
         <p style="margin-bottom: 30px;">100% Verified. We show you the good, and we don't hide the bad.</p>
 
         <div class="search-filter-wrapper">
-    <div class="market-tabs">
-        <button class="tab-btn active" onclick="setMarket('all', this)">All Listings</button>
-        <button class="tab-btn" onclick="setMarket('subsale', this)">Sub-Sale & Rent</button>
-        <button class="tab-btn" onclick="setMarket('project', this)">Developer Projects</button>
-    </div>
-    
-    <input type="text" id="searchBar" class="search-input" placeholder="🔍 Type keywords... (e.g. Corner, Furnished, Pujut, Curtin)" onkeyup="resetAndFilter()">
-    
-    <!-- Quick Search Clickable Keyword Tags -->
-    <div class="quick-tags">
-        <span class="tag-label">Popular:</span>
-        <button type="button" class="quick-tag-btn" onclick="quickSearch('Pujut')">Pujut</button>
-        <button type="button" class="quick-tag-btn" onclick="quickSearch('Permy')">Permy</button>
-        <button type="button" class="quick-tag-btn" onclick="quickSearch('Pelita')">Pelita</button>
-        <button type="button" class="quick-tag-btn" onclick="quickSearch('Marina')">Marina</button>
-        <button type="button" class="quick-tag-btn" onclick="quickSearch('Miri Times Square')">Miri Times Square</button>
-        <button type="button" class="quick-tag-btn" onclick="quickSearch('Riam')">Riam</button>
-        <button type="button" class="quick-tag-btn" onclick="quickSearch('Luak')">Luak</button>
-        <button type="button" class="quick-tag-btn" onclick="quickSearch('Lopeng')">Lopeng</button>
-        <button type="button" class="quick-tag-btn" onclick="quickSearch('Senadin')">Senadin</button>
-        <button type="button" class="quick-tag-btn" onclick="quickSearch('Piasau')">Bintang</button>
-        <button type="button" class="quick-tag-btn" onclick="quickSearch('Lutong')">Lutong</button>
-        <button type="button" class="quick-tag-btn" onclick="quickSearch('Bayshore')">Bayshore</button>
-        <button type="button" class="quick-tag-btn" onclick="quickSearch('Semi Detached')">Semi-D</button>
-        <button type="button" class="quick-tag-btn" onclick="quickSearch('Furnished')">Furnished</button>
-    </div>
+            <div class="market-tabs">
+                <button class="tab-btn active" onclick="setMarket('all', this)">All Listings</button>
+                <button class="tab-btn" onclick="setMarket('subsale', this)">Sub-Sale & Rent</button>
+                <button class="tab-btn" onclick="setMarket('project', this)">Developer Projects</button>
+            </div>
+            
+            <input type="text" id="searchBar" class="search-input" placeholder="🔍 Type keywords... (e.g. Corner, Furnished, Pujut, Curtin)" onkeyup="resetAndFilter()">
+            
+            <!-- Quick Search Clickable Keyword Tags -->
+            <div class="quick-tags">
+                <span class="tag-label">Popular:</span>
+                <button type="button" class="quick-tag-btn" onclick="quickSearch('Pujut')">Pujut</button>
+                <button type="button" class="quick-tag-btn" onclick="quickSearch('Permy')">Permy</button>
+                <button type="button" class="quick-tag-btn" onclick="quickSearch('Pelita')">Pelita</button>
+                <button type="button" class="quick-tag-btn" onclick="quickSearch('Marina')">Marina</button>
+                <button type="button" class="quick-tag-btn" onclick="quickSearch('Miri Times Square')">Miri Times Square</button>
+                <button type="button" class="quick-tag-btn" onclick="quickSearch('Riam')">Riam</button>
+                <button type="button" class="quick-tag-btn" onclick="quickSearch('Luak')">Luak</button>
+                <button type="button" class="quick-tag-btn" onclick="quickSearch('Lopeng')">Lopeng</button>
+                <button type="button" class="quick-tag-btn" onclick="quickSearch('Senadin')">Senadin</button>
+                <button type="button" class="quick-tag-btn" onclick="quickSearch('Bintang')">Bintang</button>
+                <button type="button" class="quick-tag-btn" onclick="quickSearch('Lutong')">Lutong</button>
+                <button type="button" class="quick-tag-btn" onclick="quickSearch('Bayshore')">Bayshore</button>
+                <button type="button" class="quick-tag-btn" onclick="quickSearch('Semi Detached')">Semi-D</button>
+                <button type="button" class="quick-tag-btn" onclick="quickSearch('Furnished')">Furnished</button>
+            </div>
 
-    <div class="filter-container">
-        <select id="statusFilter" class="filter-select" onchange="resetAndFilter()">
-            <option value="all">All Status</option>
-            <option value="sale">For Sale</option>
-            <option value="rent">For Rent</option>
-        </select>
-        <select id="typeFilter" class="filter-select" onchange="resetAndFilter()">
-            <option value="all">All Types</option>
-        </select>
-        <select id="areaFilter" class="filter-select" onchange="resetAndFilter()">
-            <option value="all">All Areas</option>
-        </select>
-        <button onclick="clearAllFilters()" class="clear-btn">
-            ✖ Clear Filters
-        </button>
-    </div>
+            <div class="filter-container">
+                <select id="statusFilter" class="filter-select" onchange="resetAndFilter()">
+                    <option value="all">All Status</option>
+                    <option value="sale">For Sale</option>
+                    <option value="rent">For Rent</option>
+                </select>
+                <select id="typeFilter" class="filter-select" onchange="resetAndFilter()">
+                    <option value="all">All Types</option>
+                </select>
+                <select id="areaFilter" class="filter-select" onchange="resetAndFilter()">
+                    <option value="all">All Areas</option>
+                </select>
+                <button onclick="clearAllFilters()" class="clear-btn">
+                    ✖ Clear Filters
+                </button>
+            </div>
 
-    <!-- iProperty-style Live Result Counter -->
-    <div id="results-count-bar" class="results-count-bar">
-        Showing <span id="visible-count">0</span> of <span id="total-count">0</span> properties
-    </div>
-</div>
+            <!-- iProperty-style Live Result Counter -->
+            <div id="results-count-bar" class="results-count-bar">
+                Showing <span id="visible-count">0</span> of <span id="total-count">0</span> properties
+            </div>
+        </div>
 
         <div class="property-grid">
             <!-- This spinner shows while Google Sheets is loading -->
@@ -179,11 +179,11 @@
             </div>
         </div>
 
-    <!-- This hidden message shows if a search has 0 results -->
-    <div id="no-results-message" style="display: none; width: 100%; text-align: center; padding: 50px 20px;">
-        <h3 style="color: var(--primary); font-size: 1.8rem; margin-bottom: 10px;">🕵️‍♂️ No exact matches found.</h3>
-        <p style="color: #4a5568; font-size: 1.1rem;">Try clearing your filters or searching for a different area in Miri.</p>
-    </div>
+        <!-- This hidden message shows if a search has 0 results -->
+        <div id="no-results-message" style="display: none; width: 100%; text-align: center; padding: 50px 20px;">
+            <h3 style="color: var(--primary); font-size: 1.8rem; margin-bottom: 10px;">🕵️‍♂️ No exact matches found.</h3>
+            <p style="color: #4a5568; font-size: 1.1rem;">Try clearing your filters or searching for a different area in Miri.</p>
+        </div>
 
         <button id="loadMoreBtn" class="load-more-btn" onclick="showMoreListings()">Load More Listings</button>
     </section>
@@ -215,7 +215,8 @@
         <h2>Our Latest Properties on Facebook</h2>
         <p style="margin-bottom: 30px;">Check out our newest listings and market updates below!</p>
         <script src="https://elfsightcdn.com/platform.js" async></script>
-        <div class="elfsight-app-f8015444-62da-45e2-85d3-62c0c647068e"></div>
+        <!-- I am using your updated Elfsight App ID here! -->
+        <div class="elfsight-app-8cfc3004-89f9-4754-9047-e12cd7216640" data-elfsight-app-lazy></div>
     </section>
     
     <section id="contact" class="contact-section">
@@ -295,25 +296,23 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <script src="js/script.js"></script>
-    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
-  💬 WhatsApp Us
+    
+    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20Listings!" target="_blank" style="position: fixed; bottom: 20px; right: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
+        💬 WhatsApp Us
     </a>
+    
     <script>
-  window.chatbaseConfig = {
-    chatbotId: "g5wuvpEGYSCkeUYFoRiTp",
-  };
-</script>
-<script
-  src="https://www.chatbase.co/embed.min.js"
-  chatbotId="g5wuvpEGYSCkeUYFoRiTp"
-  defer>
-</script>
-<!-- Google Translate Script -->
+      window.chatbaseConfig = {
+        chatbotId: "g5wuvpEGYSCkeUYFoRiTp",
+      };
+    </script>
+    <script src="https://www.chatbase.co/embed.min.js" chatbotId="g5wuvpEGYSCkeUYFoRiTp" defer></script>
+    
+    <!-- Google Translate Script -->
     <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
-                // This limits the dropdown to English, Malay, Simplified Chinese, and Traditional Chinese
                 includedLanguages: 'en,ms,zh-CN,zh-TW',
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE
             }, 'google_translate_element');
