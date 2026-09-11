@@ -1,3 +1,4 @@
+window.allPropertyData = [];
 const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs1vXMme9mBWAEtQUGkFbB7wcL_n-IGGkFzzwvq2yxQgWKuhyZKe-J4tYza3yzLtO/pub?output=csv";
         
 let currentLimit = 6;
@@ -28,6 +29,7 @@ Papa.parse(csvUrl, {
     download: true,
     header: true,
     complete: function(results) {
+        window.allPropertyData = results.data;
         const data = results.data;
         allPropertiesData = data; 
         const grid = document.querySelector('.property-grid');
@@ -379,4 +381,52 @@ async function sendMessage() {
         
         msgBox.innerHTML += `<div class="bot-msg">Sorry, the system is busy. Please WhatsApp Jong directly!</div>`;
     }
+}
+// --- "Similar Properties" Recommendation Engine ---
+function renderSimilarProperties(currentArea, currentType, currentName) {
+    const similarGrid = document.getElementById('similar-grid');
+    const similarSection = document.getElementById('similar-properties-section');
+    if (!similarGrid || !similarSection) return;
+    
+    similarGrid.innerHTML = ''; // Clear old recommendations
+    let similarMatches = [];
+    
+    if (window.allPropertyData) {
+        similarMatches = window.allPropertyData.filter(row => {
+            if (!row['Property Name']) return false;
+            // Don't recommend the exact same house they are already looking at
+            if (row['Property Name'] === currentName) return false; 
+            
+            // Find a match based on identical Area OR identical Type
+            let rowArea = row['Area'] ? row['Area'].toLowerCase().trim() : '';
+            let rowType = row['Type'] ? row['Type'].toLowerCase().trim() : '';
+            
+            return (rowArea === currentArea.toLowerCase() || rowType === currentType.toLowerCase());
+        });
+    }
+    
+    // Grab only the top 3 matches
+    similarMatches = similarMatches.slice(0, 3);
+    
+    if (similarMatches.length === 0) {
+        similarSection.style.display = 'none'; // Hide if no matches exist
+        return;
+    }
+    
+    similarSection.style.display = 'block';
+    
+    similarMatches.forEach(row => {
+        // Create a mini-card for the similar property
+        let card = `
+            <div style="min-width: 220px; max-width: 220px; background: #f7fafc; border-radius: 8px; overflow: hidden; box-shadow: 0 3px 6px rgba(0,0,0,0.1); flex-shrink: 0; border: 1px solid #e2e8f0;">
+                <img src="${row['Image Name']}" style="width: 100%; height: 140px; object-fit: cover; background: #cbd5e0;">
+                <div style="padding: 12px;">
+                    <h4 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${row['Property Name']}</h4>
+                    <p style="color: var(--secondary); font-weight: bold; font-size: 1rem; margin-bottom: 10px;">${row['Price']}</p>
+                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(row['Property Name'])}" target="_blank" style="display: block; text-align: center; background: var(--primary); color: white; text-decoration: none; padding: 8px; border-radius: 4px; font-size: 0.85rem; font-weight: bold;">View Details</a>
+                </div>
+            </div>
+        `;
+        similarGrid.innerHTML += card;
+    });
 }
