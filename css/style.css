@@ -363,25 +363,51 @@ footer {
     color: white;
 }
 
+/* --- Hamburger Menu Styles --- */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+}
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
+/* --- Mobile Responsiveness (Smartphones & Tablets) --- */
 @media (max-width: 768px) {
+    /* Stack the header logo and navigation links */
     header {
         flex-direction: column;
         gap: 15px;
         text-align: center;
         padding: 1rem 15px;
-        position: relative; 
     }
+    
+    /* Make navigation links wrap neatly and always visible */
     nav {
-        display: flex;
+        display: flex !important;
+        flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
         gap: 15px;
+        position: relative;
+        background-color: transparent;
+        box-shadow: none;
     }
+    
     nav a {
-        margin-left: 0;
         margin: 0 5px;
+        padding: 0;
         font-size: 0.95rem;
+        width: auto;
+        border-bottom: none;
     }
+    
+    /* Adjust the hero banner text for smaller screens */
     .hero {
         padding: 60px 15px;
     }
@@ -391,6 +417,8 @@ footer {
     .hero p {
         font-size: 1rem;
     }
+    
+    /* Stack the search and filter boxes vertically */
     .filter-container {
         flex-direction: column;
         gap: 10px;
@@ -402,10 +430,14 @@ footer {
     .search-input {
         font-size: 1rem;
     }
+    
+    /* Adjust property cards to take up the full screen width */
     .property-card {
         max-width: 100%;
         width: 100%;
     }
+    
+    /* Stack contact info blocks vertically */
     .contact-info {
         flex-direction: column;
         gap: 20px;
@@ -413,6 +445,8 @@ footer {
     .info-block {
         width: 100%;
     }
+    
+    /* Adjust the market tabs for easy tapping */
     .market-tabs {
         flex-direction: column;
         width: 100%;
