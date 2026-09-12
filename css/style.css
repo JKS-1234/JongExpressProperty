@@ -24,7 +24,14 @@ header {
     align-items: center;
     position: sticky;
     top: 0;
-    z-index: 9999;
+    z-index: 100;
+    /* Add this line for smooth animation */
+    transition: transform 0.3s ease-in-out; 
+}
+
+/* Add this new class below the header block */
+.header-hidden {
+    transform: translateY(-100%);
 }
 .logo {
     font-size: 1.5rem;
