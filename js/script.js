@@ -434,18 +434,26 @@ function renderSimilarProperties(currentArea, currentType, currentName) {
 let lastScrollTop = 0;
 const header = document.querySelector('header');
 
-window.addEventListener('scroll', function() {
-    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
-    // Check if the user is scrolling down AND has scrolled past the top 60px
-    if (scrollTop > lastScrollTop && scrollTop > 60) {
-        // Scrolling down: Hide the header
-        header.classList.add('header-hidden');
-    } else {
-        // Scrolling up: Show the header
-        header.classList.remove('header-hidden');
-    }
-    
-    // For Mobile or negative scrolling (prevents Safari bounce bugs)
-    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
-}, false);
+// Only run this if a header actually exists on the page
+if (header) {
+    window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // Calculate the total scrollable height of the document
+        let scrollHeight = document.documentElement.scrollHeight;
+        let clientHeight = document.documentElement.clientHeight;
+        
+        // ONLY trigger the hide/show logic if the page is long enough to actually scroll
+        if (scrollHeight > clientHeight + 100) {
+            if (scrollTop > lastScrollTop && scrollTop > 60) {
+                // Scrolling down: Hide the header
+                header.classList.add('header-hidden');
+            } else {
+                // Scrolling up (or at the very top): Show the header
+                header.classList.remove('header-hidden');
+            }
+        }
+        
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
+    }, false);
+}
