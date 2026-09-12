@@ -449,3 +449,23 @@ window.addEventListener('scroll', function() {
     // For Mobile or negative scrolling (prevents Safari bounce bugs)
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
 }, false);
+// --- Mobile Hamburger Menu Logic ---
+const mobileMenu = document.getElementById('mobile-menu');
+const navMenu = document.getElementById('nav-menu');
+
+if (mobileMenu && navMenu) {
+    // Open/Close menu when tapping the hamburger
+    mobileMenu.addEventListener('click', function() {
+        mobileMenu.classList.toggle('is-active');
+        navMenu.classList.toggle('active');
+    });
+
+    // Automatically close the menu when a buyer clicks a link
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            mobileMenu.classList.remove('is-active');
+            navMenu.classList.remove('active');
+        });
+    });
+}
