@@ -456,6 +456,7 @@ if (header) {
         
         lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
     }, false);
+}
 // --- Mobile Hamburger Menu Logic ---
 const mobileMenu = document.getElementById('mobile-menu');
 const navMenu = document.getElementById('nav-menu');
