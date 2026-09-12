@@ -446,6 +446,6 @@ window.addEventListener('scroll', function() {
         header.classList.remove('header-hidden');
     }
     
-    // For Mobile or negative scrolling in Safari
+    // For Mobile or negative scrolling (prevents Safari bounce bugs)
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
 }, false);
