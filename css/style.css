@@ -363,25 +363,66 @@ footer {
     color: white;
 }
 
+/* --- Hamburger Menu Styles --- */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+}
+.bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    transition: all 0.3s ease;
+}
+
 @media (max-width: 768px) {
+    /* Keep logo and hamburger on the same line */
     header {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-        padding: 1rem 15px;
-        position: relative; 
+        flex-direction: row; 
+        justify-content: space-between;
+        padding: 1rem 5%;
     }
+    
+    /* Show the hamburger icon */
+    .menu-toggle {
+        display: flex; 
+    }
+    
+    /* Hide the navigation links by default on mobile */
     nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 15px;
+        display: none; 
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: var(--primary);
+        padding: 1rem 0;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     }
+    
+    /* Show the menu when the user taps the hamburger */
+    nav.active {
+        display: flex; 
+    }
+    
     nav a {
-        margin-left: 0;
-        margin: 0 5px;
-        font-size: 0.95rem;
+        margin: 0;
+        padding: 15px 0;
+        text-align: center;
+        font-size: 1.1rem;
+        width: 100%;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
+
+    /* Animate the hamburger into an 'X' when open */
+    .menu-toggle.is-active .bar:nth-child(2) { opacity: 0; }
+    .menu-toggle.is-active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .menu-toggle.is-active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    /* Adjust the hero banner text for smaller screens */
     .hero {
         padding: 60px 15px;
     }
@@ -391,6 +432,8 @@ footer {
     .hero p {
         font-size: 1rem;
     }
+    
+    /* Stack the search and filter boxes vertically */
     .filter-container {
         flex-direction: column;
         gap: 10px;
@@ -402,10 +445,14 @@ footer {
     .search-input {
         font-size: 1rem;
     }
+    
+    /* Adjust property cards to take up the full screen width */
     .property-card {
         max-width: 100%;
         width: 100%;
     }
+    
+    /* Stack contact info blocks vertically */
     .contact-info {
         flex-direction: column;
         gap: 20px;
