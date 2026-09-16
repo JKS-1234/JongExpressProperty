@@ -1,0 +1,29 @@
+name: Daily Property Sync
+
+on:
+  schedule:
+    # Runs automatically every day at midnight (Malaysia Time / 16:00 UTC)
+    - cron: '0 16 * * *' 
+  workflow_dispatch: # This adds a manual "Run workflow" button in GitHub!
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Website Code
+        uses: actions/checkout@v3
+        
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          
+      - name: Fetch Latest Google Sheet Data
+        run: python build.py
+        
+      - name: Save and Publish to Website
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated Daily Sync: Updated Property Listings"
