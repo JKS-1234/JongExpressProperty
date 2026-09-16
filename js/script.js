@@ -25,128 +25,128 @@ function setMarket(marketType, btnElement) {
     resetAndFilter();
 }
 
-Papa.parse(csvUrl, {
-    download: true,
-    header: true,
-    complete: function(results) {
-        window.allPropertyData = results.data;
-        const data = results.data;
-        allPropertiesData = data; 
-        const grid = document.querySelector('.property-grid');
-        grid.innerHTML = '';
+// Run instantly when the page loads - No loading spinner needed!
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // Grab the instant data created by our GitHub robot
+    const data = window.PRELOADED_PROPERTY_DATA || [];
+    allPropertiesData = data; 
+    
+    const grid = document.querySelector('.property-grid');
+    if (grid) grid.innerHTML = ''; 
+
+    // Hide the loading spinner instantly if it exists
+    const spinner = document.getElementById('loading-spinner');
+    if (spinner) {
+        spinner.style.display = 'none';
+    }
+
+    const uniqueAreas = new Set();
+    const uniqueTypes = new Set();
+
+    data.forEach((row, index) => {
+        if(!row['Property Name']) return; 
+
+        let status = row['Status'] ? row['Status'].toLowerCase().trim() : 'sale';
+        let rawType = row['Type'] ? row['Type'].trim() : '';
+        let typeValue = rawType.toLowerCase();
+        let rawArea = row['Area'] ? row['Area'].trim() : '';
+        let areaValue = rawArea.toLowerCase();
+
+        if (rawType) uniqueTypes.add(rawType);
+        if (rawArea) uniqueAreas.add(rawArea);
+
+        let isProject = (typeValue.includes('project') || typeValue.includes('developer')) ? 'true' : 'false';
         
-        // Safety check added so it doesn't crash if the spinner is missing
-        const spinner = document.getElementById('loading-spinner');
-        if (spinner) {
-            spinner.style.display = 'none';
+        // Dynamic Project Badge 
+        let badgeHTML = '';
+        if (isProject === 'true') {
+            badgeHTML = `<div class="badge-new">🏢 PROJECT</div>`;
         }
 
-        const uniqueAreas = new Set();
-        const uniqueTypes = new Set();
+        // Dynamic Status Badge
+        let statusText = 'FOR SALE';
+        let statusClass = 'status-sale';
+        if (status.includes('rent')) {
+            statusText = 'FOR RENT';
+            statusClass = 'status-rent';
+        } else if (status.includes('sold')) {
+            statusText = 'SOLD';
+            statusClass = 'status-sold';
+        }
+        let statusBadgeHTML = `<div class="status-badge ${statusClass}">${statusText}</div>`;
 
-        data.forEach((row, index) => {
-            if(!row['Property Name']) return; 
+        // Extract Bedrooms & Bathrooms 
+        let desc = row['The Good (Pros)'] || '';
+        let beds = row['Room'] || row['room'] || row['Bedrooms'] || '-';
+        let baths = row['Toilet'] || row['toilet'] || row['Bathrooms'] || '-';
+        
+        if (beds === '-') {
+            let bedMatch = desc.match(/(\d+)\s*Bedroom/i);
+            if (bedMatch) beds = bedMatch[1];
+        }
+        if (baths === '-') {
+            let bathMatch = desc.match(/(\d+)\s*Bathroom/i);
+            if (bathMatch) baths = bathMatch[1];
+        }
+        let amenitiesHTML = `<div class="amenities-badge">🛏️ ${beds} &nbsp;|&nbsp; 🚿 ${baths}</div>`;
 
-            let status = row['Status'] ? row['Status'].toLowerCase().trim() : 'sale';
-            let rawType = row['Type'] ? row['Type'].trim() : '';
-            let typeValue = rawType.toLowerCase();
-            let rawArea = row['Area'] ? row['Area'].trim() : '';
-            let areaValue = rawArea.toLowerCase();
+        // Smart Image Logic
+        let firstImage = row['Image Name'] ? row['Image Name'].split(',')[0].trim() : '';
+        let finalImageUrl = firstImage;
+        if (firstImage && !firstImage.startsWith('http')) {
+            finalImageUrl = 'https://jongks1234.github.io/JongExpressProperty/' + firstImage;
+        }
 
-            if (rawType) uniqueTypes.add(rawType);
-            if (rawArea) uniqueAreas.add(rawArea);
-
-            let isProject = (typeValue.includes('project') || typeValue.includes('developer')) ? 'true' : 'false';
-            
-            // 1. Dynamic Project Badge (Emoji fixed)
-            let badgeHTML = '';
-            if (isProject === 'true') {
-                badgeHTML = `<div class="badge-new">🏢 PROJECT</div>`;
-            }
-
-            // 2. Dynamic Status Badge (Sale, Rent, Sold)
-            let statusText = 'FOR SALE';
-            let statusClass = 'status-sale';
-            if (status.includes('rent')) {
-                statusText = 'FOR RENT';
-                statusClass = 'status-rent';
-            } else if (status.includes('sold')) {
-                statusText = 'SOLD';
-                statusClass = 'status-sold';
-            }
-            let statusBadgeHTML = `<div class="status-badge ${statusClass}">${statusText}</div>`;
-
-            // 3. Extract Bedrooms & Bathrooms (Emojis fixed)
-            let desc = row['The Good (Pros)'] || '';
-            let beds = row['Room'] || row['room'] || row['Bedrooms'] || '-';
-            let baths = row['Toilet'] || row['toilet'] || row['Bathrooms'] || '-';
-            
-            // Fallback to reading the description text if columns are empty
-            if (beds === '-') {
-                let bedMatch = desc.match(/(\d+)\s*Bedroom/i);
-                if (bedMatch) beds = bedMatch[1];
-            }
-            if (baths === '-') {
-                let bathMatch = desc.match(/(\d+)\s*Bathroom/i);
-                if (bathMatch) baths = bathMatch[1];
-            }
-            let amenitiesHTML = `<div class="amenities-badge">🛏️ ${beds} &nbsp;|&nbsp; 🚿 ${baths}</div>`;
-
-            let firstImage = row['Image Name'] ? row['Image Name'].split(',')[0].trim() : '';
-
-            // Clean card HTML integrating the new badges
-            let cardHTML = `
-            <div class="property-card clickable-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" onclick="openModal(${index})" style="display:flex; flex-direction:column; height:100%;">
-                <div class="image-wrapper">
-                    ${statusBadgeHTML}
-                    ${badgeHTML}
-                    ${amenitiesHTML}
-                    <img src="${firstImage}" alt="${row['Property Name']}">
-                </div>
-                <div class="property-details">
-                    <h3 class="price">${row['Price']}</h3>
-                    <p style="font-size: 1.05rem; color: #4a5568; margin-bottom: 5px; font-weight: 500;">${row['Property Name']}</p>
-                    <p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${row['Area'] ? row['Area'].trim() + ', Sarawak' : 'Miri, Sarawak'}</p>
-                </div>
-                <div style="padding: 0 20px 20px 20px; margin-top: auto;">
-                    <button class="whatsapp-btn" style="width: 100%; border:none; cursor:pointer;">View Details</button>
-                </div>
+        let cardHTML = `
+        <div class="property-card clickable-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" onclick="openModal(${index})" style="display:flex; flex-direction:column; height:100%;">
+            <div class="image-wrapper">
+                ${statusBadgeHTML}
+                ${badgeHTML}
+                ${amenitiesHTML}
+                <img src="${finalImageUrl}" alt="${row['Property Name']}" onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60';">
             </div>
-            `;
-            grid.innerHTML += cardHTML;
+            <div class="property-details">
+                <h3 class="price">${row['Price']}</h3>
+                <p style="font-size: 1.05rem; color: #4a5568; margin-bottom: 5px; font-weight: 500;">${row['Property Name']}</p>
+                <p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${row['Area'] ? row['Area'].trim() + ', Sarawak' : 'Miri, Sarawak'}</p>
+            </div>
+            <div style="padding: 0 20px 20px 20px; margin-top: auto;">
+                <button class="whatsapp-btn" style="width: 100%; border:none; cursor:pointer;">View Details</button>
+            </div>
+        </div>
+        `;
+        if (grid) grid.innerHTML += cardHTML;
+    });
+
+    const typeFilter = document.getElementById('typeFilter');
+    if (typeFilter) {
+        typeFilter.innerHTML = '<option value="all">All Types</option>';
+        Array.from(uniqueTypes).sort().forEach(typeName => {
+            typeFilter.innerHTML += `<option value="${typeName.toLowerCase()}">${typeName}</option>`;
         });
+    }
 
-        const typeFilter = document.getElementById('typeFilter');
-        if (typeFilter) {
-            typeFilter.innerHTML = '<option value="all">All Types</option>';
-            Array.from(uniqueTypes).sort().forEach(typeName => {
-                typeFilter.innerHTML += `<option value="${typeName.toLowerCase()}">${typeName}</option>`;
-            });
-        }
+    const areaFilter = document.getElementById('areaFilter');
+    if (areaFilter) {
+        areaFilter.innerHTML = '<option value="all">All Areas</option>';
+        Array.from(uniqueAreas).sort().forEach(areaName => {
+            areaFilter.innerHTML += `<option value="${areaName.toLowerCase()}">${areaName}</option>`;
+        });
+    }
 
-        const areaFilter = document.getElementById('areaFilter');
-        if (areaFilter) {
-            areaFilter.innerHTML = '<option value="all">All Areas</option>';
-            Array.from(uniqueAreas).sort().forEach(areaName => {
-                areaFilter.innerHTML += `<option value="${areaName.toLowerCase()}">${areaName}</option>`;
-            });
-        }
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchQuery = urlParams.get('q');
+    if (searchQuery) {
+        const searchBar = document.getElementById('searchBar');
+        if (searchBar) searchBar.value = searchQuery;
+    }
 
-        // Auto-search if someone shares a link with ?q=Keyword
-        const urlParams = new URLSearchParams(window.location.search);
-        const searchQuery = urlParams.get('q');
-        if (searchQuery) {
-            const searchBar = document.getElementById('searchBar');
-            if (searchBar) searchBar.value = searchQuery;
-        }
+    filterProperties();
 
-        filterProperties();
-
-        // Check if someone shared a specific property link to open the modal
-        const sharedPropertyId = urlParams.get('p');
-        if (sharedPropertyId !== null && allPropertiesData[sharedPropertyId]) {
-            openModal(sharedPropertyId);
-        }
+    const sharedPropertyId = urlParams.get('p');
+    if (sharedPropertyId !== null && allPropertiesData[sharedPropertyId]) {
+        openModal(sharedPropertyId);
     }
 });
 
