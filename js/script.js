@@ -96,20 +96,17 @@ Papa.parse(csvUrl, {
 
             // Clean card HTML integrating the new badges
             let cardHTML = `
-            <div class="property-card clickable-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" onclick="openModal(${index})" style="display:flex; flex-direction:column; height:100%;">
-                <div class="image-wrapper">
-                    ${statusBadgeHTML}
-                    ${badgeHTML}
-                    ${amenitiesHTML}
-                    <img src="${firstImage}" alt="${row['Property Name']}">
-                </div>
+            <div class="property-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}">
+                ${badgeHTML}
+                <img src="${row['Image Name']}" alt="${row['Property Name']}" title="${row['Property Name']}" onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';">
                 <div class="property-details">
-                    <h3 class="price">${row['Price']}</h3>
-                    <p style="font-size: 1.05rem; color: #4a5568; margin-bottom: 5px; font-weight: 500;">${row['Property Name']}</p>
-                    <p style="color: #718096; font-size: 0.9rem; margin-bottom: 15px;">${row['Area'] ? row['Area'].trim() + ', Sarawak' : 'Miri, Sarawak'}</p>
-                </div>
-                <div style="padding: 0 20px 20px 20px; margin-top: auto;">
-                    <button class="whatsapp-btn" style="width: 100%; border:none; cursor:pointer;">View Details</button>
+                    <h3>${row['Property Name']}</h3>
+                    <p class="price">${row['Price']}</p>
+                    <div class="pros-cons">
+                        <p class="pro" style="color: #1a365d;"><strong>✅ Details:</strong><br>${details}</p>
+                    </div>
+                    ${videoHTML}
+                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(row['Property Name'])}" class="whatsapp-btn" target="_blank">Chat on WhatsApp</a>
                 </div>
             </div>
             `;
@@ -454,6 +451,20 @@ if (header) {
             }
         }
         
+        lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
+    }, false);
+}
+let lastScrollTop = 0;
+const header = document.querySelector('header');
+
+if (header) {
+    window.addEventListener('scroll', function() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTop > lastScrollTop && scrollTop > 60) {
+            header.classList.add('header-hidden');
+        } else {
+            header.classList.remove('header-hidden');
+        }
         lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; 
     }, false);
 }
