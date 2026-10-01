@@ -8,20 +8,20 @@
     <meta name="keywords" content="Miri property, house for sale Miri, property agent Miri, rent house Miri, shoplot Miri, buy house Miri, Kommons Realty, Jong Kiat Shan">
     <link rel="icon" type="image/png" href="photos/icononly.png">
     
-    <!-- Open Graph Meta Tags (Dynamic - Updated when property is viewed) -->
-    <meta property="og:title" content="Buy, Sell & Rent Property in Miri | Jong Express Property">
-    <meta property="og:description" content="Browse our verified property listings in Miri, Sarawak.">
-    <meta property="og:image" content="https://jongexpressproperty.online/photos/icononly.png">
-    <meta property="og:image:alt" content="Jong Express Property">
-    <meta property="og:url" content="https://jongexpressproperty.online/">
+    <!-- Open Graph Meta Tags (Will be updated server-side based on ?p= parameter) -->
+    <meta property="og:title" content="Buy, Sell & Rent Property in Miri | Jong Express Property" id="og-title">
+    <meta property="og:description" content="Browse our verified property listings in Miri, Sarawak." id="og-description">
+    <meta property="og:image" content="https://jongexpressproperty.online/photos/icononly.png" id="og-image">
+    <meta property="og:image:alt" content="Jong Express Property" id="og-image-alt">
+    <meta property="og:url" content="https://jongexpressproperty.online/" id="og-url">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Jong Express Property">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Buy, Sell & Rent Property in Miri | Jong Express Property">
-    <meta name="twitter:description" content="Browse our verified property listings in Miri, Sarawak.">
-    <meta name="twitter:image" content="https://jongexpressproperty.online/photos/icononly.png">
+    <meta name="twitter:title" content="Buy, Sell & Rent Property in Miri | Jong Express Property" id="twitter-title">
+    <meta name="twitter:description" content="Browse our verified property listings in Miri, Sarawak." id="twitter-description">
+    <meta name="twitter:image" content="https://jongexpressproperty.online/photos/icononly.png" id="twitter-image">
     
     <!-- SEO: Real Estate Agent Schema for Google -->
     <script type="application/ld+json">
@@ -78,6 +78,57 @@
     <noscript>
      <img height="1" width="1" src="https://www.facebook.com/tr?id=2776876486027023&ev=PageView&noscript=1"/>
     </noscript>
+
+    <!-- CRITICAL: Update OG tags on page load based on ?p= parameter -->
+    <script>
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const propertyId = urlParams.get('p');
+            
+            if (propertyId !== null) {
+                // Fetch the property data from Google Sheets CSV
+                fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs1vXMme9mBWAEtQUGkFbB7wcL_n-IGGkFzzwvq2yxQgWKuhyZKe-J4tYza3yzLtO/pub?output=csv')
+                    .then(response => response.text())
+                    .then(data => {
+                        // Parse CSV manually
+                        const lines = data.split('\n');
+                        if (lines.length > 1 && propertyId < lines.length - 1) {
+                            // Parse header and data row
+                            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+                            const dataRow = lines[parseInt(propertyId) + 1].split(',').map(d => d.trim().replace(/"/g, ''));
+                            
+                            const property = {};
+                            headers.forEach((header, idx) => {
+                                property[header] = dataRow[idx] || '';
+                            });
+                            
+                            if (property['Property Name']) {
+                                const title = property['Property Name'] + ' | Jong Express Property';
+                                const image = property['Image Name'] ? property['Image Name'].split(',')[0].trim() : 'https://jongexpressproperty.online/photos/icononly.png';
+                                const description = property['The Good (Pros)'] ? property['The Good (Pros)'].substring(0, 160) : property['Area'] || 'Property in Miri';
+                                const url = window.location.href;
+                                
+                                // Update OG meta tags
+                                document.getElementById('og-title').setAttribute('content', title);
+                                document.getElementById('og-description').setAttribute('content', description);
+                                document.getElementById('og-image').setAttribute('content', image);
+                                document.getElementById('og-image-alt').setAttribute('content', property['Property Name']);
+                                document.getElementById('og-url').setAttribute('content', url);
+                                
+                                // Update Twitter meta tags
+                                document.getElementById('twitter-title').setAttribute('content', title);
+                                document.getElementById('twitter-description').setAttribute('content', description);
+                                document.getElementById('twitter-image').setAttribute('content', image);
+                                
+                                // Update page title
+                                document.title = title;
+                            }
+                        }
+                    })
+                    .catch(error => console.log('Could not update meta tags:', error));
+            }
+        })();
+    </script>
 </head>
 <body>
 
@@ -344,38 +395,5 @@
         }
     </script>
     <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-
-    <!-- Function to update Open Graph tags when property is viewed -->
-    <script>
-    function updateOpenGraphTags(propertyTitle, propertyDescription, propertyImage, propertyPrice) {
-        // Update OG Title
-        let ogTitle = document.querySelector('meta[property="og:title"]');
-        if (ogTitle) ogTitle.setAttribute('content', propertyTitle + ' | Jong Express Property');
-        
-        // Update OG Description
-        let ogDesc = document.querySelector('meta[property="og:description"]');
-        if (ogDesc) ogDesc.setAttribute('content', propertyDescription);
-        
-        // Update OG Image
-        let ogImage = document.querySelector('meta[property="og:image"]');
-        if (ogImage) ogImage.setAttribute('content', propertyImage);
-        
-        // Update OG Image Alt
-        let ogImageAlt = document.querySelector('meta[property="og:image:alt"]');
-        if (ogImageAlt) ogImageAlt.setAttribute('content', propertyTitle);
-        
-        // Update Twitter Card Title
-        let twitterTitle = document.querySelector('meta[name="twitter:title"]');
-        if (twitterTitle) twitterTitle.setAttribute('content', propertyTitle + ' | Jong Express Property');
-        
-        // Update Twitter Card Description
-        let twitterDesc = document.querySelector('meta[name="twitter:description"]');
-        if (twitterDesc) twitterDesc.setAttribute('content', propertyDescription);
-        
-        // Update Twitter Card Image
-        let twitterImage = document.querySelector('meta[name="twitter:image"]');
-        if (twitterImage) twitterImage.setAttribute('content', propertyImage);
-    }
-    </script>
 </body>
 </html>
