@@ -96,7 +96,7 @@ Papa.parse(csvUrl, {
 
             // Clean card HTML integrating the new badges
             let cardHTML = `
-            <div class="property-card clickable-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" onclick="openModal(${index})" style="display:flex; flex-direction:column; height:100%;">
+            <div class="property-card clickable-card" data-status="${status}" data-type="${typeValue || 'all'}" data-area="${areaValue || 'all'}" data-project="${isProject}" onclick="openModal(${index})">
                 <div class="image-wrapper">
                     ${statusBadgeHTML}
                     ${badgeHTML}
@@ -219,6 +219,10 @@ function openModal(index) {
     let typeValue = row['Type'] ? row['Type'].trim() : 'Property';
     let priceStr = row['Price'] ? String(row['Price']).trim() : 'Price on Request';
     let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
+    let mainImg = row['Image Name'] ? row['Image Name'].trim().split(',')[0] : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
+    
+    // UPDATE OPEN GRAPH TAGS FOR SOCIAL SHARING & SEO
+    updateOpenGraphTags(title, rawDesc || address, mainImg, priceStr);
     
     document.getElementById('modal-title').innerText = title;
     document.getElementById('modal-address').innerText = address;
@@ -236,7 +240,6 @@ function openModal(index) {
     });
     document.getElementById('modal-description-list').innerHTML = listHTML;
 
-    let mainImg = row['Image Name'] ? row['Image Name'].trim().split(',')[0] : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
     document.getElementById('modal-main-img').src = mainImg;
     
     let videoLink = row['Video Link'] ? row['Video Link'].trim() : '';
@@ -257,6 +260,9 @@ function openModal(index) {
     document.getElementById('modal-share-btn').onclick = function() {
         shareListing(title, index);
     };
+
+    // Trigger the similar properties engine
+    renderSimilarProperties(row['Area'] || 'Miri', row['Type'] || 'Property', title);
 
     document.getElementById('property-modal').style.display = 'block';
 }
@@ -418,12 +424,12 @@ function renderSimilarProperties(currentArea, currentType, currentName) {
     similarMatches.forEach(row => {
         // Create a mini-card for the similar property
         let card = `
-            <div style="min-width: 220px; max-width: 220px; background: #f7fafc; border-radius: 8px; overflow: hidden; box-shadow: 0 3px 6px rgba(0,0,0,0.1); flex-shrink: 0; border: 1px solid #e2e8f0;">
+            <div style="min-width: 220px; max-width: 220px; background: #f7fafc; border-radius: 8px; overflow: hidden; box-shadow: 0 3px 6px rgba(0,0,0,0.1); flex-shrink: 0; border: 1px solid #e2e8f0; cursor: pointer;" onclick="openModal(${window.allPropertyData.indexOf(row)})">
                 <img src="${row['Image Name']}" style="width: 100%; height: 140px; object-fit: cover; background: #cbd5e0;">
                 <div style="padding: 12px;">
                     <h4 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${row['Property Name']}</h4>
                     <p style="color: var(--secondary); font-weight: bold; font-size: 1rem; margin-bottom: 10px;">${row['Price']}</p>
-                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(row['Property Name'])}" target="_blank" style="display: block; text-align: center; background: var(--primary); color: white; text-decoration: none; padding: 8px; border-radius: 4px; font-size: 0.85rem; font-weight: bold;">View Details</a>
+                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(row['Property Name'])}" target="_blank" style="display: block; text-align: center; background: var(--primary); color: white; padding: 8px; border-radius: 5px; text-decoration: none; font-size: 0.85rem; font-weight: bold;">Chat on WhatsApp</a>
                 </div>
             </div>
         `;
