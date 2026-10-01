@@ -235,9 +235,6 @@ function openModal(index) {
     let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
     let mainImg = row['Image Name'] ? row['Image Name'].trim().split(',')[0] : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
     
-    // UPDATE OPEN GRAPH TAGS FOR SOCIAL SHARING & SEO
-    updateOpenGraphTags(title, rawDesc || address, mainImg, priceStr);
-    
     document.getElementById('modal-title').innerText = title;
     document.getElementById('modal-address').innerText = address;
     document.getElementById('modal-price').innerText = priceStr;
@@ -263,7 +260,6 @@ function openModal(index) {
         if (ytEmbed) {
             videoHTML = `<div class="video-container"><iframe src="${ytEmbed}" allowfullscreen></iframe></div>`;
         } else {
-            // Emoji fixed here too!
             videoHTML = `<a href="${videoLink}" class="video-btn" target="_blank">🎬 Watch Video Tour</a>`;
         }
     }
@@ -338,6 +334,7 @@ function clearAllFilters() {
     // Run the filter function to show all properties again
     resetAndFilter();
 }
+
 // Function for one-click tag searches (e.g. clicking 'Pujut')
 function quickSearch(keyword) {
     const searchBar = document.getElementById('searchBar');
@@ -353,6 +350,7 @@ function quickSearch(keyword) {
     // Smooth scroll straight down to the results
     document.querySelector('.property-grid').scrollIntoView({ behavior: 'smooth' });
 }
+
 // --- Custom AI Chatbot Logic ---
 function toggleChat() {
     const chatWindow = document.getElementById('chat-window');
@@ -402,6 +400,7 @@ async function sendMessage() {
         msgBox.innerHTML += `<div class="bot-msg">Sorry, the system is busy. Please WhatsApp Jong directly!</div>`;
     }
 }
+
 // --- "Similar Properties" Recommendation Engine ---
 function renderSimilarProperties(currentArea, currentType, currentName) {
     const similarGrid = document.getElementById('similar-grid');
@@ -450,6 +449,7 @@ function renderSimilarProperties(currentArea, currentType, currentName) {
         similarGrid.innerHTML += card;
     });
 }
+
 // --- Smart Mobile Header Logic ---
 let lastScrollTop = 0;
 const header = document.querySelector('header');
