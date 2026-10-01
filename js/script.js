@@ -5,6 +5,20 @@ let currentLimit = 6;
 let currentMarket = 'all'; 
 let allPropertiesData = []; 
 
+function slugify(value = '') {
+    return String(value)
+        .toLowerCase()
+        .trim()
+        .replace(/&/g, 'and')
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '') || 'property';
+}
+
+function getPropertyPageUrl(title) {
+    const safeTitle = String(title || 'property').trim() || 'property';
+    return `https://jongexpressproperty.online/property/${slugify(safeTitle)}.html`;
+}
+
 function getYouTubeEmbedUrl(url) {
     if (!url || (!url.includes('youtube.com') && !url.includes('youtu.be'))) {
         return null;
@@ -282,7 +296,7 @@ function closeFullscreenImage() {
 }
 
 function shareListing(title, index) {
-    const propertyUrl = window.location.origin + window.location.pathname + '?p=' + index;
+    const propertyUrl = getPropertyPageUrl(title);
     if (navigator.share) {
         navigator.share({
             title: title,
@@ -424,12 +438,12 @@ function renderSimilarProperties(currentArea, currentType, currentName) {
     similarMatches.forEach(row => {
         // Create a mini-card for the similar property
         let card = `
-            <div style="min-width: 220px; max-width: 220px; background: #f7fafc; border-radius: 8px; overflow: hidden; box-shadow: 0 3px 6px rgba(0,0,0,0.1); flex-shrink: 0; border: 1px solid #e2e8f0; cursor: pointer;" onclick="openModal(${window.allPropertyData.indexOf(row)})">
+            <div style="min-width: 220px; max-width: 220px; background: #f7fafc; border-radius: 8px; overflow: hidden; box-shadow: 0 3px 6px rgba(0,0,0,0.1); flex-shrink: 0; border: 1px solid #e2e8f0;">
                 <img src="${row['Image Name']}" style="width: 100%; height: 140px; object-fit: cover; background: #cbd5e0;">
                 <div style="padding: 12px;">
                     <h4 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${row['Property Name']}</h4>
                     <p style="color: var(--secondary); font-weight: bold; font-size: 1rem; margin-bottom: 10px;">${row['Price']}</p>
-                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(row['Property Name'])}" target="_blank" style="display: block; text-align: center; background: var(--primary); color: white; padding: 8px; border-radius: 5px; text-decoration: none; font-size: 0.85rem; font-weight: bold;">Chat on WhatsApp</a>
+                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(row['Property Name'])}" target="_blank" style="display: block; text-align: center; background: #25D366; color: white; padding: 8px 10px; border-radius: 6px; text-decoration: none; font-weight: bold;">WhatsApp</a>
                 </div>
             </div>
         `;
