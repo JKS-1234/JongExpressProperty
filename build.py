@@ -274,7 +274,7 @@ def build_listings(rows):
             "area_slugs": area_slugs, "area_label": area_label,
             "price_num": price_num, "price_text": price_text, "raw_desc": raw_desc,
             "facts": extract_facts(raw_desc), "images": resolve_images(item.get('Image Name')),
-            "video": clean_text(item.get('Video Link') or ''), "url": f"/property/{slug}.html",
+            "video": clean_text(item.get('Video Link') or ''), "url": f"/property/{slug}",
         })
     return listings
 
@@ -311,8 +311,8 @@ def meta_description(l):
 
 # ---------------------------------------------------------------- html chrome
 
-NAV_LINKS = [("/", "Home"), ("/property/", "All Listings"), ("/type/houses-for-sale-miri.html", "Houses"),
-             ("/type/shoplots-miri.html", "Shoplots"), ("/type/property-for-rent-miri.html", "For Rent"), ("/faq.html", "FAQ")]
+NAV_LINKS = [("/", "Home"), ("/property/", "All Listings"), ("/type/houses-for-sale-miri", "Houses"),
+             ("/type/shoplots-miri", "Shoplots"), ("/type/property-for-rent-miri", "For Rent"), ("/faq", "FAQ")]
 
 
 def gtag_snippet():
@@ -331,11 +331,11 @@ def site_header():
 
 
 def footer_links_html(indexable_areas, indexable_types):
-    areas = ''.join(f'<li><a href="/area/{a["slug"]}.html">Property in {escape_html(a["name"])}</a></li>' for a in indexable_areas)
-    types = ''.join(f'<li><a href="/type/{t["slug"]}.html">{escape_html(t["name"])} in Miri</a></li>' for t in indexable_types)
+    areas = ''.join(f'<li><a href="/area/{a["slug"]}">Property in {escape_html(a["name"])}</a></li>' for a in indexable_areas)
+    types = ''.join(f'<li><a href="/type/{t["slug"]}">{escape_html(t["name"])} in Miri</a></li>' for t in indexable_types)
     return (f'<div class="footer-cols"><div><h4>Miri Areas</h4><ul>{areas}</ul></div>'
             f'<div><h4>Property Types</h4><ul>{types}</ul></div>'
-            f'<div><h4>{BRAND}</h4><ul><li><a href="/property/">All Miri listings</a></li><li><a href="/faq.html">FAQ</a></li>'
+            f'<div><h4>{BRAND}</h4><ul><li><a href="/property/">All Miri listings</a></li><li><a href="/faq">FAQ</a></li>'
             f'<li><a href="https://wa.me/{PHONE_INTL}" rel="noopener">WhatsApp +60 16-924 2000</a></li></ul></div></div>')
 
 
@@ -472,12 +472,12 @@ def build_property_page(ctx, l, listings):
     trail = [("Home", "/")]
     type_slugs = ctx["type_for_kind"].get((l["kind"], l["status"]), [])
     type_page = next((t for t in ctx["types"] if t["slug"] in type_slugs), None)
-    trail.append((type_page["name"] + " in Miri", f"/type/{type_page['slug']}.html") if type_page else ("All Listings", "/property/"))
+    trail.append((type_page["name"] + " in Miri", f"/type/{type_page['slug']}") if type_page else ("All Listings", "/property/"))
     trail.append((title, l["url"]))
 
     related = related_listings(l, listings)
     related_html = f'<h2>Related listings in Miri</h2><div class="card-grid">{"".join(card_html(r) for r in related)}</div>' if related else ''
-    area_links = ''.join(f'<a href="/area/{s}.html">More property in {escape_html(AREA_BY_SLUG[s]["name"])}</a>' for s in l["area_slugs"] if s in ctx["area_ok"])
+    area_links = ''.join(f'<a href="/area/{s}">More property in {escape_html(AREA_BY_SLUG[s]["name"])}</a>' for s in l["area_slugs"] if s in ctx["area_ok"])
 
     body = f"""  <main class="seo-main">
     {breadcrumb_html(trail)}
@@ -543,14 +543,14 @@ def collection_ld(name, desc, path, group, trail):
 
 
 def other_links_chips(ctx, exclude_area=None, exclude_type=None):
-    a = ''.join(f'<a href="/area/{x["slug"]}.html">{escape_html(x["name"])}</a>' for x in ctx["areas"] if x["slug"] != exclude_area)
-    t = ''.join(f'<a href="/type/{x["slug"]}.html">{escape_html(x["name"])}</a>' for x in ctx["types"] if x["slug"] != exclude_type)
+    a = ''.join(f'<a href="/area/{x["slug"]}">{escape_html(x["name"])}</a>' for x in ctx["areas"] if x["slug"] != exclude_area)
+    t = ''.join(f'<a href="/type/{x["slug"]}">{escape_html(x["name"])}</a>' for x in ctx["types"] if x["slug"] != exclude_type)
     return a, t
 
 
 def build_area_page(ctx, area, group):
     name = area["name"]
-    path = f"/area/{area['slug']}.html"
+    path = f"/area/{area['slug']}"
     title = f"Property for Sale & Rent in {name}, Miri | {BRAND}"
     kinds = {}
     for l in group:
@@ -588,7 +588,7 @@ def build_area_page(ctx, area, group):
 
 
 def build_type_page(ctx, t, group):
-    path = f"/type/{t['slug']}.html"
+    path = f"/type/{t['slug']}"
     trail = [("Home", "/"), (t["name"] + " in Miri", path)]
     if group:
         summary = f"{len(group)} current listing{'s' if len(group) != 1 else ''}. {price_range_sentence(group)}"
@@ -598,7 +598,7 @@ def build_type_page(ctx, t, group):
     for l in group:
         if l["area_slugs"]:
             area_counts[l["area_slugs"][0]] = area_counts.get(l["area_slugs"][0], 0) + 1
-    area_chips = ''.join(f'<a href="/area/{s}.html">{escape_html(AREA_BY_SLUG[s]["name"])} ({n})</a>'
+    area_chips = ''.join(f'<a href="/area/{s}">{escape_html(AREA_BY_SLUG[s]["name"])} ({n})</a>'
                          for s, n in sorted(area_counts.items(), key=lambda x: -x[1]) if s in ctx["area_ok"])
     _, t_chips = other_links_chips(ctx, exclude_type=t["slug"])
     cards = f'<div class="card-grid">{"".join(card_html(l) for l in group)}</div>' if group else ''
@@ -761,7 +761,7 @@ def main():
             write_file(f"{d}/{it['slug']}.html", content)
             keep.add(f"{it['slug']}.html")
             if grp:
-                sitemap.append((f"/{d}/{it['slug']}.html", content))
+                sitemap.append((f"/{d}/{it['slug']}", content))
         for f in os.listdir(d):
             if f.endswith('.html') and f not in keep:
                 os.remove(os.path.join(d, f))
@@ -783,10 +783,10 @@ def main():
                 write_file(p, redirect_stub(by_slug[slug]["url"]))
             else:
                 os.remove(p)
-    houses_target = "/type/houses-for-sale-miri.html" if any(t["slug"] == "houses-for-sale-miri" for t in types_ok) else "/property/"
-    legacy_pages = {"PageListing/lopeng.html": "/area/lopeng.html", "PageListing/permy.html": "/area/permyjaya.html",
-                    "PageListing/pujut.html": "/area/pujut.html", "PageListing/riam.html": "/area/riam.html",
-                    "PageListing/senadin.html": "/area/senadin.html", "PageListing/semi-detached.html": houses_target,
+    houses_target = "/type/houses-for-sale-miri" if any(t["slug"] == "houses-for-sale-miri" for t in types_ok) else "/property/"
+    legacy_pages = {"PageListing/lopeng.html": "/area/lopeng", "PageListing/permy.html": "/area/permyjaya",
+                    "PageListing/pujut.html": "/area/pujut", "PageListing/riam.html": "/area/riam",
+                    "PageListing/senadin.html": "/area/senadin", "PageListing/semi-detached.html": houses_target,
                     "semi-detached.html": houses_target}
     for p, target in legacy_pages.items():
         if os.path.exists(p):
@@ -794,7 +794,7 @@ def main():
 
     entries = [("/", home), ("/property/", index_content)] + sitemap
     if os.path.exists("faq.html"):
-        entries.append(("/faq.html", read_file("faq.html")))
+        entries.append(("/faq", read_file("faq.html")))
     out = []
     for path, content in entries:
         loc = SITE + path

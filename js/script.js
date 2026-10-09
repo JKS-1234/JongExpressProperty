@@ -24,7 +24,7 @@ function slugify(value = '') {
 
 function getPropertyPageUrl(title) {
     const safeTitle = String(title || 'property').trim() || 'property';
-    return `https://jongexpressproperty.online/property/${slugify(safeTitle)}.html`;
+    return `https://jongexpressproperty.online/property/${slugify(safeTitle)}`;
 }
 
 function getYouTubeEmbedUrl(url) {
