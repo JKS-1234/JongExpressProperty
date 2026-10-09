@@ -55,6 +55,10 @@ def build_property_html(item, index):
     description = clean_text(item.get('The Good (Pros)') or f'{area}. {price}. Verified property listing in Miri.')[:160]
     image = get_image_url(item)
     page_url = f"https://jongexpressproperty.online/property/{slugify(title)}.html"
+    
+    # Create WhatsApp message with property details
+    whatsapp_message = f"Hi Jong, I'm interested in this property:\n\n📍 {title}\n💰 {price}\n📍 {area}\n\nPlease tell me more details!"
+    whatsapp_link = f"https://wa.me/60169242000?text={urllib.parse.quote(whatsapp_message)}"
 
     return f"""<!DOCTYPE html>
 <html lang=\"en\">
@@ -75,18 +79,64 @@ def build_property_html(item, index):
   <meta name=\"twitter:description\" content=\"{escape_html(description)}\" />
   <meta name=\"twitter:image\" content=\"{escape_html(image)}\" />
   <link rel=\"canonical\" href=\"{escape_html(page_url)}\" />
+  <style>
+    * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+    body {{ font-family: Arial, sans-serif; background: #f3f4f6; color: #111827; line-height: 1.6; }}
+    main {{ max-width: 980px; margin: 40px auto; background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); }}
+    h1 {{ margin: 0 0 10px; font-size: 2rem; color: #111827; }}
+    .property-header {{ margin: 0 0 16px; font-size: 1.1rem; color: #475467; }}
+    .brand {{ margin: 0 0 12px; color: #2563eb; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 12px; }}
+    img {{ width: 100%; max-height: 520px; object-fit: cover; border-radius: 8px; display: block; margin: 20px 0; }}
+    .description {{ margin: 18px 0; color: #374151; line-height: 1.7; }}
+    .button-container {{ margin: 30px 0 0 0; display: flex; flex-direction: column; gap: 12px; }}
+    .btn {{ display: inline-block; padding: 14px 24px; border-radius: 8px; font-weight: 700; text-decoration: none; text-align: center; cursor: pointer; border: none; font-size: 1.05rem; transition: background 0.3s; }}
+    .whatsapp-btn {{ background: #25D366; color: #fff; }}
+    .whatsapp-btn:hover {{ background: #128C7E; }}
+    .share-btn {{ background: #3182ce; color: #fff; }}
+    .share-btn:hover {{ background: #2b6cb0; }}
+    .back-btn {{ background: #0f172a; color: #fff; }}
+    .back-btn:hover {{ background: #1a2540; }}
+    header {{ background: #1a365d; color: white; padding: 20px; text-align: center; }}
+    header a {{ color: #d69e2e; text-decoration: none; font-weight: bold; font-size: 1.5rem; }}
+    footer {{ background: #1a365d; color: white; text-align: center; padding: 20px; margin-top: 30px; }}
+    .property-details {{ background: #f7fafc; padding: 15px; border-radius: 8px; margin: 15px 0; }}
+    @media (max-width: 768px) {{
+      main {{ margin: 20px 10px; padding: 15px; }}
+      h1 {{ font-size: 1.5rem; }}
+      .btn {{ padding: 12px 18px; font-size: 0.95rem; }}
+      .button-container {{ flex-direction: column; }}
+    }}
+  </style>
 </head>
-<body style=\"font-family:Arial,sans-serif; margin:0; background:#f3f4f6; color:#111827;\">
-  <main style=\"max-width:980px; margin:40px auto; background:#fff; border-radius:12px; padding:24px; box-shadow:0 10px 25px rgba(0,0,0,0.08);\">
-    <p style=\"margin:0 0 12px; color:#2563eb; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; font-size:12px;\">Jong Express Property</p>
-    <h1 style=\"margin:0 0 10px; font-size:2rem;\">{escape_html(title)}</h1>
-    <p style=\"margin:0 0 16px; font-size:1.1rem; color:#475467;\">{escape_html(price)} • {escape_html(area)}</p>
-    <img src=\"{escape_html(image)}\" alt=\"{escape_html(title)}\" style=\"width:100%; max-height:520px; object-fit:cover; border-radius:12px; display:block;\" />
-    <p style=\"margin-top:18px; color:#374151; line-height:1.7;\">{escape_html(description)}</p>
-    <p style=\"margin-top:18px;\">
-      <a href=\"https://jongexpressproperty.online/\" style=\"display:inline-block; background:#0f172a; color:#fff; text-decoration:none; padding:12px 18px; border-radius:8px; font-weight:700;\">Back to property listings</a>
-    </p>
+<body>
+  <header>
+    <a href=\"https://jongexpressproperty.online/\">Jong Express Property</a>
+  </header>
+  
+  <main>
+    <p class=\"brand\">Jong Express Property</p>
+    <h1>{escape_html(title)}</h1>
+    <p class=\"property-header\">💰 {escape_html(price)} • 📍 {escape_html(area)}</p>
+    
+    <img src=\"{escape_html(image)}\" alt=\"{escape_html(title)}\" />
+    
+    <p class=\"description\">{escape_html(description)}</p>
+    
+    <div class=\"property-details\">
+      <p><strong>Property Name:</strong> {escape_html(title)}</p>
+      <p><strong>Price:</strong> {escape_html(price)}</p>
+      <p><strong>Location:</strong> {escape_html(area)}</p>
+    </div>
+    
+    <div class=\"button-container\">
+      <a href=\"{whatsapp_link}\" target=\"_blank\" class=\"btn whatsapp-btn\">💬 Chat on WhatsApp</a>
+      <a href=\"https://jongexpressproperty.online/\" class=\"btn back-btn\">🏠 Back to All Listings</a>
+    </div>
   </main>
+  
+  <footer>
+    <p>&copy; 2026 Jong Express Property. All rights reserved. | Represented by Jong Kiat Shan (Kommons Realty)</p>
+  </footer>
 </body>
 </html>"""
 
@@ -137,4 +187,4 @@ with open(os.path.join(property_dir, "index.html"), "w", encoding="utf-8") as f:
     f.write(index_html)
 
 print(f"Generated {len(data)} property pages in {property_dir}/")
-print("Static property previews are ready for social sharing.")
+print("Static property previews are ready for social sharing with WhatsApp buttons!")
