@@ -26,6 +26,11 @@
     .brand { margin: 0 0 12px; color: #2563eb; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 12px; }
     img { width: 100%; max-height: 520px; object-fit: cover; border-radius: 8px; display: block; margin: 20px 0; }
     .description { margin: 18px 0; color: #374151; line-height: 1.7; }
+    .description p { margin: 0 0 10px; }
+    .desc-heading { font-size: 1.05rem; color: #1a365d; margin: 16px 0 6px; }
+    .desc-list { list-style: none; margin: 0 0 12px; padding: 0; }
+    .desc-list li { position: relative; padding: 8px 0 8px 26px; border-bottom: 1px solid #edf2f7; }
+    .desc-list li::before { content: "✓"; position: absolute; left: 4px; color: #25D366; font-weight: 700; }
     .button-container { margin: 30px 0 0 0; display: flex; flex-direction: column; gap: 12px; }
     .btn { display: inline-block; padding: 14px 24px; border-radius: 8px; font-weight: 700; text-decoration: none; text-align: center; cursor: pointer; border: none; font-size: 1.05rem; transition: background 0.3s; }
     .whatsapp-btn { background: #25D366; color: #fff; }
@@ -58,7 +63,7 @@
     
     <img src="https://raw.githubusercontent.com/JKS-1234/JongExpressProperty/main/photos/telegram-image1788624654.jpg" alt="Three Storey Inter Shoplot at Jalan Duranta Commercial Centre" />
     
-    <p class="description">- Built-up area 3000 sqft - Unfurnished - Near to Imperial Mall - Walking Distance to various businesses - 5 mins to Times Square - 10 mins to Pelita Commercial</p>
+    <div class="description"><ul class="desc-list"><li>Built-up area 3000 sqft</li><li>Unfurnished</li><li>Near to Imperial Mall</li><li>Walking Distance to various businesses</li><li>5 mins to Times Square</li><li>10 mins to Pelita Commercial</li><li>16 mins to Miri Airport</li></ul></div>
     
     <div class="property-details">
       <p><strong>Property Name:</strong> Three Storey Inter Shoplot at Jalan Duranta Commercial Centre</p>
