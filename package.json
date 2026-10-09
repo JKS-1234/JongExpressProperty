@@ -4,9 +4,7 @@
   "version": "1.0.0",
   "description": "Build step that turns the Google Sheet property list into static, SEO-indexable pages.",
   "scripts": {
-    "build": "node script/build.js"
-  },
-  "dependencies": {
-    "papaparse": "^5.4.1"
+    "build": "python build.py --offline",
+    "sync": "python build.py"
   }
 }
