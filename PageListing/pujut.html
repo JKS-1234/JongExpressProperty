@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Properties for Sale & Rent in Pujut, Miri | Jong Express Property</title>
-    <meta name="description" content="Discover verified houses, corner terraces, semi-detached homes, and commercial properties for sale and rent in Pujut, Miri. 100% genuine listings with transparent details.">
+    <meta name="description" content="Discover verified houses, corner terraces, semi-detached homes, and commercial properties for sale and rent in Pujut, Miri. 100% genuine listings with transparent pricing.">
     
     <!-- Path fixed to point outside the PageListing folder -->
     <link rel="icon" type="image/png" href="../photos/icononly.png">
@@ -122,6 +122,13 @@
                 <ul class="beautiful-list" id="modal-description-list"></ul>
                 <div id="modal-video" style="margin-top: 25px;"></div>
                 <div style="text-align: center; margin-top: 30px; display: flex; flex-direction: column; gap: 15px; align-items: center;">
+                    <!-- Similar Properties Engine -->
+                    <div id="similar-properties-section" style="display: none; margin-top: 40px; border-top: 2px solid #e2e8f0; padding-top: 25px; width: 100%;">
+                        <h3 style="color: var(--primary); text-align: center; margin-bottom: 20px; font-size: 1.4rem;">🔍 You Might Also Like</h3>
+                        <div id="similar-grid" style="display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; scroll-behavior: smooth;">
+                            <!-- The JS will automatically inject similar houses here -->
+                        </div>
+                    </div>
                     <a id="modal-whatsapp" href="#" class="whatsapp-btn" target="_blank" style="max-width:300px; width:100%; font-size: 1.1rem; padding: 15px;">💬 Chat on WhatsApp</a>
                     <button id="modal-share-btn" class="share-btn" style="max-width:300px;">🔗 Share Listing</button>
                 </div>
@@ -145,7 +152,7 @@
     <script src="../js/script.js"></script>
     
     <!-- WhatsApp anchored to LEFT to prevent Chatbase overlap -->
-    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20properties%20in%20Pujut!" target="_blank" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; border-radius: 50px; padding: 10px 20px; font-size: 16px; text-decoration: none; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.3); z-index: 1000;">
+    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20properties%20in%20Pujut!" target="_blank" style="position: fixed; bottom: 20px; left: 20px; background-color: #25D366; color: white; padding: 15px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 6px rgba(0,0,0,0.2); z-index: 999;">
         💬 WhatsApp Us
     </a>
     
