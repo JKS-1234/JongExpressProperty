@@ -40,6 +40,34 @@ def clean_text(value=''):
     return re.sub(r'\s+', ' ', str(value)).strip()
 
 
+def format_description_html(raw=''):
+    text = str(raw).replace('\u3164', ' ').replace('\r', '')
+    lines = [l.strip() for l in text.split('\n')]
+    lines = [l for l in lines if l]
+    if len(lines) <= 1:
+        lines = [p.strip() for p in re.split(r'\s+[•\-–]\s+|\s*•\s*', text) if p.strip()]
+    parts, bullets = [], []
+
+    def flush():
+        if bullets:
+            parts.append('<ul class="desc-list">' + ''.join(f'<li>{b}</li>' for b in bullets) + '</ul>')
+            bullets.clear()
+
+    for line in lines:
+        m = re.match(r'^[•\-–*·]\s*(.+)$', line)
+        if m:
+            bullets.append(escape_html(clean_text(m.group(1))))
+        elif len(lines) > 1 and re.match(r'^[^\w\s]', line) and line.rstrip().endswith(':'):
+            flush()
+            parts.append(f'<h3 class="desc-heading">{escape_html(clean_text(line))}</h3>')
+        elif len(lines) > 1 and not bullets and len(line) > 60:
+            parts.append(f'<p>{escape_html(clean_text(line))}</p>')
+        else:
+            bullets.append(escape_html(clean_text(line)))
+    flush()
+    return ''.join(parts)
+
+
 def get_image_url(item):
     raw = item.get('Image Name', '') or ''
     if not raw:
@@ -52,7 +80,9 @@ def build_property_html(item, index):
     title = clean_text(item.get('Property Name') or f'Property {index + 1}')
     price = clean_text(item.get('Price') or 'Price on request')
     area = clean_text(item.get('Area') or 'Miri, Sarawak')
-    description = clean_text(item.get('The Good (Pros)') or f'{area}. {price}. Verified property listing in Miri.')[:160]
+    raw_description = item.get('The Good (Pros)') or f'{area}. {price}. Verified property listing in Miri.'
+    description = clean_text(raw_description)[:160]
+    description_html = format_description_html(raw_description)
     image = get_image_url(item)
     page_url = f"https://jongexpressproperty.online/property/{slugify(title)}.html"
     
@@ -88,6 +118,11 @@ def build_property_html(item, index):
     .brand {{ margin: 0 0 12px; color: #2563eb; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-size: 12px; }}
     img {{ width: 100%; max-height: 520px; object-fit: cover; border-radius: 8px; display: block; margin: 20px 0; }}
     .description {{ margin: 18px 0; color: #374151; line-height: 1.7; }}
+    .description p {{ margin: 0 0 10px; }}
+    .desc-heading {{ font-size: 1.05rem; color: #1a365d; margin: 16px 0 6px; }}
+    .desc-list {{ list-style: none; margin: 0 0 12px; padding: 0; }}
+    .desc-list li {{ position: relative; padding: 8px 0 8px 26px; border-bottom: 1px solid #edf2f7; }}
+    .desc-list li::before {{ content: \"✓\"; position: absolute; left: 4px; color: #25D366; font-weight: 700; }}
     .button-container {{ margin: 30px 0 0 0; display: flex; flex-direction: column; gap: 12px; }}
     .btn {{ display: inline-block; padding: 14px 24px; border-radius: 8px; font-weight: 700; text-decoration: none; text-align: center; cursor: pointer; border: none; font-size: 1.05rem; transition: background 0.3s; }}
     .whatsapp-btn {{ background: #25D366; color: #fff; }}
@@ -120,7 +155,7 @@ def build_property_html(item, index):
     
     <img src=\"{escape_html(image)}\" alt=\"{escape_html(title)}\" />
     
-    <p class=\"description\">{escape_html(description)}</p>
+    <div class=\"description\">{description_html}</div>
     
     <div class=\"property-details\">
       <p><strong>Property Name:</strong> {escape_html(title)}</p>
