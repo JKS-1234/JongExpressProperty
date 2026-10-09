@@ -5,8 +5,16 @@ let currentLimit = 6;
 let currentMarket = 'all'; 
 let allPropertiesData = []; 
 
+// Serve listing photos from this domain instead of hotlinking raw.githubusercontent.com
+function localPhoto(url) {
+    const u = String(url || '').trim();
+    const m = u.match(/^https:\/\/raw\.githubusercontent\.com\/JKS-1234\/JongExpressProperty\/[^/]+\/photos\/(.+)$/);
+    return m ? `photos/${m[1].replace(/:/g, '-')}` : u;
+}
+
 function slugify(value = '') {
     return String(value)
+        .normalize('NFKC')
         .toLowerCase()
         .trim()
         .replace(/&/g, 'and')
@@ -106,7 +114,7 @@ Papa.parse(csvUrl, {
             }
             let amenitiesHTML = `<div class="amenities-badge">🛏️ ${beds} &nbsp;|&nbsp; 🚿 ${baths}</div>`;
 
-            let firstImage = row['Image Name'] ? row['Image Name'].split(',')[0].trim() : '';
+            let firstImage = row['Image Name'] ? localPhoto(row['Image Name'].split(',')[0]) : '';
 
             // Clean card HTML integrating the new badges
             let cardHTML = `
@@ -115,7 +123,7 @@ Papa.parse(csvUrl, {
                     ${statusBadgeHTML}
                     ${badgeHTML}
                     ${amenitiesHTML}
-                    <img src="${firstImage}" alt="${row['Property Name']}">
+                    <img src="${firstImage}" alt="${row['Property Name']}" loading="lazy" decoding="async">
                 </div>
                 <div class="property-details">
                     <h3 class="price">${row['Price']}</h3>
@@ -233,7 +241,7 @@ function openModal(index) {
     let typeValue = row['Type'] ? row['Type'].trim() : 'Property';
     let priceStr = row['Price'] ? String(row['Price']).trim() : 'Price on Request';
     let rawDesc = row['The Good (Pros)'] ? String(row['The Good (Pros)']) : '';
-    let mainImg = row['Image Name'] ? row['Image Name'].trim().split(',')[0] : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
+    let mainImg = row['Image Name'] ? localPhoto(row['Image Name'].split(',')[0]) : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=600&q=80';
     
     document.getElementById('modal-title').innerText = title;
     document.getElementById('modal-address').innerText = address;
@@ -456,7 +464,7 @@ function renderSimilarProperties(currentArea, currentType, currentName) {
         const similarWhatsappMsg = `Hi Jong, I'm interested in this property: ${similarPropertyName}`;
         let card = `
             <div class="similar-card">
-                <img src="${row['Image Name']}" alt="">
+                <img src="${localPhoto(String(row['Image Name'] || '').split(',')[0])}" alt="${similarPropertyName}" loading="lazy" decoding="async">
                 <div class="similar-card-body">
                     <h4>${similarPropertyName}</h4>
                     <p>${row['Price']}</p>

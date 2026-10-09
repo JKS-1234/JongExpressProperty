@@ -40,5 +40,5 @@ jobs:
         with:
           commit_message: "Automated Daily Sync: Updated Property Listings"
           branch: main
-          file_pattern: "property js sitemap.xml robots.txt llms.txt listings index.html"
+          file_pattern: "property area type listings PageListing semi-detached.html js sitemap.xml robots.txt llms.txt index.html"
           add_options: "-A"
