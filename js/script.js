@@ -265,10 +265,12 @@ function openModal(index) {
     }
     document.getElementById('modal-video').innerHTML = videoHTML;
 
-    document.getElementById('modal-whatsapp').href = `https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(title)}`;
+    // Enhanced WhatsApp message with property details
+    const whatsappMessage = `Hi Jong, I'm interested in this property:\n\n📍 ${title}\n💰 ${priceStr}\n📍 ${address}\n\nPlease tell me more details and arrange a viewing!`;
+    document.getElementById('modal-whatsapp').href = `https://wa.me/60169242000?text=${encodeURIComponent(whatsappMessage)}`;
     
     document.getElementById('modal-share-btn').onclick = function() {
-        shareListing(title, index);
+        shareListing(title, index, priceStr, address);
     };
 
     // Trigger the similar properties engine
@@ -291,18 +293,32 @@ function closeFullscreenImage() {
     document.getElementById('fullscreen-zoom').style.display = 'none'; 
 }
 
-function shareListing(title, index) {
+// Enhanced share function that opens WhatsApp with property details
+function shareListing(title, index, price, address) {
+    // Primary method: Share via native Web Share API with WhatsApp fallback
     const propertyUrl = getPropertyPageUrl(title);
+    const shareMessage = `Check out this property listing!\n\n📍 ${title}\n💰 ${price}\n📍 ${address}\n\n🔗 ${propertyUrl}`;
+    
     if (navigator.share) {
+        // Use native share (includes WhatsApp option on mobile)
         navigator.share({
             title: title,
-            text: `Check out this property listing: ${title}`,
+            text: shareMessage,
             url: propertyUrl,
-        }).catch((error) => console.log('Sharing failed', error));
+        }).catch((error) => {
+            // If share cancelled, fall back to WhatsApp
+            fallbackShareToWhatsApp(shareMessage);
+        });
     } else {
-        navigator.clipboard.writeText(propertyUrl);
-        alert("Listing link copied to clipboard!\n" + propertyUrl);
+        // No native share API: open WhatsApp directly
+        fallbackShareToWhatsApp(shareMessage);
     }
+}
+
+// Fallback function to share directly to WhatsApp
+function fallbackShareToWhatsApp(message) {
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
 }
 
 // Click outside overlay listener
@@ -436,13 +452,15 @@ function renderSimilarProperties(currentArea, currentType, currentName) {
     
     similarMatches.forEach(row => {
         // Create a mini-card for the similar property
+        const similarPropertyName = row['Property Name'];
+        const similarWhatsappMsg = `Hi Jong, I'm interested in this property: ${similarPropertyName}`;
         let card = `
             <div style="min-width: 220px; max-width: 220px; background: #f7fafc; border-radius: 8px; overflow: hidden; box-shadow: 0 3px 6px rgba(0,0,0,0.1); flex-shrink: 0; border: 1px solid #e2e8f0;">
                 <img src="${row['Image Name']}" style="width: 100%; height: 140px; object-fit: cover; background: #cbd5e0;">
                 <div style="padding: 12px;">
-                    <h4 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${row['Property Name']}</h4>
+                    <h4 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${similarPropertyName}</h4>
                     <p style="color: var(--secondary); font-weight: bold; font-size: 1rem; margin-bottom: 10px;">${row['Price']}</p>
-                    <a href="https://wa.me/60169242000?text=Hi%20Jong,%20I'm%20interested%20in%20${encodeURIComponent(row['Property Name'])}" target="_blank" style="display: block; text-align: center; background: #25D366; color: white; padding: 8px 10px; border-radius: 6px; text-decoration: none; font-weight: bold;">WhatsApp</a>
+                    <a href="https://wa.me/60169242000?text=${encodeURIComponent(similarWhatsappMsg)}" target="_blank" style="display: block; text-align: center; background: #25D366; color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold;">💬 Inquire</a>
                 </div>
             </div>
         `;
