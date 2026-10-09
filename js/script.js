@@ -455,12 +455,12 @@ function renderSimilarProperties(currentArea, currentType, currentName) {
         const similarPropertyName = row['Property Name'];
         const similarWhatsappMsg = `Hi Jong, I'm interested in this property: ${similarPropertyName}`;
         let card = `
-            <div style="min-width: 220px; max-width: 220px; background: #f7fafc; border-radius: 8px; overflow: hidden; box-shadow: 0 3px 6px rgba(0,0,0,0.1); flex-shrink: 0; border: 1px solid #e2e8f0;">
-                <img src="${row['Image Name']}" style="width: 100%; height: 140px; object-fit: cover; background: #cbd5e0;">
-                <div style="padding: 12px;">
-                    <h4 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${similarPropertyName}</h4>
-                    <p style="color: var(--secondary); font-weight: bold; font-size: 1rem; margin-bottom: 10px;">${row['Price']}</p>
-                    <a href="https://wa.me/60169242000?text=${encodeURIComponent(similarWhatsappMsg)}" target="_blank" style="display: block; text-align: center; background: #25D366; color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold;">💬 Inquire</a>
+            <div class="similar-card">
+                <img src="${row['Image Name']}" alt="">
+                <div class="similar-card-body">
+                    <h4>${similarPropertyName}</h4>
+                    <p>${row['Price']}</p>
+                    <a href="https://wa.me/60169242000?text=${encodeURIComponent(similarWhatsappMsg)}" target="_blank">💬 Inquire</a>
                 </div>
             </div>
         `;
