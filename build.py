@@ -341,7 +341,7 @@ def footer_links_html(indexable_areas, indexable_types):
 
 def site_footer(ctx):
     return (f'<footer class="site-footer">{ctx["footer_links"]}'
-            f'<p>&copy; {BRAND}. Represented by Jong Kiat Shan (REN 84702), Kommons Realty, Miri, Sarawak.</p></footer>\n'
+            f'<p>&copy; {BRAND}. Represented by Jong (REN 84702), Kommons Realty, Miri, Sarawak.</p></footer>\n'
             f'  <a class="float-wa" href="https://wa.me/{PHONE_INTL}?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20listings" target="_blank" rel="noopener noreferrer">💬 WhatsApp Us</a>')
 
 
@@ -464,7 +464,7 @@ def build_property_page(ctx, l, listings):
     if bits:
         fact_sentence = " It offers " + (', '.join(bits[:-1]) + ' and ' if len(bits) > 1 else '') + bits[-1] + '.'
     intro = (f"This {kind.lower()} is available for {sale_word(l)} in {l['area_label']}, Miri, Sarawak, listed at {l['price_text']}."
-             f"{fact_sentence} Contact Jong Kiat Shan (REN 84702, Kommons Realty) to arrange a viewing.")
+             f"{fact_sentence} Contact Jong (REN 84702, Kommons Realty) to arrange a viewing.")
 
     desc_html = '' if clean_text(l["raw_desc"]) in ('', '-') else format_description_html(l["raw_desc"])
     video_html = f'<p><a href="{escape_html(l["video"])}" target="_blank" rel="noopener">▶ Watch the video tour</a></p>' if l["video"] else ''
@@ -636,7 +636,7 @@ def build_property_index(ctx, listings):
     body = f"""  <main class="seo-main">
     {breadcrumb_html(trail)}
     <h1>Miri Properties for Sale and Rent</h1>
-    <p>Every listing below is currently marketed by Jong Kiat Shan (REN 84702, Kommons Realty). Browse houses, shoplots, warehouses, land and condos across Miri, or jump to a neighbourhood or property type.</p>
+    <p>Every listing below is currently marketed by Jong (REN 84702, Kommons Realty). Browse houses, shoplots, warehouses, land and condos across Miri, or jump to a neighbourhood or property type.</p>
     <h2>Browse by area</h2><div class="chip-row">{a_chips}</div>
     <h2>Browse by type</h2><div class="chip-row">{t_chips}</div>
     {''.join(sections)}
