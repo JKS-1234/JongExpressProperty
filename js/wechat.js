@@ -1,4 +1,26 @@
 (function () {
+  var fab = document.getElementById('contact-fab');
+  var fabBtn = fab && fab.querySelector('.contact-fab-btn');
+  var fabMenu = fab && fab.querySelector('.contact-fab-menu');
+
+  function setMenu(show, refocus) {
+    if (!fab) return;
+    fabMenu.hidden = !show;
+    fabBtn.setAttribute('aria-expanded', String(show));
+    if (!show && refocus) fabBtn.focus();
+  }
+
+  if (fab) {
+    fabBtn.addEventListener('click', function () { setMenu(fabMenu.hidden); });
+    fabMenu.addEventListener('click', function () { setMenu(false); });
+    document.addEventListener('click', function (e) {
+      if (!fabMenu.hidden && !fab.contains(e.target)) setMenu(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if ((e.key === 'Escape' || e.key === 'Esc') && !fabMenu.hidden) setMenu(false, true);
+    });
+  }
+
   var modal = document.getElementById('wechat-modal');
   if (!modal) return;
   var ID = 'ivanjong0809';
@@ -21,7 +43,8 @@
   function close() {
     modal.hidden = true;
     document.documentElement.classList.remove('wechat-open');
-    if (lastFocus && lastFocus.focus) lastFocus.focus();
+    if (lastFocus && lastFocus.offsetParent !== null) lastFocus.focus();
+    else if (fabBtn) fabBtn.focus();
   }
 
   function notify(msg) {
