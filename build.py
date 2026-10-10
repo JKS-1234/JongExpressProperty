@@ -336,13 +336,30 @@ def footer_links_html(indexable_areas, indexable_types):
     return (f'<div class="footer-cols"><div><h4>Miri Areas</h4><ul>{areas}</ul></div>'
             f'<div><h4>Property Types</h4><ul>{types}</ul></div>'
             f'<div><h4>{BRAND}</h4><ul><li><a href="/property/">All Miri listings</a></li><li><a href="/faq">FAQ</a></li>'
-            f'<li><a href="https://wa.me/{PHONE_INTL}" rel="noopener">WhatsApp +60 16-924 2000</a></li></ul></div></div>')
+            f'<li><a href="https://wa.me/{PHONE_INTL}" rel="noopener">WhatsApp +60 16-924 2000</a></li>'
+            f'<li><button type="button" class="wechat-link" data-wechat-open aria-haspopup="dialog">WeChat {WECHAT_ID}</button></li></ul></div></div>')
+
+
+WECHAT_ID = "ivanjong0809"
+WECHAT_WIDGET = (
+    '<button type="button" class="float-wechat" data-wechat-open aria-haspopup="dialog" aria-label="Contact Jong on WeChat">\U0001F4AC WeChat</button>\n'
+    '  <div id="wechat-modal" hidden><div class="wechat-dialog" role="dialog" aria-modal="true" aria-labelledby="wechat-title">'
+    '<button type="button" class="wechat-close" data-wechat-close aria-label="Close WeChat dialog">&times;</button>'
+    '<h2 id="wechat-title">Contact on WeChat</h2>'
+    f'<p class="wechat-id">WeChat ID: <strong>{WECHAT_ID}</strong></p>'
+    '<div class="wechat-actions"><button type="button" data-wechat-copy aria-label="Copy WeChat ID ' + WECHAT_ID + '">Copy WeChat ID</button>'
+    '<button type="button" data-wechat-qr aria-expanded="false" aria-controls="wechat-qr-panel">Scan QR</button></div>'
+    '<p class="wechat-status" role="status" aria-live="polite"></p>'
+    '<div class="wechat-qr-panel" id="wechat-qr-panel" hidden><img src="/photos/wechat-qr.png" width="600" height="804" loading="lazy" alt="WeChat QR code for Jong (ivanjong0809)" />'
+    '<p>Open WeChat &gt; Scan</p></div></div></div>\n'
+    '  <script src="/js/wechat.js" defer></script>')
 
 
 def site_footer(ctx):
     return (f'<footer class="site-footer">{ctx["footer_links"]}'
             f'<p>&copy; {BRAND}. Represented by Jong (REN 84702), Kommons Realty, Miri, Sarawak.</p></footer>\n'
-            f'  <a class="float-wa" href="https://wa.me/{PHONE_INTL}?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20listings" target="_blank" rel="noopener noreferrer">💬 WhatsApp Us</a>')
+            f'  <a class="float-wa" href="https://wa.me/{PHONE_INTL}?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20listings" target="_blank" rel="noopener noreferrer">💬 WhatsApp Us</a>\n'
+            f'  {WECHAT_WIDGET}')
 
 
 def page_shell(ctx, *, title, desc, path, og_image, body, jsonld=(), robots=None):
@@ -372,6 +389,7 @@ def page_shell(ctx, *, title, desc, path, og_image, body, jsonld=(), robots=None
   <meta name="twitter:image" content="{escape_html(og_image)}" />
   <link rel="stylesheet" href="/css/style.css" />
   <link rel="stylesheet" href="/css/seo.css" />
+  <link rel="stylesheet" href="/css/wechat.css" />
   {gtag_snippet()}{ld}
 </head>
 <body>
