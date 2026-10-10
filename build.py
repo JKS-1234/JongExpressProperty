@@ -327,7 +327,7 @@ def gtag_snippet():
 
 def site_header():
     links = ''.join(f'<a href="{h}">{escape_html(n)}</a>' for h, n in NAV_LINKS)
-    return f'<header><a href="/" class="logo">{BRAND}</a><nav style="display:flex;flex-wrap:wrap;align-items:center">{links}</nav></header>'
+    return f'<header><a href="/" class="logo">{BRAND}</a><nav style="display:flex;flex-wrap:wrap;align-items:center">{links}<div id="lang-switch"></div></nav></header>'
 
 
 def footer_links_html(indexable_areas, indexable_types):
@@ -378,6 +378,7 @@ def page_shell(ctx, *, title, desc, path, og_image, body, jsonld=(), robots=None
   {site_header()}
 {body}
   {site_footer(ctx)}
+  <script src="/js/lang-switch.js" defer></script>
 </body>
 </html>
 """

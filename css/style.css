@@ -659,23 +659,92 @@ html {
     100% { transform: rotate(360deg); }
 }
 /* --- Google Translate Widget Styling --- */
-.goog-te-gadget-simple {
-    background-color: var(--light) !important;
-    border: none !important;
-    padding: 6px 10px !important;
-    border-radius: 4px !important;
-    font-weight: bold !important;
-    font-size: 0.9rem !important;
+/* Google's own UI is hidden; js/lang-switch.js drives the engine */
+#google_translate_element,
+.goog-te-gadget,
+.goog-te-gadget-simple,
+.goog-te-banner-frame,
+iframe.goog-te-banner-frame,
+.goog-te-balloon-frame,
+#goog-gt-tt,
+.goog-tooltip,
+.goog-te-spinner-pos,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+.VIpgJd-ZVi9od-ORHb-OEVmcd,
+.VIpgJd-yAWNEb-L7lbkb {
+    display: none !important;
+    visibility: hidden !important;
 }
-.goog-te-gadget-simple span {
-    color: var(--primary) !important;
-}
-/* Hides the annoying top translation bar Google tries to force */
 .skiptranslate iframe {
     display: none !important;
 }
-body {
-    top: 0px !important; 
+.goog-text-highlight {
+    background: none !important;
+    box-shadow: none !important;
+}
+html, body {
+    top: 0 !important;
+}
+
+/* --- Custom language switcher --- */
+.lang-switch {
+    position: relative;
+    display: inline-block;
+    margin-left: 20px;
+    font-size: 0.9rem;
+}
+.lang-btn {
+    background: transparent;
+    color: var(--secondary);
+    border: 2px solid var(--secondary);
+    border-radius: 999px;
+    padding: 6px 14px;
+    font: inherit;
+    font-weight: bold;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
+}
+.lang-btn:hover,
+.lang-btn[aria-expanded="true"] {
+    background: var(--secondary);
+    color: var(--primary);
+}
+.lang-menu {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    min-width: 220px;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    background: #fff;
+    border: 1px solid var(--secondary);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    z-index: 2200;
+    text-align: left;
+}
+.lang-menu[hidden] { display: none; }
+.lang-menu li {
+    padding: 9px 12px;
+    border-radius: 6px;
+    color: var(--primary);
+    cursor: pointer;
+}
+.lang-menu li:hover,
+.lang-menu li:focus {
+    background: var(--light);
+    outline: none;
+}
+.lang-menu li.active {
+    background: var(--primary);
+    color: var(--secondary);
+    font-weight: bold;
+}
+@media (max-width: 768px) {
+    .lang-switch { margin-left: 0; }
+    .lang-menu { right: auto; left: 50%; transform: translateX(-50%); }
 }
 /* --- Quick Search Clickable Chips --- */
 .quick-tags {
