@@ -1,4 +1,4 @@
-﻿name: Daily Property Sync
+name: Daily Property Sync
 
 on:
   schedule:
@@ -8,10 +8,13 @@ on:
     branches: [ main ]
     paths:
       - 'build.py'
+      - 'translate_zh.py'
+      - 'i18n/glossary.json'
+      - 'i18n/zh-overrides.json'
   workflow_dispatch: # This adds a manual "Run workflow" button in GitHub!
 
 concurrency:
-  group: daily-property-sync
+  group: site-build
   cancel-in-progress: false
 
 jobs:
@@ -31,7 +34,11 @@ jobs:
           python-version: '3.10'
 
       - name: Fetch Latest Google Sheet Data
-        run: python build.py
+        env:
+          DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
+        run: |
+          python build.py
+          python tests/validate_site.py
 
       # Commits made with GITHUB_TOKEN do not trigger new workflow runs, and the
       # push trigger only fires for build.py changes, so this cannot loop.
@@ -40,5 +47,5 @@ jobs:
         with:
           commit_message: "Automated Daily Sync: Updated Property Listings"
           branch: main
-          file_pattern: "property area type listings PageListing semi-detached.html js sitemap.xml robots.txt llms.txt index.html"
+          file_pattern: "property area type listings PageListing semi-detached.html js sitemap.xml robots.txt llms.txt index.html faq.html zh i18n"
           add_options: "-A"

@@ -1,0 +1,3 @@
+{
+  "_comment": "Manual translations. Key = exact English source text (whitespace-collapsed, as shown in zh-cache.json 'src'); value = the Chinese text to use. Overrides always beat DeepL and the cache. Keep any protected terms (place names, RM prices, phone numbers, REN) in Latin script."
+}

@@ -658,26 +658,41 @@ html {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-/* --- Google Translate Widget Styling --- */
-.goog-te-gadget-simple {
-    background-color: var(--light) !important;
-    border: none !important;
-    padding: 6px 10px !important;
-    border-radius: 4px !important;
-    font-weight: bold !important;
-    font-size: 0.9rem !important;
+/* --- Language switcher (EN | 中文) --- */
+.lang-switch {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 20px;
+    border: 1px solid var(--secondary);
+    border-radius: 999px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    line-height: 1;
 }
-.goog-te-gadget-simple span {
-    color: var(--primary) !important;
+.lang-switch a,
+.lang-switch .lang-current {
+    display: inline-block;
+    margin: 0;
+    padding: 7px 14px;
+    font-weight: 700;
+    text-decoration: none;
 }
-/* Hides the annoying top translation bar Google tries to force */
-.skiptranslate iframe {
-    display: none !important;
+.lang-switch a {
+    color: var(--secondary);
+    background: transparent;
 }
-body {
-    top: 0px !important; 
+.lang-switch a:hover {
+    background: rgba(214, 158, 46, 0.2);
+    color: #ecc94b;
 }
-/* --- Quick Search Clickable Chips --- */
+.lang-switch .lang-current {
+    background: var(--secondary);
+    color: var(--primary);
+}
+@media (max-width: 768px) {
+    .lang-switch { margin: 0; }
+}/* --- Quick Search Clickable Chips --- */
 .quick-tags {
     display: flex;
     flex-wrap: wrap;

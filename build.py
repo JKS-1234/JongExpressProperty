@@ -21,6 +21,8 @@ import urllib.request
 from datetime import datetime, timezone
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.getcwd())
+import translate_zh  # noqa: E402
 
 SITE = "https://jongexpressproperty.online"
 CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSaVVVJKkYOYo7Gs1vXMme9mBWAEtQUGkFbB7wcL_n-IGGkFzzwvq2yxQgWKuhyZKe-J4tYza3yzLtO/pub?output=csv"
@@ -327,7 +329,7 @@ def gtag_snippet():
 
 def site_header():
     links = ''.join(f'<a href="{h}">{escape_html(n)}</a>' for h, n in NAV_LINKS)
-    return f'<header><a href="/" class="logo">{BRAND}</a><nav style="display:flex;flex-wrap:wrap;align-items:center">{links}</nav></header>'
+    return f'<header><a href="/" class="logo">{BRAND}</a><nav style="display:flex;flex-wrap:wrap;align-items:center">{links}<!--LANG-SWITCH-START--><!--LANG-SWITCH-END--></nav></header>'
 
 
 def footer_links_html(indexable_areas, indexable_types):
@@ -357,7 +359,7 @@ def page_shell(ctx, *, title, desc, path, og_image, body, jsonld=(), robots=None
   <title>{escape_html(title)}</title>
   <meta name="description" content="{escape_html(desc)}" />{robots_tag}
   <link rel="canonical" href="{escape_html(url)}" />
-  <link rel="alternate" hreflang="en-MY" href="{escape_html(url)}" />
+  <!--HREFLANG-START--><!--HREFLANG-END-->
   <link rel="icon" type="image/png" href="/photos/icononly.png" />
   <meta property="og:title" content="{escape_html(title)}" />
   <meta property="og:description" content="{escape_html(desc)}" />
@@ -738,15 +740,16 @@ def main():
            "footer_links": footer_links_html(areas_ok, types_ok), "type_for_kind": type_for_kind}
 
     sitemap = []
+    files = {}  # english url path -> (file, html); written after the zh pass fills hreflang/switcher markers
 
     expected = {"index.html"}
     for l in listings:
         content = build_property_page(ctx, l, listings)
-        write_file(f"property/{l['slug']}.html", content)
+        files[l["url"]] = (f"property/{l['slug']}.html", content)
         expected.add(f"{l['slug']}.html")
         sitemap.append((l["url"], content))
     index_content = build_property_index(ctx, listings)
-    write_file("property/index.html", index_content)
+    files["/property/"] = ("property/index.html", index_content)
     for f in os.listdir("property"):
         if f.endswith('.html') and f not in expected:
             os.remove(os.path.join("property", f))
@@ -758,7 +761,7 @@ def main():
         for it in items:
             grp = groups[it["slug"]]
             content = builder(ctx, it, grp)
-            write_file(f"{d}/{it['slug']}.html", content)
+            files[f"/{d}/{it['slug']}"] = (f"{d}/{it['slug']}.html", content)
             keep.add(f"{it['slug']}.html")
             if grp:
                 sitemap.append((f"/{d}/{it['slug']}", content))
@@ -769,7 +772,7 @@ def main():
     home = read_file("index.html")
     home = inject(home, "STATIC-LISTINGS", "\n    " + static_home_block(ctx, listings) + "\n    ")
     home = inject(home, "FOOTER-LINKS", ctx["footer_links"])
-    write_file("index.html", home)
+    files["/"] = ("index.html", home)
 
     # legacy duplicates: redirect stubs where a replacement exists, otherwise remove
     by_slug = {l["slug"]: l for l in listings}
@@ -792,20 +795,48 @@ def main():
         if os.path.exists(p):
             write_file(p, redirect_stub(target))
 
-    entries = [("/", home), ("/property/", index_content)] + sitemap
     if os.path.exists("faq.html"):
-        entries.append(("/faq", read_file("faq.html")))
-    out = []
-    for path, content in entries:
-        loc = SITE + path
+        files["/faq"] = ("faq.html", read_file("faq.html"))
+    order = ["/", "/property/"] + [p for p, _ in sitemap] + (["/faq"] if "/faq" in files else [])
+    raw = {p: translate_zh.apply_alternates(files[p][1], p, "en", False) for p in files}
+    zh_html, zh_stale, zh_paths = translate_zh.build_zh({p: raw[p] for p in order}, translate_zh.Translator())
+
+    final, zh_final = {}, {}
+    for p, (f, _) in files.items():
+        final[p] = translate_zh.apply_alternates(raw[p], p, "en", p in zh_paths, "/" in zh_paths)
+        write_file(f, final[p])
+    for p in zh_paths:
+        if p in zh_html:
+            zh_final[p] = translate_zh.apply_alternates(zh_html[p], p, "zh", True)
+            write_file(translate_zh.zh_file(p), zh_final[p])
+        else:
+            zh_final[p] = read_file(translate_zh.zh_file(p))
+    keep = {translate_zh.zh_file(p).replace('\\', '/') for p in zh_paths}
+    for root, _dirs, names in os.walk("zh"):
+        for n in names:
+            fp = os.path.join(root, n).replace('\\', '/')
+            if fp.endswith('.html') and fp not in keep:
+                os.remove(fp)
+                print(f"  removed stale {fp}")
+
+    def sha_mod(loc, content):
         sha = hashlib.sha1(content.encode('utf-8')).hexdigest()[:10]
         mod = prev[loc][0] if loc in prev and prev[loc][1] == sha else datetime.now(timezone.utc).strftime("%Y-%m-%d")
-        out.append(f"  <url>\n    <loc>{loc}</loc>\n    <lastmod>{mod}</lastmod> <!-- sha:{sha} -->\n  </url>")
-    write_file("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "\n".join(out) + "\n</urlset>\n")
+        return sha, mod
 
-    robots = read_file("robots.txt") or "User-agent: *\nAllow: /\n"
-    if f"Sitemap: {SITE}/sitemap.xml" not in robots:
-        write_file("robots.txt", robots.rstrip('\n') + f"\n\nSitemap: {SITE}/sitemap.xml\n")
+    def url_entry(path, content, alt_path):
+        loc = SITE + path
+        sha, mod = sha_mod(loc, content)
+        alts = ''
+        if alt_path in zh_paths:
+            alts = (f'\n    <xhtml:link rel="alternate" hreflang="{translate_zh.EN_LANG}" href="{SITE + alt_path}" />'
+                    f'\n    <xhtml:link rel="alternate" hreflang="{translate_zh.ZH_LANG}" href="{SITE + translate_zh.zh_path(alt_path)}" />'
+                    f'\n    <xhtml:link rel="alternate" hreflang="x-default" href="{SITE + alt_path}" />')
+        return f"  <url>\n    <loc>{loc}</loc>\n    <lastmod>{mod}</lastmod> <!-- sha:{sha} -->{alts}\n  </url>"
+
+    out = [url_entry(p, final[p], p) for p in order]
+    out += [url_entry(translate_zh.zh_path(p), zh_final[p], p) for p in order if p in zh_paths]
+    write_file("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + "\n".join(out) + "\n</urlset>\n")
 
     print(f"Generated {len(listings)} property pages, {len(areas_ok)} area pages, {len(types_ok)} type pages; sitemap has {len(out)} URLs.")
 
