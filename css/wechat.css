@@ -1,0 +1,30 @@
+/* WeChat contact widget (navy/gold theme) */
+.float-wechat { position: fixed; bottom: 84px; left: 20px; z-index: 999; display: inline-flex; align-items: center; gap: 8px; background: var(--primary, #1a365d); color: #fff; border: 2px solid var(--secondary, #d69e2e); padding: 11px 18px; border-radius: 50px; font: bold 16px 'Segoe UI', sans-serif; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+.float-wechat:hover, .float-wechat:focus-visible { background: var(--secondary, #d69e2e); color: var(--primary, #1a365d); }
+.float-wechat:focus-visible, .wechat-dialog button:focus-visible, .wechat-link:focus-visible { outline: 3px solid var(--secondary, #d69e2e); outline-offset: 2px; }
+.wechat-link { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
+.contact-section .wechat-link { color: var(--primary, #1a365d); }
+footer .wechat-link { color: #e2e8f0; text-decoration: none; }
+footer .wechat-link:hover { color: var(--secondary, #d69e2e); }
+
+#wechat-modal { position: fixed; inset: 0; z-index: 3100; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(15,23,42,0.7); }
+#wechat-modal[hidden], #wechat-modal [hidden] { display: none; }
+.wechat-dialog { position: relative; width: 100%; max-width: 360px; max-height: 100%; overflow-y: auto; background: #fff; color: #1a202c; border-top: 5px solid var(--secondary, #d69e2e); border-radius: 12px; padding: 24px 20px 20px; text-align: center; font-family: 'Segoe UI', sans-serif; box-shadow: 0 10px 40px rgba(0,0,0,0.35); }
+.wechat-dialog h2 { color: var(--primary, #1a365d); font-size: 1.3rem; margin: 0 0 6px; }
+.wechat-id { margin: 0 0 16px; font-size: 1.05rem; }
+.wechat-id strong { color: var(--primary, #1a365d); user-select: all; -webkit-user-select: all; }
+.wechat-dialog .wechat-actions { display: flex; flex-direction: column; gap: 10px; }
+.wechat-dialog .wechat-actions button { padding: 12px 16px; border-radius: 8px; font: bold 1rem 'Segoe UI', sans-serif; cursor: pointer; border: 2px solid var(--primary, #1a365d); }
+.wechat-dialog [data-wechat-copy] { background: var(--primary, #1a365d); color: #fff; }
+.wechat-dialog [data-wechat-qr] { background: #fff; color: var(--primary, #1a365d); }
+.wechat-dialog .wechat-actions button:hover { background: var(--secondary, #d69e2e); border-color: var(--secondary, #d69e2e); color: var(--primary, #1a365d); }
+.wechat-status { min-height: 1.4em; margin: 8px 0 0; color: #276749; font-weight: bold; }
+.wechat-qr-panel { margin-top: 12px; }
+.wechat-qr-panel img { display: block; width: 100%; max-width: 260px; height: auto; margin: 0 auto 8px; border: 1px solid #e2e8f0; border-radius: 8px; }
+.wechat-qr-panel p { margin: 0; color: #4a5568; font-size: 0.9rem; }
+.wechat-close { position: absolute; top: 6px; right: 8px; background: none; border: 0; font-size: 1.8rem; line-height: 1; color: #4a5568; cursor: pointer; padding: 4px 10px; }
+html.wechat-open { overflow: hidden; }
+
+@media (max-width: 600px) {
+  .float-wechat { bottom: 78px; left: 12px; padding: 10px 16px; font-size: 15px; }
+}
