@@ -342,8 +342,7 @@ def footer_links_html(indexable_areas, indexable_types):
 
 WECHAT_ID = "ivanjong0809"
 WECHAT_WIDGET = (
-    '<button type="button" class="float-wechat" data-wechat-open aria-haspopup="dialog" aria-label="Contact Jong on WeChat">\U0001F4AC WeChat</button>\n'
-    '  <div id="wechat-modal" hidden><div class="wechat-dialog" role="dialog" aria-modal="true" aria-labelledby="wechat-title">'
+    '<div id="wechat-modal" hidden><div class="wechat-dialog" role="dialog" aria-modal="true" aria-labelledby="wechat-title">'
     '<button type="button" class="wechat-close" data-wechat-close aria-label="Close WeChat dialog">&times;</button>'
     '<h2 id="wechat-title">Contact on WeChat</h2>'
     f'<p class="wechat-id">WeChat ID: <strong>{WECHAT_ID}</strong></p>'
@@ -355,10 +354,17 @@ WECHAT_WIDGET = (
     '  <script src="/js/wechat.js" defer></script>')
 
 
+def contact_fab(wa_href):
+    return ('<div class="contact-fab" id="contact-fab"><button type="button" class="contact-fab-btn" aria-haspopup="true" aria-expanded="false" aria-controls="contact-fab-menu">\U0001F4AC Contact Us</button>'
+            '<div class="contact-fab-menu" id="contact-fab-menu" role="menu" hidden>'
+            f'<a role="menuitem" class="contact-fab-wa" href="{wa_href}" target="_blank" rel="noopener noreferrer">WhatsApp</a>'
+            '<button type="button" role="menuitem" data-wechat-open aria-haspopup="dialog">WeChat</button></div></div>')
+
+
 def site_footer(ctx):
     return (f'<footer class="site-footer">{ctx["footer_links"]}'
             f'<p>&copy; {BRAND}. Represented by Jong (REN 84702), Kommons Realty, Miri, Sarawak.</p></footer>\n'
-            f'  <a class="float-wa" href="https://wa.me/{PHONE_INTL}?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20listings" target="_blank" rel="noopener noreferrer">💬 WhatsApp Us</a>\n'
+            f'  {contact_fab("https://wa.me/" + PHONE_INTL + "?text=Hi%20Jong,%20I%20am%20interested%20in%20your%20listings")}\n'
             f'  {WECHAT_WIDGET}')
 
 

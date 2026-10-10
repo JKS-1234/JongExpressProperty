@@ -1,7 +1,14 @@
 /* WeChat contact widget (navy/gold theme) */
-.float-wechat { position: fixed; bottom: 84px; left: 20px; z-index: 999; display: inline-flex; align-items: center; gap: 8px; background: var(--primary, #1a365d); color: #fff; border: 2px solid var(--secondary, #d69e2e); padding: 11px 18px; border-radius: 50px; font: bold 16px 'Segoe UI', sans-serif; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
-.float-wechat:hover, .float-wechat:focus-visible { background: var(--secondary, #d69e2e); color: var(--primary, #1a365d); }
-.float-wechat:focus-visible, .wechat-dialog button:focus-visible, .wechat-link:focus-visible { outline: 3px solid var(--secondary, #d69e2e); outline-offset: 2px; }
+.contact-fab { position: fixed; bottom: 20px; left: 20px; z-index: 999; font-family: 'Segoe UI', sans-serif; }
+.contact-fab-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--primary, #1a365d); color: #fff; border: 2px solid var(--secondary, #d69e2e); padding: 10px 16px; border-radius: 50px; font: bold 15px 'Segoe UI', sans-serif; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+.contact-fab-btn:hover, .contact-fab-btn[aria-expanded="true"] { background: var(--secondary, #d69e2e); color: var(--primary, #1a365d); }
+.contact-fab-menu { position: absolute; bottom: calc(100% + 8px); left: 0; display: flex; flex-direction: column; gap: 6px; min-width: 160px; background: #fff; border-top: 4px solid var(--secondary, #d69e2e); border-radius: 10px; padding: 8px; box-shadow: 0 6px 24px rgba(0,0,0,0.3); }
+.contact-fab-menu[hidden] { display: none; }
+.contact-fab-menu a, .contact-fab-menu button { display: block; width: 100%; text-align: left; padding: 10px 14px; border: 0; border-radius: 6px; font: bold 15px 'Segoe UI', sans-serif; text-decoration: none; cursor: pointer; }
+.contact-fab-menu .contact-fab-wa { background: #25D366; color: #fff; }
+.contact-fab-menu button { background: var(--primary, #1a365d); color: #fff; }
+.contact-fab-menu a:hover, .contact-fab-menu button:hover { filter: brightness(1.1); }
+.contact-fab-btn:focus-visible, .contact-fab-menu a:focus-visible, .contact-fab-menu button:focus-visible, .wechat-dialog button:focus-visible, .wechat-link:focus-visible { outline: 3px solid var(--secondary, #d69e2e); outline-offset: 2px; }
 .wechat-link { background: none; border: 0; padding: 0; font: inherit; color: inherit; text-decoration: underline; cursor: pointer; }
 .contact-section .wechat-link { color: var(--primary, #1a365d); }
 footer .wechat-link { color: #e2e8f0; text-decoration: none; }
@@ -26,5 +33,6 @@ footer .wechat-link:hover { color: var(--secondary, #d69e2e); }
 html.wechat-open { overflow: hidden; }
 
 @media (max-width: 600px) {
-  .float-wechat { bottom: 78px; left: 12px; padding: 10px 16px; font-size: 15px; }
+  .contact-fab { bottom: 14px; left: 12px; }
+  .contact-fab-btn { padding: 9px 14px; font-size: 14px; }
 }
