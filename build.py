@@ -260,7 +260,8 @@ def build_listings(rows):
         used.add(slug)
         title = display_title(raw_name)
         typ = clean_text(item.get('Type') or '')
-        status = 'rent' if 'rent' in (item.get('Status') or '').lower() else 'sale'
+        status_raw = (item.get('Status') or '').lower()
+        status = 'sold' if 'sold' in status_raw else 'rent' if 'rent' in status_raw else 'sale'
         kind = classify(title, typ)
         area_raw = clean_text(fix_text(item.get('Area') or ''))
         area_slugs = match_areas(title, area_raw)
@@ -280,12 +281,18 @@ def build_listings(rows):
 
 
 def sale_word(l):
-    return 'rent' if l["status"] == 'rent' else 'sale'
+    return l["status"] if l["status"] in ('rent', 'sold') else 'sale'
+
+
+STATUS_BADGE = {'rent': 'For Rent', 'sold': 'Sold', 'sale': 'For Sale'}
 
 
 def meta_description(l):
     limit = 155
-    base = f"{KIND_LABEL[l['kind']]} for {sale_word(l)} in {l['area_label']}, Miri, Sarawak at {l['price_text']}."
+    if l['status'] == 'sold':
+        base = f"{KIND_LABEL[l['kind']]} sold in {l['area_label']}, Miri, Sarawak, previously listed at {l['price_text']}."
+    else:
+        base = f"{KIND_LABEL[l['kind']]} for {sale_word(l)} in {l['area_label']}, Miri, Sarawak at {l['price_text']}."
     f = l["facts"]
     bits = []
     if 'Bedrooms' in f:
@@ -432,7 +439,7 @@ def abs_url(path):
 
 def card_html(l):
     img = l["images"][0] if l["images"] else '/photos/icononly.png'
-    badge = 'For Rent' if l["status"] == 'rent' else 'For Sale'
+    badge = STATUS_BADGE[l["status"]]
     return (f'<article class="card"><a href="{l["url"]}"><img src="{escape_html(img)}" alt="{escape_html(l["title"])} - {badge.lower()} in {escape_html(l["area_label"])}, Miri" loading="lazy" decoding="async" />'
             f'<div class="card-body"><div class="card-price">{escape_html(l["price_text"])}</div>'
             f'<div class="card-title">{escape_html(l["title"])}</div>'
@@ -452,7 +459,7 @@ def related_listings(l, listings, limit=6):
         if o["status"] == l["status"]:
             s += 2
         return -s, o["slug"]
-    return sorted([o for o in listings if o["slug"] != l["slug"]], key=score)[:limit]
+    return sorted([o for o in listings if o["slug"] != l["slug"] and o["status"] != 'sold'], key=score)[:limit]
 
 
 def build_property_page(ctx, l, listings):
@@ -460,7 +467,7 @@ def build_property_page(ctx, l, listings):
     full_title = f"{title}{'' if 'miri' in title.lower() else ', Miri'} for {sale_word(l).title()} | {BRAND}"
     desc = meta_description(l)
     images = l["images"] or ['/photos/icononly.png']
-    badge = 'For Rent' if l["status"] == 'rent' else 'For Sale'
+    badge = STATUS_BADGE[l["status"]]
     kind = KIND_LABEL[l["kind"]]
     page_url = f"{SITE}{l['url']}"
 
@@ -468,7 +475,7 @@ def build_property_page(ctx, l, listings):
     wa_link = f"https://wa.me/{PHONE_INTL}?text={urllib.parse.quote(wa_msg)}"
 
     gallery = ''.join(
-        f'<img src="{escape_html(src)}" alt="{escape_html(title)} - {kind.lower()} for {sale_word(l)} in {escape_html(l["area_label"])}, Miri (photo {i + 1} of {len(images)})" '
+        f'<img src="{escape_html(src)}" alt="{escape_html(title)} - {kind.lower()} {'sold' if l['status'] == 'sold' else 'for ' + sale_word(l)} in {escape_html(l["area_label"])}, Miri (photo {i + 1} of {len(images)})" '
         f'loading="{"eager" if i == 0 else "lazy"}" decoding="async" />' for i, src in enumerate(images))
 
     facts = {"Price": l["price_text"], "Status": badge, "Property type": kind, "Location": f"{l['area_label']}, Miri, Sarawak"}
@@ -488,8 +495,14 @@ def build_property_page(ctx, l, listings):
     fact_sentence = ''
     if bits:
         fact_sentence = " It offers " + (', '.join(bits[:-1]) + ' and ' if len(bits) > 1 else '') + bits[-1] + '.'
-    intro = (f"This {kind.lower()} is available for {sale_word(l)} in {l['area_label']}, Miri, Sarawak, listed at {l['price_text']}."
-             f"{fact_sentence} Contact Jong (REN 84702, Kommons Realty) to arrange a viewing.")
+    if l['status'] == 'sold':
+        availability = f"has been sold. It was located in {l['area_label']}, Miri, Sarawak, and listed at {l['price_text']}."
+        cta = "to ask about similar properties"
+    else:
+        availability = f"is available for {sale_word(l)} in {l['area_label']}, Miri, Sarawak, listed at {l['price_text']}."
+        cta = "to arrange a viewing"
+    intro = (f"This {kind.lower()} {availability}"
+             f"{fact_sentence} Contact Jong (REN 84702, Kommons Realty) {cta}.")
 
     desc_html = '' if clean_text(l["raw_desc"]) in ('', '-') else format_description_html(l["raw_desc"])
     video_html = f'<p><a href="{escape_html(l["video"])}" target="_blank" rel="noopener">▶ Watch the video tour</a></p>' if l["video"] else ''
@@ -506,7 +519,7 @@ def build_property_page(ctx, l, listings):
 
     body = f"""  <main class="seo-main">
     {breadcrumb_html(trail)}
-    <p><span class="badge{' rent' if l['status'] == 'rent' else ''}">{badge}</span> {escape_html(kind)} · {escape_html(l['area_label'])}, Miri</p>
+    <p><span class="badge{' ' + l['status'] if l['status'] in ('rent', 'sold') else ''}">{badge}</span> {escape_html(kind)} · {escape_html(l['area_label'])}, Miri</p>
     <h1>{escape_html(title)}</h1>
     <p class="price-line">{escape_html(l['price_text'])}</p>
     <div class="{'gallery single' if len(images) == 1 else 'gallery'}">{gallery}</div>
@@ -526,7 +539,7 @@ def build_property_page(ctx, l, listings):
     offer = None
     if l["price_num"]:
         offer = {"@type": "Offer", "url": page_url, "price": f"{l['price_num']:.2f}", "priceCurrency": "MYR",
-                 "availability": "https://schema.org/InStock",
+                 "availability": "https://schema.org/SoldOut" if l["status"] == 'sold' else "https://schema.org/InStock",
                  "seller": {"@type": "RealEstateAgent", "name": BRAND, "url": SITE + "/", "telephone": "+" + PHONE_INTL}}
         if l["status"] == 'rent':
             offer["priceSpecification"] = {"@type": "UnitPriceSpecification", "price": f"{l['price_num']:.2f}", "priceCurrency": "MYR", "unitCode": "MON", "unitText": "month"}
@@ -537,7 +550,7 @@ def build_property_page(ctx, l, listings):
                   "contentLocation": {"@type": "Place", "name": f"{l['area_label']}, Miri", "address": address},
                   "offers": offer}
     product_ld = {"@context": "https://schema.org", "@type": "Product", "name": title, "description": desc, "image": img_abs,
-                  "sku": l["slug"], "category": f"{kind} for {sale_word(l)}", "url": page_url,
+                  "sku": l["slug"], "category": kind if l["status"] == 'sold' else f"{kind} for {sale_word(l)}", "url": page_url,
                   "brand": {"@type": "Brand", "name": BRAND}, "offers": offer}
     ld = [clean_ld(listing_ld), clean_ld(product_ld), clean_ld(breadcrumb_ld(trail))]
     return page_shell(ctx, title=full_title, desc=desc, path=l["url"], og_image=abs_url(images[0]), body=body, jsonld=ld)
@@ -653,7 +666,7 @@ def build_property_index(ctx, listings):
     trail = [("Home", "/"), ("All Listings", path)]
     order = list(KIND_LABEL)
     sections = []
-    for status, heading in (('sale', 'Properties for Sale in Miri'), ('rent', 'Properties for Rent in Miri')):
+    for status, heading in (('sale', 'Properties for Sale in Miri'), ('rent', 'Properties for Rent in Miri'), ('sold', 'Recently Sold in Miri')):
         grp = sorted([l for l in listings if l["status"] == status], key=lambda l: (order.index(l["kind"]), l["title"]))
         if grp:
             sections.append(f'<h2>{heading} ({len(grp)})</h2><div class="card-grid">{"".join(card_html(l) for l in grp)}</div>')
@@ -672,7 +685,7 @@ def build_property_index(ctx, listings):
 def static_home_block(ctx, listings):
     a_chips, t_chips = other_links_chips(ctx)
     items = ''.join(
-        f'<li><a href="{l["url"]}">{escape_html(l["title"])}</a> — {escape_html(l["price_text"])} ({"for rent" if l["status"] == "rent" else "for sale"}, {escape_html(l["area_label"])})</li>'
+        f'<li><a href="{l["url"]}">{escape_html(l["title"])}</a> — {escape_html(l["price_text"])} ({"for rent" if l["status"] == "rent" else "sold" if l["status"] == "sold" else "for sale"}, {escape_html(l["area_label"])})</li>'
         for l in sorted(listings, key=lambda l: l["title"]))
     return f"""<section class="home-static-index" id="miri-property-index">
         <h2>Miri Property for Sale and Rent: Browse by Area and Type</h2>
@@ -748,15 +761,16 @@ def main():
     listings = build_listings(load_rows())
     prev = previous_lastmods()
 
-    area_groups = {a["slug"]: [l for l in listings if a["slug"] in l["area_slugs"]] for a in AREAS}
-    type_groups = {t["slug"]: [l for l in listings if t["filter"](l)] for t in TYPES}
+    active = [l for l in listings if l["status"] != 'sold']
+    area_groups = {a["slug"]: [l for l in active if a["slug"] in l["area_slugs"]] for a in AREAS}
+    type_groups = {t["slug"]: [l for l in active if t["filter"](l)] for t in TYPES}
     for g in list(area_groups.values()) + list(type_groups.values()):
         g.sort(key=lambda l: (l["status"] != 'sale', l["title"]))
     areas_ok = [a for a in AREAS if area_groups[a["slug"]]]
     types_ok = [t for t in TYPES if type_groups[t["slug"]]]
 
     type_for_kind = {}
-    for l in listings:
+    for l in active:
         type_for_kind[(l["kind"], l["status"])] = [t["slug"] for t in TYPES if t["slug"] != "property-for-rent-miri" and t["filter"](l)]
 
     ctx = {"areas": areas_ok, "types": types_ok, "area_ok": {a["slug"] for a in areas_ok},
