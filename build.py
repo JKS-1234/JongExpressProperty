@@ -474,8 +474,9 @@ def build_property_page(ctx, l, listings):
     wa_msg = f"Hi Jong, I'm interested in this property:\n\n{title}\n{l['price_text']}\n{l['area_label']}, Miri\n{page_url}\n\nPlease tell me more details!"
     wa_link = f"https://wa.me/{PHONE_INTL}?text={urllib.parse.quote(wa_msg)}"
 
+    alt_status = 'sold' if l['status'] == 'sold' else 'for ' + sale_word(l)
     gallery = ''.join(
-        f'<img src="{escape_html(src)}" alt="{escape_html(title)} - {kind.lower()} {'sold' if l['status'] == 'sold' else 'for ' + sale_word(l)} in {escape_html(l["area_label"])}, Miri (photo {i + 1} of {len(images)})" '
+        f'<img src="{escape_html(src)}" alt="{escape_html(title)} - {kind.lower()} {alt_status} in {escape_html(l["area_label"])}, Miri (photo {i + 1} of {len(images)})" '
         f'loading="{"eager" if i == 0 else "lazy"}" decoding="async" />' for i, src in enumerate(images))
 
     facts = {"Price": l["price_text"], "Status": badge, "Property type": kind, "Location": f"{l['area_label']}, Miri, Sarawak"}
